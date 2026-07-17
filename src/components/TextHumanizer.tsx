@@ -8,7 +8,17 @@ interface ToolProps {
 export default function TextHumanizer({ triggerProcess }: ToolProps) {
   const [input, setInput] = useState<string>("");
   const [output, setOutput] = useState<string>("");
+  const [copied, setCopied] = useState(false);
 
+  const copyOutput = async () => {
+    await navigator.clipboard.writeText(output);
+
+    setCopied(true);
+
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
+  };
   const handleGenerate = async () => {
     if (!input) return;
 
@@ -108,14 +118,5 @@ Rules:
 )}
     </div>
   );
-  const [copied, setCopied] = useState(false);
 
-const copyOutput = async () => {
-  await navigator.clipboard.writeText(output);
-  setCopied(true);
-
-  setTimeout(() => {
-    setCopied(false);
-  }, 2000);
-};
 }
