@@ -1,14 +1,7 @@
 import { useState } from "react";
 import { Copy, Check } from "lucide-react";
 import { Helmet } from "react-helmet-async";
-
-
-const TOOL_METADATA = {
-  title: "Free AI Text Humanizer | No Subscription",
-  description:
-    "Humanize AI-generated text instantly. Rewrite robotic writing into natural, human-sounding content for free.",
-  canonicalUrl: "https://lazysuite.vercel.app/humanizer"
-};
+import { TOOL_METADATA } from "../seo/toolMetadata";
 
 interface ToolProps {
   triggerProcess: (msg: string, action: () => void) => void;
@@ -104,26 +97,26 @@ export default function TextHumanizer({ triggerProcess }: ToolProps) {
   return (
     <>
       <Helmet>
-        <title>{TOOL_METADATA.title}</title>
-  
+        <title>{TOOL_METADATA.humanizer.title}</title>
+
         <meta
           name="description"
-          content={TOOL_METADATA.description}
+          content={TOOL_METADATA.humanizer.description}
         />
-  
+
         <link
           rel="canonical"
-          href={TOOL_METADATA.canonicalUrl}
+          href={`https://lazysuite-mini-mall.vercel.app${TOOL_METADATA.humanizer.canonical}`}
         />
-  
+
         <meta
           property="og:title"
-          content={TOOL_METADATA.title}
+          content={TOOL_METADATA.humanizer.title}
         />
-  
+
         <meta
           property="og:description"
-          content={TOOL_METADATA.description}
+          content={TOOL_METADATA.humanizer.description}
         />
       </Helmet>
   
