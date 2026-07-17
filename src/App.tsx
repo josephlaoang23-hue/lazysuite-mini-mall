@@ -93,7 +93,41 @@ const STYLES_INJECTION = `
   .textarea-input { width: 100%; height: 120px; background-color: #0f172a; border: 1px solid #1e293b; border-radius: 8px; padding: 12px; font-size: 12px; color: #cbd5e1; font-family: monospace; resize: none; box-sizing: border-box; }
   .btn-generate { width: 100%; padding: 12px; background: linear-gradient(to right, #2dd4bf, #34d399); color: #020617; font-weight: bold; font-size: 12px; border: none; border-radius: 8px; cursor: pointer; margin-top: 12px; }
   .output-box { padding: 16px; background-color: #0f172a; border: 1px solid #1e293b; border-radius: 8px; font-size: 12px; color: #e2e8f0; white-space: pre-wrap; margin-top: 16px; }
+  .output-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
   
+  .output-content {
+    white-space: pre-wrap;
+    line-height: 1.7;
+  }
+  
+  .copy-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    border: 1px solid #334155;
+    background: #16223d;
+    color: #cbd5e1;
+    cursor: pointer;
+    transition: all .2s ease;
+  }
+  
+  .copy-button:hover {
+    background: #233554;
+    border-color: #2dd4bf;
+    color: #2dd4bf;
+  }
+  
+  .copy-button:active {
+    transform: scale(.95);
+  }
   .overlay-bg { position: fixed; inset: 0; background-color: rgba(2, 6, 23, 0.95); z-index: 50; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; box-sizing: border-box; }
   .overlay-card { width: 100%; max-width: 32rem; padding: 24px; background-color: #0f172a; border: 1px solid #1e293b; border-radius: 12px; text-align: center; }
   .spinner-ring { width: 48px; height: 48px; border: 4px solid #1e293b; border-top-color: #2dd4bf; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 16px auto; }
