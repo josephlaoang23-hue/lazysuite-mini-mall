@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState } from "react";
+import { Copy, Check } from "lucide-react";
 
 interface ToolProps {
   triggerProcess: (msg: string, action: () => void) => void;
@@ -84,7 +85,37 @@ Rules:
       <button onClick={handleGenerate} disabled={!input} className="btn-generate">
         Breathe Organic Speech Into String
       </button>
-      {output && <div className="output-box">{output}</div>}
+      {output && (
+  <div className="output-box">
+
+    <div className="output-header">
+      <span>Humanized Text</span>
+
+      <button
+        className="copy-button"
+        onClick={copyOutput}
+      >
+        {copied ? <Check size={18} /> : <Copy size={18} />}
+      </button>
+
+    </div>
+
+    <div className="output-content">
+      {output}
+    </div>
+
+  </div>
+)}
     </div>
   );
+  const [copied, setCopied] = useState(false);
+
+const copyOutput = async () => {
+  await navigator.clipboard.writeText(output);
+  setCopied(true);
+
+  setTimeout(() => {
+    setCopied(false);
+  }, 2000);
+};
 }
