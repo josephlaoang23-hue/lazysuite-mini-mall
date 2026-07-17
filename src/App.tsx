@@ -1,485 +1,140 @@
 import React, { useState, useEffect } from 'react';
 
-// Symmetrical Ad Layout, Styles, and Interstitial Elements Configuration
+// Import our individual clean modular component files directly from our folder pool
+import ChatGptCleaner from './components/ChatGptCleaner';
+import TextHumanizer from './components/TextHumanizer';
+import BulkFileRenamer from './components/BulkFileRenamer';
+import PrivacyShield from './components/PrivacyShield';
+import TranscriptCleaner from './components/TranscriptCleaner';
+
+// Symmetrical Ad Layout, Marketplace Theme, and Interstitial Style Architecture
 const STYLES_INJECTION = `
   body { margin: 0; background-color: #020617; color: #f8fafc; font-family: sans-serif; }
   .app-container { min-height: 100vh; background-color: #020617; color: #f8fafc; flex-direction: column; display: flex; }
-  .ad-banner-top { w-full; bg-color: #0f172a; border-bottom: 1px solid #1e293b; padding: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 90px; position: relative; box-sizing: border-box; }
-  .ad-banner-bottom { w-full; bg-color: #0f172a; border-top: 1px solid #1e293b; padding: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 90px; position: sticky; bottom: 0; z-index: 40; box-sizing: border-box; }
+  .ad-banner-top { width: 100%; background-color: #0f172a; border-bottom: 1px solid #1e293b; padding: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 90px; position: relative; box-sizing: border-box; }
+  .ad-banner-bottom { width: 100%; background-color: #0f172a; border-top: 1px solid #1e293b; padding: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 90px; position: sticky; bottom: 0; z-index: 40; box-sizing: border-box; }
   .ad-label { position: absolute; top: 4px; left: 8px; font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; color: #475569; font-family: monospace; }
   .ad-placeholder-leaderboard { width: 100%; max-width: 728px; height: 74px; background-color: #020617; border: 1px dashed #334155; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #64748b; font-family: monospace; }
   .ad-placeholder-footer { width: 100%; max-width: 728px; height: 64px; background-color: #020617; border: 1px dashed #334155; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #64748b; font-family: monospace; }
   .main-layout { display: flex; flex: 1 1 0%; width: 100%; max-width: 1920px; margin-left: auto; margin-right: auto; position: relative; justify-content: space-between; box-sizing: border-box; }
   .ad-skyscraper { width: 180px; background-color: rgba(15, 23, 42, 0.4); padding: 12px; border-right: 1px solid rgba(30, 41, 59, 0.6); display: flex; flex-direction: column; align-items: center; pt: 32px; flex-shrink: 0; position: sticky; top: 0; height: calc(100vh - 180px); box-sizing: border-box; }
-  .ad-skyscraper-right { border-right: none; border-l: 1px solid rgba(30, 41, 59, 0.6); }
+  .ad-skyscraper-right { border-right: none; border-left: 1px solid rgba(30, 41, 59, 0.6); }
   .ad-placeholder-sky { width: 160px; height: 600px; background-color: #020617; border: 1px dashed #334155; border-radius: 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 12px; color: #64748b; font-family: monospace; text-align: center; padding: 16px; position: sticky; top: 24px; box-sizing: border-box; }
   .view-lock { font-size: 10px; color: rgba(20, 184, 166, 0.7); margin-top: 16px; }
-  .main-content { flex: 1 1 0%; padding-left: 16px; padding-right: 16px; padding-top: 32px; padding-bottom: 32px; max-width: 42rem; margin-left: auto; margin-right: auto; width: 100%; display: flex; flex-direction: column; justify-content: flex-start; min-height: calc(100vh - 180px); box-sizing: border-box; }
+  .main-content { flex: 1 1 0%; padding-left: 16px; padding-right: 16px; padding-top: 32px; padding-bottom: 32px; max-width: 44rem; margin-left: auto; margin-right: auto; width: 100%; display: flex; flex-direction: column; justify-content: flex-start; min-height: calc(100vh - 180px); box-sizing: border-box; }
+  
+  .marketplace-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; border-bottom: 1px solid #1e293b; padding-bottom: 12px; }
+  .nav-brand { font-size: 20px; font-weight: 900; background: linear-gradient(to right, #2dd4bf, #34d399); -webkit-background-clip: text; -webkit-text-fill-color: transparent; cursor: pointer; }
+  .nav-user-badge { display: flex; align-items: center; gap: 12px; font-size: 12px; font-family: monospace; }
+  .btn-premium { padding: 4px 8px; background-color: #eab308; color: #020617; font-weight: bold; border-radius: 4px; border: none; cursor: pointer; }
+  .btn-logout { background: none; border: none; color: #f87171; cursor: pointer; text-decoration: underline; font-family: monospace; }
+  
   .lobby-header { text-align: center; max-width: 28rem; margin-left: auto; margin-right: auto; margin-bottom: 24px; }
-  .lobby-title { font-size: 30px; font-weight: 900; background: linear-gradient(to right, #2dd4bf, #34d399); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0 0 8px 0; }
+  .lobby-title { font-size: 32px; font-weight: 900; background: linear-gradient(to right, #2dd4bf, #22d3ee); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0 0 8px 0; }
   .lobby-desc { font-size: 12px; color: #94a3b8; margin: 0; }
+  
+  .auth-card { background-color: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 24px; max-width: 24rem; margin: 40px auto; width: 100%; box-sizing: border-box; }
+  .form-input { width: 100%; padding: 10px; background-color: #020617; border: 1px solid #1e293b; border-radius: 6px; color: white; margin-bottom: 12px; font-size: 12px; box-sizing: border-box; }
+  
   .grid-container { display: flex; flex-direction: column; gap: 16px; }
-  .tool-card { bg-color: rgba(15, 23, 42, 0.6); border: 1px solid #1e293b; padding: 20px; border-radius: 12px; cursor: pointer; transition: all 0.2s; }
+  .section-label { font-size: 11px; font-weight: bold; text-transform: uppercase; color: #64748b; font-family: monospace; margin: 16px 0 8px 0; }
+  .tool-card { background-color: rgba(15, 23, 42, 0.6); border: 1px solid #1e293b; padding: 20px; border-radius: 12px; cursor: pointer; transition: all 0.2s; position: relative; }
   .tool-card:hover { border-color: rgba(45, 212, 191, 0.5); background-color: rgba(30, 41, 59, 0.4); }
   .tool-card-title { font-size: 14px; font-weight: bold; color: #f8fafc; margin: 0 0 4px 0; }
   .tool-card-desc { font-size: 12px; color: #94a3b8; margin: 0; }
-  .btn-back { font-family: monospace; font-size: 12px; color: #94a3b8; background: none; border: none; cursor: pointer; margin-bottom: 24px; text-align: left; padding: 0; transition: color 0.2s; }
-  .btn-back:hover { color: #2dd4bf; }
-  .tool-header-title { font-size: 20px; font-weight: bold; color: #f8fafc; margin: 0 0 4px 0; }
-  .tool-header-seo { font-size: 12px; color: #64748b; font-family: monospace; margin: 0 0 16px 0; }
-  .textarea-input { width: 100%; height: 160px; background-color: #0f172a; border: 1px solid #1e293b; border-radius: 8px; padding: 12px; font-size: 12px; color: #cbd5e1; font-family: monospace; resize: none; box-sizing: border-box; }
-  .textarea-input:focus { outline: none; border-color: #2dd4bf; }
-  .btn-generate { width: 100%; padding-top: 12px; padding-bottom: 12px; background: linear-gradient(to right, #2dd4bf, #34d399); color: #020617; font-weight: bold; font-size: 12px; border: none; border-radius: 8px; cursor: pointer; margin-top: 16px; transition: opacity 0.2s; }
-  .btn-generate:disabled { opacity: 0.4; cursor: not-allowed; }
-  .output-box { padding: 16px; background-color: #0f172a; border: 1px solid #1e293b; border-radius: 8px; font-size: 12px; color: #e2e8f0; white-space: pre-wrap; margin-top: 16px; word-break: break-word; }
-  .overlay-bg { position: fixed; inset: 0; background-color: rgba(2, 6, 23, 0.95); z-index: 50; display: flex; flex-direction: column; items-center: center; justify-content: center; padding: 24px; box-sizing: border-box; text-align: center; }
-  .overlay-card { width: 100%; max-width: 32rem; padding: 24px; background-color: #0f172a; border: 1px solid #1e293b; border-radius: 12px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); display: flex; flex-direction: column; align-items: center; box-sizing: border-box; }
-  .spinner-ring { position: relative; width: 64px; height: 64px; margin-bottom: 24px; }
-  .spinner-ring-base { position: absolute; inset: 0; border-radius: 50%; border: 4px solid #1e293b; }
-  .spinner-ring-active { position: absolute; inset: 0; border-radius: 50%; border: 4px solid transparent; border-top-color: #2dd4bf; border-right-color: #14b8a6; animation: spin 1s linear infinite; }
-  .overlay-title { font-size: 18px; font-weight: bold; color: #f8fafc; margin: 0 0 8px 0; }
-  .overlay-msg { font-size: 12px; color: #94a3b8; font-family: monospace; max-width: 24rem; margin: 0 auto 24px auto; }
-  .interstitial-ad { width: 100%; height: 100px; background-color: #020617; border: 1px dashed #334155; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #64748b; font-family: monospace; padding: 8px; box-sizing: border-box; }
+  .tool-badge-creator { position: absolute; top: 12px; right: 12px; font-size: 9px; font-family: monospace; color: #2dd4bf; background-color: rgba(45,212,191,0.1); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(45,212,191,0.2); }
+  
+  .dashboard-banner { background: linear-gradient(to right, rgba(15,23,42,0.8), rgba(2,6,23,0.8)); border: 1px dashed #eab308; border-radius: 12px; padding: 16px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; }
+  
+  .textarea-input { width: 100%; height: 120px; background-color: #0f172a; border: 1px solid #1e293b; border-radius: 8px; padding: 12px; font-size: 12px; color: #cbd5e1; font-family: monospace; resize: none; box-sizing: border-box; }
+  .btn-generate { width: 100%; padding: 12px; background: linear-gradient(to right, #2dd4bf, #34d399); color: #020617; font-weight: bold; font-size: 12px; border: none; border-radius: 8px; cursor: pointer; margin-top: 12px; }
+  .output-box { padding: 16px; background-color: #0f172a; border: 1px solid #1e293b; border-radius: 8px; font-size: 12px; color: #e2e8f0; white-space: pre-wrap; margin-top: 16px; }
+  
+  .overlay-bg { position: fixed; inset: 0; background-color: rgba(2, 6, 23, 0.95); z-index: 50; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; box-sizing: border-box; }
+  .overlay-card { width: 100%; max-width: 32rem; padding: 24px; background-color: #0f172a; border: 1px solid #1e293b; border-radius: 12px; text-align: center; }
+  .spinner-ring { width: 48px; height: 48px; border: 4px solid #1e293b; border-top-color: #2dd4bf; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 16px auto; }
+  .interstitial-ad { width: 100%; height: 100px; background-color: #020617; border: 1px dashed #334155; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #64748b; font-family: monospace; margin-top: 16px; }
   @keyframes spin { to { transform: rotate(360deg); } }
   @media (max-width: 1279px) { .ad-skyscraper { display: none; } }
 `;
 
-// ========================================================
-// INTERFACES & COMPONENTS
-// ========================================================
+interface UserAccount {
+  username: string;
+  isPremium: boolean;
+  walletBalance: number;
+}
+
+interface CustomTool {
+  id: string;
+  title: string;
+  desc: string;
+  promptInstructions: string;
+  creator: string;
+  usesCount: number;
+}
+
 function AdLayoutWrapper({ children }: { children: React.ReactNode }) {
   const [adRefreshCount, setAdRefreshCount] = useState<number>(0);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setAdRefreshCount((prev) => prev + 1);
-    }, 30000);
+    const interval = setInterval(() => { setAdRefreshCount(prev => prev + 1); }, 30000);
     return () => clearInterval(interval);
   }, []);
 
   return (
     <div className="app-container">
       <style>{STYLES_INJECTION}</style>
-
-      <div className="ad-banner-top">
-        <div className="ad-label">Sponsored Advertisement</div>
-        <div className="ad-placeholder-leaderboard">
-          Leaderboard_728x90 // Zone_Top // Token_Refreshes_{adRefreshCount}
-        </div>
-      </div>
-
+      <div className="ad-banner-top"><div className="ad-label">Sponsored Advertisement</div><div className="ad-placeholder-leaderboard">Leaderboard_728x90 // Zone_Top // Token_Refreshes_{adRefreshCount}</div></div>
       <div className="main-layout">
-        <aside className="ad-skyscraper">
-          <div className="ad-label">Advertisement</div>
-          <div className="ad-placeholder-sky">
-            Skyscraper_160x600 <br /> [Zone_Left] <br />
-            <br />
-            <span className="view-lock">Viewability_Locked</span>
-          </div>
-        </aside>
-
+        <aside className="ad-skyscraper"><div className="ad-label">Advertisement</div><div className="ad-placeholder-sky">Skyscraper_160x600 <br/> [Zone_Left] <br/><br/> <span className="view-lock">Viewability_Locked</span></div></aside>
         <main className="main-content">{children}</main>
-
-        <aside className="ad-skyscraper ad-skyscraper-right">
-          <div className="ad-label">Advertisement</div>
-          <div className="ad-placeholder-sky">
-            Skyscraper_160x600 <br /> [Zone_Right] <br />
-            <br />
-            <span className="view-lock">Viewability_Locked</span>
-          </div>
-        </aside>
+        <aside className="ad-skyscraper ad-skyscraper-right"><div className="ad-label">Advertisement</div><div className="ad-placeholder-sky">Skyscraper_160x600 <br/> [Zone_Right] <br/><br/> <span className="view-lock">Viewability_Locked</span></div></aside>
       </div>
-
-      <div className="ad-banner-bottom">
-        <div className="ad-label">Sponsored Link</div>
-        <div className="ad-placeholder-footer">
-          Sticky_Footer_Banner // Responsive_Mobile_Anchor
-        </div>
-      </div>
+      <div className="ad-banner-bottom"><div className="ad-label">Sponsored Link</div><div className="ad-placeholder-footer">Sticky_Footer_Banner // Responsive_Mobile_Anchor</div></div>
     </div>
   );
 }
 
-function ProcessingOverlay({
-  message,
-  onComplete,
-}: {
-  message: string;
-  onComplete: () => void;
-}) {
+function ProcessingOverlay({ message, onComplete }: { message: string; onComplete: () => void }) {
   useEffect(() => {
-    const timer = setTimeout(() => {
-      onComplete();
-    }, 3000);
+    const timer = setTimeout(() => { onComplete(); }, 3000);
     return () => clearTimeout(timer);
   }, [onComplete]);
 
   return (
     <div className="overlay-bg">
       <div className="overlay-card">
-        <div className="spinner-ring">
-          <div className="spinner-ring-base"></div>
-          <div className="spinner-ring-active"></div>
-        </div>
-        <div>
-          <h3 className="overlay-title">Running AI Pipelines...</h3>
-          <p className="overlay-msg">{message}</p>
-        </div>
-        <div className="interstitial-ad">
-          Processing_Interstitial_Premium_Placement_300x100
-        </div>
+        <div className="spinner-ring"></div>
+        <h3 style={{ margin: '0 0 8px 0', fontSize: '16px' }}>Processing Stream Matrix...</h3>
+        <p style={{ margin: 0, fontSize: '12px', color: '#94a3b8', fontFamily: 'monospace' }}>{message}</p>
+        <div className="interstitial-ad">Interstitial_High_RPM_Execution_Placement_300x100</div>
       </div>
     </div>
   );
 }
-
-function ChatGptCleaner({
-  triggerProcess,
-}: {
-  triggerProcess: (msg: string, action: () => void) => void;
-}) {
-  const [input, setInput] = useState<string>('');
-  const [output, setOutput] = useState<string>('');
-
-  const handleGenerate = () => {
-    if (!input) return;
-    triggerProcess('Stripping grey markdown highlight artifacts...', () => {
-      let cleaned = input
-        .replace(/```[a-z]*\n?/gi, '')
-        .replace(/`/g, '')
-        .replace(/■/g, '');
-      setOutput(cleaned.trim());
-    });
-  };
-
-  return (
-    <div>
-      <h2 className="tool-header-title">ChatGPT Formatting Cleaner</h2>
-      <p className="tool-header-seo">
-        Target SEO: "Fix ChatGPT copy formatting boxes"
-      </p>
-      <textarea
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        placeholder="Paste text from ChatGPT with annoying grey background boxes here..."
-        className="textarea-input"
-      />
-      <button
-        onClick={handleGenerate}
-        disabled={!input}
-        className="btn-generate"
-      >
-        Clean Text & Refresh Layout
-      </button>
-      {output && <div className="output-box">{output}</div>}
-    </div>
-  );
-}
-
-function TextHumanizer({
-  triggerProcess,
-}: {
-  triggerProcess: (msg: string, action: () => void) => void;
-}) {
-  const [input, setInput] = useState<string>('');
-  const [output, setOutput] = useState<string>('');
-
-  const handleGenerate = () => {
-    if (!input) return;
-    triggerProcess(
-      'Injecting optimization tokens into Gemini allocation metrics...',
-      () => {
-        setOutput(
-          'Look, I know how hard it can be to scale when you run low on time. That is exactly why we built this automated utility loop for you.'
-        );
-      }
-    );
-  };
-
-  return (
-    <div>
-      <h2 className="tool-header-title">AI Text Humanizer</h2>
-      <p className="tool-header-seo">
-        Target SEO: "Free AI text humanizer no subscription"
-      </p>
-      <textarea
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        placeholder="Paste robotic AI sentences here..."
-        className="textarea-input"
-      />
-      <button
-        onClick={handleGenerate}
-        disabled={!input}
-        className="btn-generate"
-      >
-        Breathe Organic Speech Into String
-      </button>
-      {output && <div className="output-box">{output}</div>}
-    </div>
-  );
-}
-
-// ========================================================
-// 5.2 COMPONENT: BulkFileRenamer Tool (Added Module)
-// ========================================================
-function BulkFileRenamer({
-  triggerProcess,
-}: {
-  triggerProcess: (msg: string, action: () => void) => void;
-}) {
-  const [instructions, setInstructions] = useState<string>('');
-  const [output, setOutput] = useState<boolean>(false);
-
-  const handleGenerate = () => {
-    if (!instructions) return;
-    triggerProcess(
-      'Injecting processing stream token into API free container allocation metrics...',
-      () => {
-        setOutput(true);
-      }
-    );
-  };
-
-  return (
-    <div>
-      <h2 className="tool-header-title">AI Contextual Bulk File Renamer</h2>
-      <p className="tool-header-seo">
-        Target SEO: "Bulk rename files in ZIP folder free"
-      </p>
-      <div
-        style={{
-          padding: '24px',
-          border: '2px dashed #1e293b',
-          backgroundColor: 'rgba(15,23,42,0.4)',
-          borderRadius: '12px',
-          textAlign: 'center',
-          marginBottom: '16px',
-        }}
-      >
-        <p
-          style={{
-            fontSize: '12px',
-            color: '#34d399',
-            fontWeight: 'bold',
-            margin: 0,
-          }}
-        >
-          ✓ asset_payload.zip (3 data clusters detected)
-        </p>
-      </div>
-      <textarea
-        value={instructions}
-        onChange={(e) => setInstructions(e.target.value)}
-        placeholder="e.g., Look inside images and rename them product_angle based on orientation..."
-        className="textarea-input"
-        style={{ height: '80px' }}
-      />
-      <button
-        onClick={handleGenerate}
-        disabled={!instructions}
-        className="btn-generate"
-      >
-        Execute Intelligent Renaming Sequence
-      </button>
-      {output && (
-        <div
-          className="output-box"
-          style={{ fontFamily: 'monospace', fontSize: '11px' }}
-        >
-          <div style={{ color: '#f87171', textDecoration: 'line-through' }}>
-            DSC_0012.jpg &rarr;{' '}
-            <span
-              style={{
-                color: '#34d399',
-                textDecoration: 'none',
-                fontWeight: 'bold',
-              }}
-            >
-              product_left_angle.jpg
-            </span>
-          </div>
-          <div style={{ color: '#f87171', textDecoration: 'line-through' }}>
-            DSC_0013.jpg &rarr;{' '}
-            <span
-              style={{
-                color: '#34d399',
-                textDecoration: 'none',
-                fontWeight: 'bold',
-              }}
-            >
-              product_front_view.jpg
-            </span>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ========================================================
-// 5.4 COMPONENT: PrivacyShield Tool (Added Module)
-// ========================================================
-function PrivacyShield({
-  triggerProcess,
-}: {
-  triggerProcess: (msg: string, action: () => void) => void;
-}) {
-  const [active, setActive] = useState<boolean>(false);
-  const [output, setOutput] = useState<boolean>(false);
-
-  const handleGenerate = () => {
-    triggerProcess(
-      'Mapping binary arrays internally and purging nested GPS coordinates locally...',
-      () => {
-        setOutput(true);
-      }
-    );
-  };
-
-  return (
-    <div>
-      <h2 className="tool-header-title">
-        Metadata Privacy Shield & Tag Purger
-      </h2>
-      <p className="tool-header-seo">
-        Target SEO: "Remove tracking metadata from video clip"
-      </p>
-      <div
-        style={{
-          padding: '24px',
-          border: '2px dashed #1e293b',
-          backgroundColor: 'rgba(15,23,42,0.4)',
-          borderRadius: '12px',
-          textAlign: 'center',
-          marginBottom: '16px',
-        }}
-      >
-        {!active ? (
-          <button
-            onClick={() => setActive(true)}
-            className="btn-generate"
-            style={{ marginTop: 0, width: 'auto', padding: '8px 16px' }}
-          >
-            Load Test Media File
-          </button>
-        ) : (
-          <p
-            style={{
-              fontSize: '12px',
-              color: '#2dd4bf',
-              fontWeight: 'bold',
-              margin: 0,
-            }}
-          >
-            ✓ raw_drone_capture_2026.mp4 (GPS Track Logs & Model EXIF Meta
-            Found)
-          </p>
-        )}
-      </div>
-      <button
-        onClick={handleGenerate}
-        disabled={!active}
-        className="btn-generate"
-      >
-        Strip Tracking Context Safely
-      </button>
-      {output && (
-        <div
-          className="output-box"
-          style={{
-            fontFamily: 'monospace',
-            fontSize: '11px',
-            color: '#cbd5e1',
-          }}
-        >
-          <div>
-            &bull; Target Output Identity:
-            raw_drone_capture_2026_safe_shielded.mp4
-          </div>
-          <div>
-            &bull; Device Configuration Tracking Footprints:{' '}
-            <span style={{ color: '#34d399', fontWeight: 'bold' }}>PURGED</span>
-          </div>
-          <div>
-            &bull; Geospatial Geo-Location Hardware Signatures:{' '}
-            <span style={{ color: '#34d399', fontWeight: 'bold' }}>WIPED</span>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ========================================================
-// 5.5 COMPONENT: TranscriptCleaner Tool (Added Module)
-// ========================================================
-function TranscriptCleaner({
-  triggerProcess,
-}: {
-  triggerProcess: (msg: string, action: () => void) => void;
-}) {
-  const [input, setInput] = useState<string>('');
-  const [output, setOutput] = useState<string>('');
-
-  const handleGenerate = () => {
-    if (!input) return;
-    triggerProcess(
-      'Sorting timestamp timelines and distilling chat blocks into structured summaries...',
-      () => {
-        // Free client-side fallback regex to strip timestamps [00:00] or 00:00:00 and clean up formatting markers
-        let sanitized = input
-          .replace(/\[?\d{1,2}:\d{2}(:\d{2})?\]?/g, '') // Purge timestamps completely
-          .replace(/^[A-Za-z\s]+:\s*/gm, ''); // Purge raw speaker identifier headings
-
-        let structuredNotes =
-          '• Meeting structure parsed successfully.\n' +
-          '• Discussion point recorded: Action item variables locked into ad placeholders.\n' +
-          '• Next operational check: Syncing dynamic rate limit tokens.';
-
-        setOutput(
-          sanitized.trim()
-            ? '--- CLEANED SUMMARY TRANSLATION ---\n\n' + structuredNotes
-            : ''
-        );
-      }
-    );
-  };
-
-  return (
-    <div>
-      <h2 className="tool-header-title">Intelligent Transcript Structurer</h2>
-      <p className="tool-header-seo">
-        Target SEO: "Clean raw Zoom Teams transcript text online"
-      </p>
-      <textarea
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        placeholder="Paste messy, disorganized transcript files containing raw timestate metrics or speaker logs here..."
-        className="textarea-input"
-      />
-      <button
-        onClick={handleGenerate}
-        disabled={!input}
-        className="btn-generate"
-      >
-        Extract Core Meeting Actions
-      </button>
-      {output && <div className="output-box">{output}</div>}
-    </div>
-  );
-}
-
-// ========================================================
-// MAIN EXPORT
-// ========================================================
 export default function App() {
+  const [user, setUser] = useState<UserAccount | null>(null);
   const [route, setRoute] = useState<string>('hub');
   const [processing, setProcessing] = useState<boolean>(false);
-  const [msg, setMsg] = useState<string>('');
+  const [msg, setMsg] = useState<string>("");
   const [pendingAction, setPendingAction] = useState<() => void>(() => {});
+  
+  const [customTools, setCustomTools] = useState<CustomTool[]>([
+    { id: 'pirate-joke', title: 'Pirate Translator', desc: 'Converts any plain input text into custom high-sea pirate speak strings.', promptInstructions: 'Translate the following text into pirate jargon:', creator: 'CaptainJack', usesCount: 42 }
+  ]);
 
-  const runTrigger = (message: string, action: () => void) => {
+  const [authMode, setAuthMode] = useState<'login' | 'signup' | null>(null);
+  const [formUser, setFormUser] = useState<string>("");
+
+  const [toolTitle, setToolTitle] = useState<string>("");
+  const [toolDesc, setToolDesc] = useState<string>("");
+  const [toolPrompt, setToolPrompt] = useState<string>("");
+
+  const [activeTool, setActiveTool] = useState<CustomTool | null>(null);
+  const [toolInput, setToolInput] = useState<string>("");
+  const [toolOutput, setToolOutput] = useState<string>("");
+
+  const triggerProcess = (message: string, action: () => void) => {
     setMsg(message);
     setPendingAction(() => action);
     setProcessing(true);
@@ -490,77 +145,203 @@ export default function App() {
     if (pendingAction) pendingAction();
   };
 
+  const handleCreateTool = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!toolTitle || !toolPrompt || !user) return;
+
+    const newId = toolTitle.toLowerCase().replace(/\s+/g, '-');
+    const newTool: CustomTool = {
+      id: newId,
+      title: toolTitle,
+      desc: toolDesc || "Custom user-generated automated prompt processing pipeline.",
+      promptInstructions: toolPrompt,
+      creator: user.username,
+      usesCount: 0
+    };
+
+    setCustomTools([newTool, ...customTools]);
+    setToolTitle(""); setToolDesc(""); setToolPrompt("");
+    setRoute('hub');
+  };
+
+  const executeCustomTool = () => {
+    if (!activeTool || !toolInput) return;
+    triggerProcess(`Running creator array prompt across marketplace nodes...`, () => {
+      setToolOutput(`[OUTPUT BLOCK GENERATED BY DYNAMIC SYSTEM PROMPT: "${activeTool.promptInstructions}"]\n\nProcessed Response Trace: Re-aligned your input matrix "${toolInput}" cleanly.`);
+      
+      setCustomTools(prev => prev.map(t => {
+        if (t.id === activeTool.id) {
+          const addedUses = t.usesCount + 1;
+          if (user && t.creator === user.username && !user.isPremium) {
+            setUser(prevUser => prevUser ? { ...prevUser, walletBalance: prevUser.walletBalance + 0.09 } : null);
+          }
+          return { ...t, usesCount: addedUses };
+        }
+        return t;
+      }));
+    });
+  };
+
   return (
     <AdLayoutWrapper>
-      {route !== 'hub' && (
+      <div className="marketplace-nav">
+        <div className="nav-brand" onClick={() => setRoute('hub')}>LazySuite Builder Hub</div>
+        <div className="nav-user-badge">
+          {user ? (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <span>User: <strong style={{ color: '#34d399' }}>{user.username}</strong> {user.isPremium && <span style={{ color: '#eab308' }}>[PRO]</span>}</span>
+              <span>Balance: <strong style={{ color: '#2dd4bf' }}>${user.walletBalance.toFixed(2)}</strong></span>
+              {!user.isPremium && (
+                <button className="btn-premium" onClick={() => setUser({ ...user, isPremium: true })}>Go Pro (0% Fees)</button>
+              )}
+              <button className="btn-logout" onClick={() => { setUser(null); setRoute('hub'); }}>Logout</button>
+            </div>
+          ) : (
+            <div style={{ display: 'flex', gap: '12px' }}>
+              <button style={{ background: 'none', border: '1px solid #1e293b', color: 'white', padding: '4px 12px', borderRadius: '4px', cursor: 'pointer' }} onClick={() => setAuthMode('login')}>Login</button>
+              <button style={{ background: 'linear-gradient(to right, #2dd4bf, #34d399)', border: 'none', color: '#020617', fontWeight: 'bold', padding: '4px 12px', borderRadius: '4px', cursor: 'pointer' }} onClick={() => setAuthMode('signup')}>Sign Up</button>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {authMode && (
+        <div className="auth-card">
+          <h3 style={{ margin: '0 0 12px 0', textAlign: 'center' }}>{authMode === 'login' ? 'Welcome Back' : 'Create Builder Account'}</h3>
+          <p style={{ fontSize: '11px', color: '#64748b', textAlign: 'center', margin: '0 0 16px 0' }}>Join the automated 10% commission pool.</p>
+          <input type="text" placeholder="Enter Username..." value={formUser} onChange={(e) => setFormUser(e.target.value)} className="form-input" />
+          <button className="btn-generate" style={{ marginTop: '4px' }} onClick={() => {
+            if (!formUser) return;
+            setUser({ username: formUser, isPremium: false, walletBalance: 0.00 });
+            setFormUser(""); setAuthMode(null);
+          }}>
+            {authMode === 'login' ? 'Sign In Securely' : 'Register Free Day-Pass'}
+          </button>
+          <button style={{ background: 'none', border: 'none', color: '#64748b', fontSize: '11px', width: '100%', marginTop: '12px', cursor: 'pointer' }} onClick={() => setAuthMode(null)}>Cancel</button>
+        </div>
+      )}
+
+      {route !== 'hub' && !authMode && (
         <button onClick={() => setRoute('hub')} className="btn-back">
           &larr; Return To Boutique Mall Lobby
         </button>
       )}
 
-      {route === 'hub' && (
+      {!authMode && route === 'hub' && (
         <div>
-          <div className="lobby-header">
-            <h1 className="lobby-title">LazySuite</h1>
-            <p className="lobby-desc">
-              Zero-cost hyper-focused data friction utilities.
-            </p>
+          {user && (
+            <div className="dashboard-banner">
+              <div>
+                <h4 style={{ margin: 0, fontSize: '13px', color: '#eab308' }}>Creator Monetization Mode Enabled</h4>
+                <p style={{ margin: '2px 0 0 0', fontSize: '11px', color: '#94a3b8' }}>{!user.isPremium ? 'You are earning 90% revenue from runs. 10% system fee applied.' : 'PRO Member tier active: Keeping 100% of custom run monetization tokens!'}</p>
+              </div>
+              <button onClick={() => setRoute('create-tool')} style={{ background: '#020617', border: '1px solid #eab308', color: '#eab308', padding: '6px 12px', borderRadius: '6px', fontWeight: 'bold', cursor: 'pointer', fontSize: '11px' }}>+ Build Custom Tool</button>
+            </div>
+          )}
+
+<div className="lobby-header">
+            <h1 className="lobby-title">LazySuite Mall</h1>
+            <p className="lobby-desc">Launch hyper-focused data engines or engineer your own monetized micro-utility pipelines.</p>
+            
+            {/* ROADMAP HOOK DISCOVERY BUTTONS */}
+            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', marginTop: '16px' }}>
+              <button 
+                onClick={() => alert("Coming in the next update!")}
+                style={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', color: '#34d399', fontSize: '12px', fontWeight: 'bold', padding: '8px 16px', borderRadius: '6px', cursor: 'pointer', fontFamily: 'monospace' }}
+              >
+                📁 Other Tools
+              </button>
+              <button 
+                onClick={() => alert("Coming in the next update!")}
+                style={{ background: 'linear-gradient(to right, #eab308, #ca8a04)', border: 'none', color: '#020617', fontSize: '12px', fontWeight: 'bold', padding: '8px 16px', borderRadius: '6px', cursor: 'pointer', fontFamily: 'monospace' }}
+              >
+                🔥 Create and Earn Money
+              </button>
+            </div>
           </div>
-          <div className="grid-container">
+
+
+          <div className="section-label">Default Core Boutiques</div>
+          <div className="grid-container" style={{ marginBottom: '24px' }}>
             <div onClick={() => setRoute('cleaner')} className="tool-card">
-              <h3 className="tool-card-title">ChatGPT Formatting Cleaner</h3>
-              <p className="tool-card-desc">
-                Strips grey boxes and formatting markers instantly.
-              </p>
+              <h3 className="tool-card-title">ChatGPT Copy-Paste Formatting Cleaner</h3>
+              <p className="tool-card-desc">Strips annoying gray text background artifact sheets straight from prompt outputs.</p>
             </div>
             <div onClick={() => setRoute('humanizer')} className="tool-card">
-              <h3 className="tool-card-title">AI Text Humanizer</h3>
-              <p className="tool-card-desc">
-                Converts synthetic writing into natural human speech flows.
-              </p>
+              <h3 className="tool-card-title">Zero-Cost AI Conversational Text Humanizer</h3>
+              <p className="tool-card-desc">Breathes organic prose sentence loops straight into rigid text layers.</p>
             </div>
             <div onClick={() => setRoute('renamer')} className="tool-card">
-              <h3 className="tool-card-title">
-                AI Contextual Bulk File Renamer
-              </h3>
-              <p className="tool-card-desc">
-                Intelligently renames batch files inside zip archives with plain
-                instructions.
-              </p>
+              <h3 className="tool-card-title">AI Contextual Bulk File Renamer</h3>
+              <p className="tool-card-desc">Intelligently renames batch files inside zip archives with plain instructions.</p>
             </div>
             <div onClick={() => setRoute('shield')} className="tool-card">
-              <h3 className="tool-card-title">
-                Metadata Privacy Shield & Tag Purger
-              </h3>
-              <p className="tool-card-desc">
-                Scrubs tracking coordinates, EXIF markers, and hardware
-                signatures from media.
-              </p>
+              <h3 className="tool-card-title">Metadata Privacy Shield & Tag Purger</h3>
+              <p className="tool-card-desc">Scrubs tracking coordinates, EXIF markers, and hardware signatures from media.</p>
             </div>
             <div onClick={() => setRoute('transcript')} className="tool-card">
-              <h3 className="tool-card-title">
-                Intelligent Transcript Structurer
-              </h3>
-              <p className="tool-card-desc">
-                Cleans chaotic Zoom and Teams log files into summary actions
-                instantly.
-              </p>
+              <h3 className="tool-card-title">Intelligent Transcript Structurer</h3>
+              <p className="tool-card-desc">Cleans chaotic Zoom and Teams log files into summary actions instantly.</p>
             </div>
+          </div>
+
+          <div className="section-label">User-Generated App Marketplace (10% Commission Shared)</div>
+          <div className="grid-container">
+            {customTools.map(t => (
+              <div key={t.id} onClick={() => { setActiveTool(t); setToolInput(""); setToolOutput(""); setRoute('run-custom'); }} className="tool-card">
+                <span className="tool-badge-creator">By @{t.creator} ({t.usesCount} runs)</span>
+                <h3 className="tool-card-title" style={{ paddingRight: '120px' }}>{t.title}</h3>
+                <p className="tool-card-desc">{t.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       )}
 
-      {route === 'cleaner' && <ChatGptCleaner triggerProcess={runTrigger} />}
-      {route === 'humanizer' && <TextHumanizer triggerProcess={runTrigger} />}
-      {route === 'renamer' && <BulkFileRenamer triggerProcess={runTrigger} />}
-      {route === 'shield' && <PrivacyShield triggerProcess={runTrigger} />}
-      {route === 'transcript' && (
-        <TranscriptCleaner triggerProcess={runTrigger} />
+      {route === 'cleaner' && <ChatGptCleaner triggerProcess={triggerProcess} />}
+      {route === 'humanizer' && <TextHumanizer triggerProcess={triggerProcess} />}
+      {route === 'renamer' && <BulkFileRenamer triggerProcess={triggerProcess} />}
+      {route === 'shield' && <PrivacyShield triggerProcess={triggerProcess} />}
+      {route === 'transcript' && <TranscriptCleaner triggerProcess={triggerProcess} />}
+
+      {route === 'create-tool' && (
+        <div style={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', padding: '24px', borderRadius: '12px' }}>
+          <h2 style={{ fontSize: '18px', margin: '0 0 4px 0' }}>Build Your Own Custom Tool</h2>
+          <p style={{ fontSize: '11px', color: '#64748b', margin: '0 0 20px 0', fontFamily: 'monospace' }}>Every execution logs interstitial ad revenue commissions directly into your wallet.</p>
+          <form onSubmit={handleCreateTool} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div>
+              <label style={{ display: 'block', fontSize: '11px', fontFamily: 'monospace', color: '#94a3b8', marginBottom: '4px' }}>TOOL TITLE</label>
+              <input type="text" placeholder="e.g., Code Comment Eraser, Blog Outline Builder..." value={toolTitle} onChange={(e) => setToolTitle(e.target.value)} className="form-input" required />
+            </div>
+            <div>
+              <label style={{ display: 'block', fontSize: '11px', fontFamily: 'monospace', color: '#94a3b8', marginBottom: '4px' }}>SHORT PUBLIC DESCRIPTION</label>
+              <input type="text" placeholder="Explain what painful data-friction point this solves..." value={toolDesc} onChange={(e) => setToolDesc(e.target.value)} className="form-input" />
+            </div>
+            <div>
+              <label style={{ display: 'block', fontSize: '11px', fontFamily: 'monospace', color: '#94a3b8', marginBottom: '4px' }}>SECRET SYSTEM CORE PROMPT INSTRUCTIONS</label>
+              <textarea placeholder="e.g., Act as a master copywriter. Take the input text and restructure it into an attention-grabbing sales letter hook..." value={toolPrompt} onChange={(e) => setToolPrompt(e.target.value)} className="textarea-input" style={{ height: '80px' }} required />
+            </div>
+            <button type="submit" className="btn-generate">Deploy Custom Tool to Marketplace Hub</button>
+          </form>
+        </div>
       )}
 
-      {processing && (
-        <ProcessingOverlay message={msg} onComplete={handleComplete} />
+      {route === 'run-custom' && activeTool && (
+        <div>
+          <button onClick={() => setRoute('hub')} className="btn-back">&larr; Back To Marketplace Grid</button>
+          <h2 className="tool-header-title">{activeTool.title}</h2>
+          <p className="tool-header-seo">Engineered Array Pipeline Managed by: <strong>@{activeTool.creator}</strong></p>
+          <p style={{ fontSize: '12px', color: '#94a3b8', marginTop: '-8px', marginBottom: '16px' }}>{activeTool.desc}</p>
+          
+          <textarea value={toolInput} onChange={(e) => setToolInput(e.target.value)} placeholder="Enter your text to trigger the prompt logic execution loop..." className="textarea-input" />
+          <button onClick={executeCustomTool} disabled={!toolInput} className="btn-generate">Execute Tool & Refresh Ad Placements</button>
+          
+          {toolOutput && <div className="output-box">{toolOutput}</div>}
+        </div>
       )}
+
+      {processing && <ProcessingOverlay message={msg} onComplete={handleComplete} />}
     </AdLayoutWrapper>
   );
 }
+
