@@ -22,6 +22,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const { promptInstructions, userInput } = req.body;
   
     const aiResponse = await fetch(
+      
       "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
       {
         method: "POST",
@@ -42,8 +43,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         })
       }
     );
-  
-    const aiData = await aiResponse.json();
+    console.log("Gemini Status:", aiResponse.status);
+    console.log("Gemini OK:", aiResponse.ok);
+    const raw = await aiResponse.text();
+    if (!raw.trim()) {
+      return res.status(500).json({
+        allowed: false,
+        message: "Gemini returned an empty response."
+      });
+    }
+
+    console.log("Raw Gemini Response:", raw);
+
+    const aiData = JSON.parse(raw);
   
     console.log("Gemini Response:", JSON.stringify(aiData, null, 2));
   

@@ -21,7 +21,23 @@ export default function TextHumanizer({ triggerProcess }: ToolProps) {
           body: JSON.stringify({ promptInstructions: promptText, userInput: input })
         });
 
-        const data = await response.json();
+        const responseText = await response.text();
+
+        console.log("Raw API Response:", responseText);
+
+        let data;
+
+        try {
+          data = JSON.parse(responseText);
+        } catch {
+          throw new Error(`Server returned invalid JSON:\n${responseText}`);
+        }
+
+        if (!response.ok) {
+          throw new Error(data.message || "Request failed");
+        }
+
+        setOutput(data.output);
 
         if (!response.ok) {
           alert(data.message || "Something went wrong. Please try again.");
@@ -31,7 +47,12 @@ export default function TextHumanizer({ triggerProcess }: ToolProps) {
         setOutput(data.output);
       } catch (error) {
         console.error("Request failed:", error);
-        setOutput("Something went wrong generating a response. Please try again.");
+      
+        if (error instanceof Error) {
+          setOutput(error.message);
+        } else {
+          setOutput("Unknown error");
+        }
       }
     });
   };
