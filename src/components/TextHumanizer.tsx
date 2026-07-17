@@ -129,7 +129,6 @@ export default function TextHumanizer({ triggerProcess }: ToolProps) {
   
       <div>
       <h2 className="tool-header-title">AI Text Humanizer</h2>
-      <p className="tool-header-seo">Target SEO: "Free AI text humanizer no subscription"</p>
       <textarea
         value={input}
         onChange={(e) => setInput(e.target.value)}
