@@ -21,27 +21,43 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     const { promptInstructions, userInput } = req.body;
   
-    const aiResponse = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-goog-api-key": GEMINI_API_KEY
-        },
-        body: JSON.stringify({
-          contents: [
-            {
-              parts: [
-                {
-                  text: `${promptInstructions}\n\nInput text:\n${userInput}`
-                }
-              ]
-            }
-          ]
-        })
+    const models = [
+      "gemini-3.5-flash",
+      "gemini-3.1-flash-lite",
+      "gemini-3-flash"
+    ];
+    
+    let aiResponse: Response | null = null;
+    
+    for (const model of models) {
+      aiResponse = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-goog-api-key": GEMINI_API_KEY
+          },
+          body: JSON.stringify({
+            contents: [
+              {
+                parts: [
+                  {
+                    text: `${promptInstructions}\n\nInput text:\n${userInput}`
+                  }
+                ]
+              }
+            ]
+          })
+        }
+      );
+    
+      if (aiResponse.ok) {
+        break;
       }
-    );
+    
+      console.log(`Model ${model} failed with ${aiResponse.status}`);
+    }
     console.log("Gemini Status:", aiResponse.status);
     console.log("Gemini OK:", aiResponse.ok);
     const raw = await aiResponse.text();
