@@ -11,17 +11,17 @@ import TranscriptCleaner from './components/TranscriptCleaner';
 const STYLES_INJECTION = `
   body { margin: 0; background-color: #020617; color: #f8fafc; font-family: sans-serif; }
   .app-container { min-height: 100vh; background-color: #020617; color: #f8fafc; flex-direction: column; display: flex; }
-  .ad-banner-top { width: 100%; background-color: #0f172a; border-bottom: 1px solid #1e293b; padding: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 90px; position: relative; box-sizing: border-box; }
-  .ad-banner-bottom { width: 100%; background-color: #0f172a; border-top: 1px solid #1e293b; padding: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 90px; position: sticky; bottom: 0; z-index: 40; box-sizing: border-box; }
-  .ad-label { position: absolute; top: 4px; left: 8px; font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; color: #475569; font-family: monospace; }
-  .ad-placeholder-leaderboard { width: 100%; max-width: 728px; height: 74px; background-color: #020617; border: 1px dashed #334155; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #64748b; font-family: monospace; }
-  .ad-placeholder-footer { width: 100%; max-width: 728px; height: 64px; background-color: #020617; border: 1px dashed #334155; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #64748b; font-family: monospace; }
-  .main-layout { display: flex; flex: 1 1 0%; width: 100%; max-width: 1920px; margin-left: auto; margin-right: auto; position: relative; justify-content: space-between; box-sizing: border-box; }
-  .ad-skyscraper { width: 180px; background-color: rgba(15, 23, 42, 0.4); padding: 12px; border-right: 1px solid rgba(30, 41, 59, 0.6); display: flex; flex-direction: column; align-items: center; pt: 32px; flex-shrink: 0; position: sticky; top: 0; height: calc(100vh - 180px); box-sizing: border-box; }
-  .ad-skyscraper-right { border-right: none; border-left: 1px solid rgba(30, 41, 59, 0.6); }
-  .ad-placeholder-sky { width: 160px; height: 600px; background-color: #020617; border: 1px dashed #334155; border-radius: 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 12px; color: #64748b; font-family: monospace; text-align: center; padding: 16px; position: sticky; top: 24px; box-sizing: border-box; }
-  .view-lock { font-size: 10px; color: rgba(20, 184, 166, 0.7); margin-top: 16px; }
-  .main-content { flex: 1 1 0%; padding-left: 16px; padding-right: 16px; padding-top: 32px; padding-bottom: 32px; max-width: 44rem; margin-left: auto; margin-right: auto; width: 100%; display: flex; flex-direction: column; justify-content: flex-start; min-height: calc(100vh - 180px); box-sizing: border-box; }
+  .ad-banner-top { width: 100%; background-color: #020617; padding: 0px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 20px; position: relative; box-sizing: border-box; }
+  .ad-banner-bottom { width: 100%; background-color: #020617; padding: 0px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 20px; position: sticky; bottom: 0; z-index: 40; box-sizing: border-box; }
+  .ad-label { display: none; }
+  .ad-placeholder-leaderboard { width: 100%; max-width: 728px; height: 0px; display: none; }
+  .ad-placeholder-footer { width: 100%; max-width: 728px; height: 0px; display: none; }
+  .main-layout { display: flex; flex: 1 1 0%; width: 100%; max-width: 1920px; margin-left: auto; margin-right: auto; position: relative; justify-content: center; box-sizing: border-box; }
+  .ad-skyscraper { width: 0px; display: none; }
+  .ad-skyscraper-right { display: none; }
+  .ad-placeholder-sky { display: none; }
+  .view-lock { display: none; }
+  .main-content { flex: 1 1 0%; padding-left: 16px; padding-right: 16px; padding-top: 32px; padding-bottom: 32px; max-width: 44rem; margin-left: auto; margin-right: auto; width: 100%; display: flex; flex-direction: column; justify-content: flex-start; min-height: 100vh; box-sizing: border-box; }
   
   .marketplace-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; border-bottom: 1px solid #1e293b; padding-bottom: 12px; }
   .nav-brand { font-size: 20px; font-weight: 900; background: linear-gradient(to right, #2dd4bf, #34d399); -webkit-background-clip: text; -webkit-text-fill-color: transparent; cursor: pointer; }
@@ -38,13 +38,57 @@ const STYLES_INJECTION = `
   
   .grid-container { display: flex; flex-direction: column; gap: 16px; }
   .section-label { font-size: 11px; font-weight: bold; text-transform: uppercase; color: #64748b; font-family: monospace; margin: 16px 0 8px 0; }
-  .tool-card { background-color: rgba(15, 23, 42, 0.6); border: 1px solid #1e293b; padding: 20px; border-radius: 12px; cursor: pointer; transition: all 0.2s; position: relative; }
-  .tool-card:hover { border-color: rgba(45, 212, 191, 0.5); background-color: rgba(30, 41, 59, 0.4); }
-  .tool-card-title { font-size: 14px; font-weight: bold; color: #f8fafc; margin: 0 0 4px 0; }
-  .tool-card-desc { font-size: 12px; color: #94a3b8; margin: 0; }
+  .tool-card {
+    background-color: rgba(15, 23, 42, 0.6);
+    border: 1px solid #1e293b;
+    padding: 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    position: relative;
+    transform: translateY(0) scale(1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 300ms cubic-bezier(0.22, 1, 0.36, 1),
+                border-color 300ms cubic-bezier(0.22, 1, 0.36, 1),
+                background-color 300ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .tool-card:hover {
+    transform: translateY(-6px) scale(1.04);
+    background-color: rgba(30, 41, 59, 0.55);
+    border-color: rgba(45, 212, 191, 0.6);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(45, 212, 191, 0.15), 0 0 24px rgba(45, 212, 191, 0.18);
+  }
+  .tool-card-title {
+    font-size: 14px;
+    font-weight: bold;
+    color: #cbd5e1;
+    margin: 0 0 4px 0;
+    transition: color 300ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .tool-card:hover .tool-card-title {
+    color: #f8fafc;
+  }
+  .tool-card-desc {
+    font-size: 12px;
+    color: #64748b;
+    margin: 0;
+    transition: color 300ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .tool-card:hover .tool-card-desc {
+    color: #94a3b8;
+  }
+  .tool-card-icon {
+    display: inline-block;
+    transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .tool-card:hover .tool-card-icon {
+    transform: scale(1.08);
+  }
   .tool-badge-creator { position: absolute; top: 12px; right: 12px; font-size: 9px; font-family: monospace; color: #2dd4bf; background-color: rgba(45,212,191,0.1); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(45,212,191,0.2); }
   
   .dashboard-banner { background: linear-gradient(to right, rgba(15,23,42,0.8), rgba(2,6,23,0.8)); border: 1px dashed #eab308; border-radius: 12px; padding: 16px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; }
+  .limit-warning-banner-safe { background-color: rgba(52, 211, 153, 0.1); border: 1px solid #34d399; border-radius: 8px; padding: 12px; color: #6ee7b7; font-size: 12px; text-align: center; margin-bottom: 16px; font-family: monospace; transition: background-color 300ms cubic-bezier(0.22, 1, 0.36, 1), border-color 300ms cubic-bezier(0.22, 1, 0.36, 1), color 300ms cubic-bezier(0.22, 1, 0.36, 1); }
+  .limit-warning-banner-danger { background-color: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; border-radius: 8px; padding: 12px; color: #f87171; font-size: 12px; text-align: center; margin-bottom: 16px; font-family: monospace; transition: background-color 300ms cubic-bezier(0.22, 1, 0.36, 1), border-color 300ms cubic-bezier(0.22, 1, 0.36, 1), color 300ms cubic-bezier(0.22, 1, 0.36, 1); }
   
   .textarea-input { width: 100%; height: 120px; background-color: #0f172a; border: 1px solid #1e293b; border-radius: 8px; padding: 12px; font-size: 12px; color: #cbd5e1; font-family: monospace; resize: none; box-sizing: border-box; }
   .btn-generate { width: 100%; padding: 12px; background: linear-gradient(to right, #2dd4bf, #34d399); color: #020617; font-weight: bold; font-size: 12px; border: none; border-radius: 8px; cursor: pointer; margin-top: 12px; }
@@ -56,7 +100,103 @@ const STYLES_INJECTION = `
   .interstitial-ad { width: 100%; height: 100px; background-color: #020617; border: 1px dashed #334155; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #64748b; font-family: monospace; margin-top: 16px; }
   @keyframes spin { to { transform: rotate(360deg); } }
   @media (max-width: 1279px) { .ad-skyscraper { display: none; } }
-`;
+
+  .btn-back { background: none; border: none; color: #2dd4bf; font-size: 12px; font-family: monospace; cursor: pointer; padding: 0; margin-bottom: 16px; text-align: left; }
+  .btn-back:hover { color: #5eead4; text-decoration: underline; }
+  .tool-header-title { font-size: 20px; font-weight: 900; color: #f8fafc; margin: 0 0 4px 0; }
+  .tool-header-seo { font-size: 11px; color: #64748b; font-family: monospace; margin: 0; }
+  .btn-other-tools {
+    background-color: #0f172a;
+    border: 1px solid #1e293b;
+    color: #34d399;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: monospace;
+    transform: scale(1) translateY(0);
+    transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1),
+                border-color 300ms cubic-bezier(0.22, 1, 0.36, 1),
+                background-color 300ms cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 300ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .btn-other-tools:hover {
+    transform: scale(1.03) translateY(-2px);
+    border-color: rgba(45, 212, 191, 0.5);
+    background-color: #16223d;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 16px rgba(45, 212, 191, 0.12);
+  }
+
+  .btn-create-earn {
+    background: linear-gradient(to right, #eab308, #ca8a04);
+    border: none;
+    color: #020617;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: monospace;
+    transform: scale(1) translateY(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1),
+                background 300ms cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 300ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .btn-create-earn:hover {
+    transform: scale(1.03) translateY(-2px);
+    background: linear-gradient(to right, #facc15, #eab308);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3), 0 0 20px rgba(234, 179, 8, 0.35);
+  }
+
+  .btn-nav-login {
+    background: none;
+    border: 1px solid #1e293b;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transform: scale(1);
+    transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1),
+                border-color 300ms cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 300ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .btn-nav-login:hover {
+    transform: scale(1.05);
+    border-color: rgba(148, 163, 184, 0.6);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  }
+
+  .btn-nav-signup {
+    background: linear-gradient(to right, #2dd4bf, #34d399);
+    border: none;
+    color: #020617;
+    font-weight: bold;
+    padding: 4px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transform: scale(1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 300ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .btn-nav-signup:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3), 0 0 14px rgba(45, 212, 191, 0.3);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tool-card, .tool-card-title, .tool-card-desc, .tool-card-icon,
+    .btn-other-tools, .btn-create-earn, .btn-nav-login, .btn-nav-signup {
+      transition: none;
+    }
+    .tool-card:hover, .btn-other-tools:hover, .btn-create-earn:hover,
+    .btn-nav-login:hover, .btn-nav-signup:hover {
+      transform: none;
+    }
+  }
+  `;
 
 interface UserAccount {
   username: string;
@@ -74,23 +214,14 @@ interface CustomTool {
 }
 
 function AdLayoutWrapper({ children }: { children: React.ReactNode }) {
-  const [adRefreshCount, setAdRefreshCount] = useState<number>(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => { setAdRefreshCount(prev => prev + 1); }, 30000);
-    return () => clearInterval(interval);
-  }, []);
-
   return (
     <div className="app-container">
       <style>{STYLES_INJECTION}</style>
-      <div className="ad-banner-top"><div className="ad-label">Sponsored Advertisement</div><div className="ad-placeholder-leaderboard">Leaderboard_728x90 // Zone_Top // Token_Refreshes_{adRefreshCount}</div></div>
+      <div className="ad-banner-top"><div className="ad-placeholder-leaderboard">Leaderboard_728x90</div></div>
       <div className="main-layout">
-        <aside className="ad-skyscraper"><div className="ad-label">Advertisement</div><div className="ad-placeholder-sky">Skyscraper_160x600 <br/> [Zone_Left] <br/><br/> <span className="view-lock">Viewability_Locked</span></div></aside>
         <main className="main-content">{children}</main>
-        <aside className="ad-skyscraper ad-skyscraper-right"><div className="ad-label">Advertisement</div><div className="ad-placeholder-sky">Skyscraper_160x600 <br/> [Zone_Right] <br/><br/> <span className="view-lock">Viewability_Locked</span></div></aside>
       </div>
-      <div className="ad-banner-bottom"><div className="ad-label">Sponsored Link</div><div className="ad-placeholder-footer">Sticky_Footer_Banner // Responsive_Mobile_Anchor</div></div>
+      <div className="ad-banner-bottom"><div className="ad-placeholder-footer">Sticky_Footer_Banner</div></div>
     </div>
   );
 }
@@ -98,7 +229,7 @@ function AdLayoutWrapper({ children }: { children: React.ReactNode }) {
 function ProcessingOverlay({ message, onComplete }: { message: string; onComplete: () => void }) {
   useEffect(() => {
     const timer = setTimeout(() => { onComplete(); }, 3000);
-    return () => clearTimeout(timer);
+    return () => clearInterval(timer);
   }, [onComplete]);
 
   return (
@@ -107,22 +238,43 @@ function ProcessingOverlay({ message, onComplete }: { message: string; onComplet
         <div className="spinner-ring"></div>
         <h3 style={{ margin: '0 0 8px 0', fontSize: '16px' }}>Processing Stream Matrix...</h3>
         <p style={{ margin: 0, fontSize: '12px', color: '#94a3b8', fontFamily: 'monospace' }}>{message}</p>
-        <div className="interstitial-ad">Interstitial_High_RPM_Execution_Placement_300x100</div>
+        <div className="interstitial-ad">Interstitial_Ad_Slot_Hidden</div>
       </div>
     </div>
   );
 }
+
 export default function App() {
-  const [user, setUser] = useState<UserAccount | null>(null);
+  const [user, setUser] = useState<UserAccount | null>(() => {
+    const saved = localStorage.getItem('lazysuite_user');
+    return saved ? JSON.parse(saved) : null;
+  });
+
+  const [customTools, setCustomTools] = useState<CustomTool[]>(() => {
+    const saved = localStorage.getItem('lazysuite_custom_tools');
+    return saved ? JSON.parse(saved) : [
+      { id: 'pirate-joke', title: 'Pirate Translator', desc: 'Converts any plain input text into custom high-sea pirate speak strings.', promptInstructions: 'Translate the following text into pirate jargon:', creator: 'CaptainJack', usesCount: 42 }
+    ];
+  });
+
+  const [usageCount, setUsageCount] = useState<number>(() => {
+    const count = localStorage.getItem('lazysuite_daily_count');
+    const timestamp = localStorage.getItem('lazysuite_reset_time');
+    
+    if (timestamp && Date.now() > parseInt(timestamp)) {
+      localStorage.setItem('lazysuite_daily_count', '0');
+      localStorage.setItem('lazysuite_reset_time', (Date.now() + 24 * 60 * 60 * 1000).toString());
+      return 0;
+    }
+    return count ? parseInt(count) : 0;
+  });
+
+  const [resetTimeLeft, setResetTimeLeft] = useState<string>("");
   const [route, setRoute] = useState<string>('hub');
   const [processing, setProcessing] = useState<boolean>(false);
   const [msg, setMsg] = useState<string>("");
   const [pendingAction, setPendingAction] = useState<() => void>(() => {});
   
-  const [customTools, setCustomTools] = useState<CustomTool[]>([
-    { id: 'pirate-joke', title: 'Pirate Translator', desc: 'Converts any plain input text into custom high-sea pirate speak strings.', promptInstructions: 'Translate the following text into pirate jargon:', creator: 'CaptainJack', usesCount: 42 }
-  ]);
-
   const [authMode, setAuthMode] = useState<'login' | 'signup' | null>(null);
   const [formUser, setFormUser] = useState<string>("");
 
@@ -134,9 +286,56 @@ export default function App() {
   const [toolInput, setToolInput] = useState<string>("");
   const [toolOutput, setToolOutput] = useState<string>("");
 
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem('lazysuite_user', JSON.stringify(user));
+    } else {
+      localStorage.removeItem('lazysuite_user');
+    }
+  }, [user]);
+
+  useEffect(() => {
+    localStorage.setItem('lazysuite_custom_tools', JSON.stringify(customTools));
+  }, [customTools]);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const timestamp = localStorage.getItem('lazysuite_reset_time');
+      if (!timestamp) {
+        localStorage.setItem('lazysuite_reset_time', (Date.now() + 24 * 60 * 60 * 1000).toString());
+        return;
+      }
+      const diff = parseInt(timestamp) - Date.now();
+      if (diff <= 0) {
+        setUsageCount(0);
+        localStorage.setItem('lazysuite_daily_count', '0');
+        localStorage.setItem('lazysuite_reset_time', (Date.now() + 24 * 60 * 60 * 1000).toString());
+      } else {
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        setResetTimeLeft(`${hours}h ${minutes}m`);
+      }
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [usageCount]);
+
   const triggerProcess = (message: string, action: () => void) => {
+    if (usageCount >= 5 && (!user || !user.isPremium)) {
+      alert("Daily Free Limit Reached! To unlock unlimited continuous processing runs, subscribe to a Pro Tier account or check back after reset.");
+      return;
+    }
+
     setMsg(message);
-    setPendingAction(() => action);
+    setPendingAction(() => {
+      return () => {
+        action();
+        if (!user || !user.isPremium) {
+          const nextCount = usageCount + 1;
+          setUsageCount(nextCount);
+          localStorage.setItem('lazysuite_daily_count', nextCount.toString());
+        }
+      };
+    });
     setProcessing(true);
   };
 
@@ -196,14 +395,15 @@ export default function App() {
               )}
               <button className="btn-logout" onClick={() => { setUser(null); setRoute('hub'); }}>Logout</button>
             </div>
-          ) : (
-            <div style={{ display: 'flex', gap: '12px' }}>
-              <button style={{ background: 'none', border: '1px solid #1e293b', color: 'white', padding: '4px 12px', borderRadius: '4px', cursor: 'pointer' }} onClick={() => setAuthMode('login')}>Login</button>
-              <button style={{ background: 'linear-gradient(to right, #2dd4bf, #34d399)', border: 'none', color: '#020617', fontWeight: 'bold', padding: '4px 12px', borderRadius: '4px', cursor: 'pointer' }} onClick={() => setAuthMode('signup')}>Sign Up</button>
-            </div>
-          )}
+          ) : null}
         </div>
       </div>
+
+      {(!user || !user.isPremium) && (
+        <div className={usageCount >= 4 ? "limit-warning-banner-danger" : "limit-warning-banner-safe"}>
+          {usageCount >= 4 ? "🔒" : "✅"} Platform Account Usage Cap: <strong>{usageCount}/5 Free Runs Used Today</strong>. Resetting in: <strong>{resetTimeLeft || "calculating..."}</strong>
+        </div>
+      )}
 
       {authMode && (
         <div className="auth-card">
@@ -239,29 +439,16 @@ export default function App() {
             </div>
           )}
 
-<div className="lobby-header">
+          <div className="lobby-header">
             <h1 className="lobby-title">LazySuite Mall</h1>
             <p className="lobby-desc">Launch hyper-focused data engines or engineer your own monetized micro-utility pipelines.</p>
-            
-            {/* ROADMAP HOOK DISCOVERY BUTTONS */}
             <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', marginTop: '16px' }}>
-              <button 
-                onClick={() => alert("Coming in the next update!")}
-                style={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', color: '#34d399', fontSize: '12px', fontWeight: 'bold', padding: '8px 16px', borderRadius: '6px', cursor: 'pointer', fontFamily: 'monospace' }}
-              >
-                📁 Other Tools
-              </button>
-              <button 
-                onClick={() => alert("Coming in the next update!")}
-                style={{ background: 'linear-gradient(to right, #eab308, #ca8a04)', border: 'none', color: '#020617', fontSize: '12px', fontWeight: 'bold', padding: '8px 16px', borderRadius: '6px', cursor: 'pointer', fontFamily: 'monospace' }}
-              >
-                🔥 Create and Earn Money
-              </button>
+            <button onClick={() => alert("Coming in the next update!")} className="btn-other-tools">📁 Other Tools</button>
+            <button onClick={() => alert("Coming in the next update!")} className="btn-create-earn">🔥 Create and Earn Money</button>
             </div>
           </div>
 
-
-          <div className="section-label">Default Core Boutiques</div>
+          <div className="section-label">Featured Core Boutiques</div>
           <div className="grid-container" style={{ marginBottom: '24px' }}>
             <div onClick={() => setRoute('cleaner')} className="tool-card">
               <h3 className="tool-card-title">ChatGPT Copy-Paste Formatting Cleaner</h3>
@@ -344,4 +531,3 @@ export default function App() {
     </AdLayoutWrapper>
   );
 }
-

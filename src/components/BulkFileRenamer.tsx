@@ -6,12 +6,33 @@ interface ToolProps {
 
 export default function BulkFileRenamer({ triggerProcess }: ToolProps) {
   const [instructions, setInstructions] = useState<string>("");
-  const [output, setOutput] = useState<boolean>(false);
+  const [output, setOutput] = useState<string>("");
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
     if (!instructions) return;
-    triggerProcess("Injecting processing stream token into API free container allocation metrics...", () => {
-      setOutput(true);
+
+    triggerProcess("Generating contextual renaming maps from serverless logic arrays...", async () => {
+      const promptText = "The user wants to rename a batch of raw asset files inside an archive. Take their instructions and generate a clean mapping output layout list showing how an automated system would map old names (like DSC_001.jpg) to pristine, descriptive names based on their rule.";
+
+      try {
+        const response = await fetch('/api/run-tool', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ promptInstructions: promptText, userInput: instructions })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          alert(data.message || "Something went wrong. Please try again.");
+          return;
+        }
+
+        setOutput(data.output);
+      } catch (error) {
+        console.error("Request failed:", error);
+        setOutput("Something went wrong generating a response. Please try again.");
+      }
     });
   };
 
@@ -19,25 +40,16 @@ export default function BulkFileRenamer({ triggerProcess }: ToolProps) {
     <div>
       <h2 className="tool-header-title">AI Contextual Bulk File Renamer</h2>
       <p className="tool-header-seo">Target SEO: "Bulk rename files in ZIP folder free"</p>
-      <div style={{ padding: '24px', border: '2px dashed #1e293b', backgroundColor: 'rgba(15,23,42,0.4)', borderRadius: '12px', textAlign: 'center', marginBottom: '16px' }}>
-        <p style={{ fontSize: '12px', color: '#34d399', fontWeight: 'bold', margin: 0 }}>✓ asset_payload.zip (3 data clusters detected)</p>
-      </div>
-      <textarea 
-        value={instructions} 
+      <textarea
+        value={instructions}
         onChange={(e) => setInstructions(e.target.value)}
-        placeholder="e.g., Look inside images and rename them product_angle based on orientation..." 
+        placeholder="e.g., Look inside images and rename them product_angle based on orientation..."
         className="textarea-input"
-        style={{ height: '80px' }}
       />
       <button onClick={handleGenerate} disabled={!instructions} className="btn-generate">
         Execute Intelligent Renaming Sequence
       </button>
-      {output && (
-        <div className="output-box" style={{ fontFamily: 'monospace', fontSize: '11px' }}>
-          <div style={{ color: '#f87171', textDecoration: 'line-through' }}>DSC_0012.jpg &rarr; <span style={{ color: '#34d399', textDecoration: 'none', fontWeight: 'bold' }}>product_left_angle.jpg</span></div>
-          <div style={{ color: '#f87171', textDecoration: 'line-through' }}>DSC_0013.jpg &rarr; <span style={{ color: '#34d399', textDecoration: 'none', fontWeight: 'bold' }}>product_front_view.jpg</span></div>
-        </div>
-      )}
+      {output && <div className="output-box" style={{ fontFamily: 'monospace' }}>{output}</div>}
     </div>
   );
 }

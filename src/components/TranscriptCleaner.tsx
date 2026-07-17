@@ -8,18 +8,31 @@ export default function TranscriptCleaner({ triggerProcess }: ToolProps) {
   const [input, setInput] = useState<string>("");
   const [output, setOutput] = useState<string>("");
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
     if (!input) return;
-    triggerProcess("Sorting timestamp timelines and distilling chat blocks into structured summaries...", () => {
-      let sanitized = input
-        .replace(/\[?\d{1,2}:\d{2}(:\d{2})?\]?/g, "")
-        .replace(/^[A-Za-z\s]+:\s*/gm, "");
-      
-      let structuredNotes = "• Meeting structure parsed successfully.\n" + 
-                            "• Discussion point recorded: Action item variables locked into ad placeholders.\n" + 
-                            "• Next operational check: Syncing dynamic rate limit tokens.";
-      
-      setOutput(sanitized.trim() ? "--- CLEANED SUMMARY TRANSLATION ---\n\n" + structuredNotes : "");
+
+    triggerProcess("Sorting timestamp timelines and distilling chat blocks via serverless filters...", async () => {
+      const promptText = "You are an advanced secretary. Take this chaotic, raw meeting transcript containing timestamps, speaker markers, or messy logs. Strip out the timestamps entirely, clean up broken sentences, and distill everything into a beautifully structured, highly readable summary with clear bulleted action items.";
+
+      try {
+        const response = await fetch('/api/run-tool', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ promptInstructions: promptText, userInput: input })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          alert(data.message || "Something went wrong. Please try again.");
+          return;
+        }
+
+        setOutput(data.output);
+      } catch (error) {
+        console.error("Request failed:", error);
+        setOutput("Something went wrong generating a response. Please try again.");
+      }
     });
   };
 
@@ -27,10 +40,10 @@ export default function TranscriptCleaner({ triggerProcess }: ToolProps) {
     <div>
       <h2 className="tool-header-title">Intelligent Transcript Structurer</h2>
       <p className="tool-header-seo">Target SEO: "Clean raw Zoom Teams transcript text online"</p>
-      <textarea 
-        value={input} 
+      <textarea
+        value={input}
         onChange={(e) => setInput(e.target.value)}
-        placeholder="Paste messy, disorganized transcript files containing raw timestate metrics or speaker logs here..." 
+        placeholder="Paste messy transcript log files containing raw timestate metrics here..."
         className="textarea-input"
       />
       <button onClick={handleGenerate} disabled={!input} className="btn-generate">

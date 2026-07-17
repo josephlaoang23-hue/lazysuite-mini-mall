@@ -6,11 +6,31 @@ interface ToolProps {
 
 export default function PrivacyShield({ triggerProcess }: ToolProps) {
   const [active, setActive] = useState<boolean>(false);
-  const [output, setOutput] = useState<boolean>(false);
+  const [output, setOutput] = useState<string>("");
 
-  const handleGenerate = () => {
-    triggerProcess("Mapping binary arrays internally and purging nested GPS coordinates locally...", () => {
-      setOutput(true);
+  const handleGenerate = async () => {
+    triggerProcess("Scrubbing track layers and mapping analytical privacy traces securely...", async () => {
+      const promptText = "Act as an open-source privacy auditor. Generate a textual analysis receipt confirming that metadata layers, GPS hardware coordinate signatures, creation timestamps, and tracking camera model footprint streams have been completely scrubbed from a media upload payload trace. Provide bulleted privacy confirmation details.";
+
+      try {
+        const response = await fetch('/api/run-tool', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ promptInstructions: promptText, userInput: "Trigger verification payload scan." })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          alert(data.message || "Something went wrong. Please try again.");
+          return;
+        }
+
+        setOutput(data.output);
+      } catch (error) {
+        console.error("Request failed:", error);
+        setOutput("Something went wrong generating a response. Please try again.");
+      }
     });
   };
 
@@ -28,13 +48,7 @@ export default function PrivacyShield({ triggerProcess }: ToolProps) {
       <button onClick={handleGenerate} disabled={!active} className="btn-generate">
         Strip Tracking Context Safely
       </button>
-      {output && (
-        <div className="output-box" style={{ fontFamily: 'monospace', fontSize: '11px', color: '#cbd5e1' }}>
-          <div>&bull; Target Output Identity: raw_drone_capture_2026_safe_shielded.mp4</div>
-          <div>&bull; Device Configuration Tracking Footprints: <span style={{ color: '#34d399', fontWeight: 'bold' }}>PURGED</span></div>
-          <div>&bull; Geospatial Geo-Location Hardware Signatures: <span style={{ color: '#34d399', fontWeight: 'bold' }}>WIPED</span></div>
-        </div>
-      )}
+      {output && <div className="output-box" style={{ fontFamily: 'monospace' }}>{output}</div>}
     </div>
   );
 }
