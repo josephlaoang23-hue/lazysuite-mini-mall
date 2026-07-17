@@ -46,6 +46,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     console.log("Gemini Status:", aiResponse.status);
     console.log("Gemini OK:", aiResponse.ok);
     const raw = await aiResponse.text();
+    console.log("Status:", aiResponse.status);
+    console.log("Headers:", Object.fromEntries(aiResponse.headers.entries()));
+    console.log("Raw:", raw);
     if (!raw.trim()) {
       return res.status(500).json({
         allowed: false,
@@ -65,10 +68,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     ) {
       console.error("Gemini Error:", aiData);
   
-      return res.status(500).json({
-        allowed: false,
-        message: "AI generation failed."
-      });
+      return res.status(500).send(raw);
     }
   
     return res.status(200).json({
