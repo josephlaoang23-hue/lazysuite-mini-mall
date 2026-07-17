@@ -128,6 +128,35 @@ const STYLES_INJECTION = `
   .copy-button:active {
     transform: scale(.95);
   }
+  .output-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  
+  .copy-button {
+    background: #1e293b;
+    border: 1px solid #334155;
+    color: #cbd5e1;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 200ms ease;
+  }
+  
+  .copy-button:hover {
+    background: #334155;
+    color: #ffffff;
+  }
+  
+  .output-content {
+    white-space: pre-wrap;
+  }
   .overlay-bg { position: fixed; inset: 0; background-color: rgba(2, 6, 23, 0.95); z-index: 50; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; box-sizing: border-box; }
   .overlay-card { width: 100%; max-width: 32rem; padding: 24px; background-color: #0f172a; border: 1px solid #1e293b; border-radius: 12px; text-align: center; }
   .spinner-ring { width: 48px; height: 48px; border: 4px solid #1e293b; border-top-color: #2dd4bf; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 16px auto; }
