@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState } from "react";
+import { Copy, Check } from "lucide-react";
+import { Helmet } from "react-helmet-async";
 
 interface ToolProps {
   triggerProcess: (msg: string, action: () => void) => void;
@@ -7,18 +9,36 @@ interface ToolProps {
 export default function BulkFileRenamer({ triggerProcess }: ToolProps) {
   const [instructions, setInstructions] = useState<string>("");
   const [output, setOutput] = useState<string>("");
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(output);
+    setCopied(true);
+
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
+  };
+
 
   const handleGenerate = async () => {
     if (!instructions) return;
 
-    triggerProcess("Generating contextual renaming maps from serverless logic arrays...", async () => {
-      const promptText = "The user wants to rename a batch of raw asset files inside an archive. Take their instructions and generate a clean mapping output layout list showing how an automated system would map old names (like DSC_001.jpg) to pristine, descriptive names based on their rule.";
+    triggerProcess(
+      "Generating contextual filename transformation maps...",
+      async () => {
+
+      const promptText =
+        "You are a file organization assistant. Create a clean rename mapping plan based on the user's instructions. Show examples of old filenames becoming descriptive professional filenames. Keep the format easy to copy.";
 
       try {
         const response = await fetch('/api/run-tool', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ promptInstructions: promptText, userInput: instructions })
+          body: JSON.stringify({
+            promptInstructions: promptText,
+            userInput: instructions
+          })
         });
 
         const data = await response.json();
@@ -29,27 +49,97 @@ export default function BulkFileRenamer({ triggerProcess }: ToolProps) {
         }
 
         setOutput(data.output);
+
       } catch (error) {
         console.error("Request failed:", error);
-        setOutput("Something went wrong generating a response. Please try again.");
+        setOutput(
+          "Something went wrong generating a response. Please try again."
+        );
       }
     });
   };
 
+
   return (
     <div>
-      <h2 className="tool-header-title">AI Contextual Bulk File Renamer</h2>
-      <p className="tool-header-seo">Target SEO: "Bulk rename files in ZIP folder free"</p>
+
+      <Helmet>
+        <title>
+          AI Bulk File Renamer | Organize Files Automatically
+        </title>
+
+        <meta
+          name="description"
+          content="Generate smart filename structures and rename plans for large collections of files using AI."
+        />
+
+      </Helmet>
+
+
+      <h2 className="tool-header-title">
+        AI Contextual Bulk File Renamer
+      </h2>
+
+
+      <p
+        style={{
+          fontSize: "12px",
+          color: "#94a3b8",
+          marginBottom: "16px"
+        }}
+      >
+        Create organized filename structures from simple instructions.
+      </p>
+
+
       <textarea
         value={instructions}
         onChange={(e) => setInstructions(e.target.value)}
-        placeholder="e.g., Look inside images and rename them product_angle based on orientation..."
+        placeholder="Example: Rename travel photos using location and date format..."
         className="textarea-input"
       />
-      <button onClick={handleGenerate} disabled={!instructions} className="btn-generate">
+
+
+      <button
+        onClick={handleGenerate}
+        disabled={!instructions}
+        className="btn-generate"
+      >
         Execute Intelligent Renaming Sequence
       </button>
-      {output && <div className="output-box" style={{ fontFamily: 'monospace' }}>{output}</div>}
+
+
+      {output && (
+        <div className="output-box"
+          style={{
+            fontFamily: "monospace",
+            position: "relative"
+          }}
+        >
+
+          <button
+            onClick={handleCopy}
+            style={{
+              position:"absolute",
+              right:"12px",
+              top:"12px",
+              background:"#1e293b",
+              border:"none",
+              color:"#cbd5e1",
+              padding:"6px",
+              borderRadius:"6px",
+              cursor:"pointer"
+            }}
+          >
+            {copied ? <Check size={16}/> : <Copy size={16}/>}
+          </button>
+
+
+          {output}
+
+        </div>
+      )}
+
     </div>
   );
 }
