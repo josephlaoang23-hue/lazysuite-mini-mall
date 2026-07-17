@@ -392,7 +392,16 @@ export default function App() {
               <span>User: <strong style={{ color: '#34d399' }}>{user.username}</strong> {user.isPremium && <span style={{ color: '#eab308' }}>[PRO]</span>}</span>
               <span>Balance: <strong style={{ color: '#2dd4bf' }}>${user.walletBalance.toFixed(2)}</strong></span>
               {!user.isPremium && (
-                <button className="btn-premium" onClick={() => setUser({ ...user, isPremium: true })}>Go Pro (0% Fees)</button>
+                <button
+                className="btn-premium"
+                onClick={() =>
+                  setUser(prev =>
+                    prev
+                      ? { ...prev, isPremium: true }
+                      : null
+                  )
+                }
+              >Go Pro (0% Fees)</button>
               )}
               <button className="btn-logout" onClick={() => { setUser(null); setRoute('hub'); }}>Logout</button>
             </div>
