@@ -44,6 +44,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     const aiData = await aiResponse.json();
 
+    console.log("Gemini Response:", JSON.stringify(aiData, null, 2));
+
     if (
       !aiData.candidates ||
       !aiData.candidates[0]?.content?.parts?.[0]?.text
