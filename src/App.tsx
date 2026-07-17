@@ -320,10 +320,11 @@ export default function App() {
   }, [usageCount]);
 
   const triggerProcess = (message: string, action: () => void) => {
-    if (usageCount >= 5 && (!user || !user.isPremium)) {
-      alert("Daily Free Limit Reached! To unlock unlimited continuous processing runs, subscribe to a Pro Tier account or check back after reset.");
-      return;
-    }
+  // TEMP: Disable free limit while developing
+  // if (usageCount >= 5 && (!user || !user.isPremium)) {
+  //   alert("Daily Free Limit Reached!");
+  //   return;
+  // }
 
     setMsg(message);
     setPendingAction(() => {
