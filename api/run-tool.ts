@@ -20,13 +20,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     const { promptInstructions, userInput } = req.body;
-
+  
     const aiResponse = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`,
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
       {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
+          "x-goog-api-key": GEMINI_API_KEY
         },
         body: JSON.stringify({
           contents: [
@@ -41,34 +42,34 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         })
       }
     );
-
+  
     const aiData = await aiResponse.json();
-
+  
     console.log("Gemini Response:", JSON.stringify(aiData, null, 2));
-
+  
     if (
       !aiData.candidates ||
       !aiData.candidates[0]?.content?.parts?.[0]?.text
     ) {
-      console.error('Gemini Error:', aiData);
-
+      console.error("Gemini Error:", aiData);
+  
       return res.status(500).json({
         allowed: false,
-        message: 'AI generation failed.'
+        message: "AI generation failed."
       });
     }
-
+  
     return res.status(200).json({
       allowed: true,
       output: aiData.candidates[0].content.parts[0].text.trim()
     });
-
+  
   } catch (error) {
     console.error(error);
-
+  
     return res.status(500).json({
       allowed: false,
-      message: 'Internal server error.'
+      message: "Internal server error."
     });
   }
 }
