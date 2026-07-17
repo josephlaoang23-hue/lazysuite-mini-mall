@@ -8,6 +8,7 @@ interface ToolProps {
 export default function TextHumanizer({ triggerProcess }: ToolProps) {
   const [input, setInput] = useState<string>("");
   const [output, setOutput] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const copyOutput = async () => {
@@ -21,7 +22,7 @@ export default function TextHumanizer({ triggerProcess }: ToolProps) {
   };
   const handleGenerate = async () => {
     if (!input) return;
-
+    setIsLoading(true);
     triggerProcess("Streaming organic language syntax models across serverless rails...", async () => {
       const promptText = `
       You are an expert writing editor.
@@ -70,6 +71,7 @@ export default function TextHumanizer({ triggerProcess }: ToolProps) {
         }
 
         setOutput(data.output);
+        setIsLoading(false);
 
         if (!response.ok) {
           alert(data.message || "Something went wrong. Please try again.");
@@ -77,9 +79,10 @@ export default function TextHumanizer({ triggerProcess }: ToolProps) {
         }
 
         setOutput(data.output);
+        setIsLoading(false);
       } catch (error) {
         console.error("Request failed:", error);
-      
+        setIsLoading(false);
         if (error instanceof Error) {
           setOutput(error.message);
         } else {
@@ -99,8 +102,14 @@ export default function TextHumanizer({ triggerProcess }: ToolProps) {
         placeholder="Paste sentence loops here to watch the edge processor humanize them in real-time..."
         className="textarea-input"
       />
-      <button onClick={handleGenerate} disabled={!input} className="btn-generate">
-        Breathe Organic Speech Into String
+      <button
+        onClick={handleGenerate}
+        disabled={!input || isLoading}
+        className="btn-generate"
+      >
+        {isLoading
+          ? "⏳ Humanizing..."
+          : "Breathe Organic Speech Into String"}
       </button>
       {output && (
   <div className="output-box">
