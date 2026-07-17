@@ -12,7 +12,21 @@ export default function TextHumanizer({ triggerProcess }: ToolProps) {
     if (!input) return;
 
     triggerProcess("Streaming organic language syntax models across serverless rails...", async () => {
-      const promptText = "Act as an expert copywriter. Take the user sentence block below and rewrite it to make it sound incredibly natural, engaging, and organic. Remove all rigid robotic phrasing, repetitive transitions, or AI giveaways. Match authentic human speech flows. Maintain the core meaning.";
+      const promptText = `
+You are an AI Text Humanizer.
+
+Rewrite the user's text so it sounds naturally written by a human.
+
+Rules:
+- Return ONLY the rewritten text.
+- Do not explain your changes.
+- Do not use headings.
+- Do not use bullet points.
+- Do not give multiple versions.
+- Preserve the original meaning.
+- Keep roughly the same length.
+- Make the writing smooth, conversational, and natural.
+`;
 
       try {
         const response = await fetch('/api/run-tool', {
