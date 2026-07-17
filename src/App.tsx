@@ -399,7 +399,7 @@ export default function App() {
         </div>
       </div>
 
-      {(!user || !user.isPremium) && (
+      {false && (!user || !user.isPremium) && (
         <div className={usageCount >= 4 ? "limit-warning-banner-danger" : "limit-warning-banner-safe"}>
           {usageCount >= 4 ? "🔒" : "✅"} Platform Account Usage Cap: <strong>{usageCount}/5 Free Runs Used Today</strong>. Resetting in: <strong>{resetTimeLeft || "calculating..."}</strong>
         </div>
