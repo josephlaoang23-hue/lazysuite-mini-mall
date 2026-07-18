@@ -1,4 +1,4 @@
-let lastAdTime = 0;
+let lastAdTrigger = 0;
 
 const AD_COOLDOWN = 5000;
 
@@ -6,24 +6,25 @@ export function triggerPopunderAd() {
 
   const now = Date.now();
 
-  // Prevent spam clicks
-  if (now - lastAdTime < AD_COOLDOWN) {
-    return false;
+  if (now - lastAdTrigger < AD_COOLDOWN) {
+    return;
   }
 
-  lastAdTime = now;
+  lastAdTrigger = now;
 
 
-  // Replace this later with your real ad network URL
-  const adUrl = "https://your-ad-network-url.com";
-
-
-  window.open(
-    adUrl,
-    "_blank",
-    "noopener,noreferrer"
+  const adWindow = window.open(
+    "https://your-ad-network-url.com",
+    "_blank"
   );
 
 
-  return true;
+  if (adWindow) {
+
+    adWindow.blur();
+
+    window.focus();
+
+  }
+
 }
