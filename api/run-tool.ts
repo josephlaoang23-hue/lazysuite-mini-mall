@@ -49,6 +49,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const unlocksKey = `lazysuite:unlocks:${rawIp}:${dateString}`;
     const unlocksUsed = (await redis.get<number>(unlocksKey)) ?? 0;
   
+    res.setHeader('X-RateLimit-Limit', String(DAILY_LIMIT));
+    res.setHeader('X-RateLimit-Remaining', '0');
+  
     if (unlocksUsed >= UNLOCK_CAP) {
       return res.status(202).json({
         unlimitedMode: true,

@@ -496,6 +496,22 @@ useEffect(() => {
   }, []);
 
   useEffect(() => {
+    const fetchUsageStatus = async () => {
+      try {
+        const res = await fetch('/api/usage-status');
+        const data = await res.json();
+        if (res.ok) {
+          setRemainingRuns(data.remaining);
+          setAdUnlocksUsed(data.unlocksUsed);
+        }
+      } catch (err) {
+        console.error('Failed to fetch usage status:', err);
+      }
+    };
+    fetchUsageStatus();
+  }, []);
+
+  useEffect(() => {
     localStorage.setItem('lazysuite_custom_tools', JSON.stringify(customTools));
   }, [customTools]);
 
