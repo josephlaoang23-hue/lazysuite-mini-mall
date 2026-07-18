@@ -8,7 +8,7 @@ import BulkFileRenamer from "./tools/featured/BulkFileRenamer";
 
 import PirateTranslator from "./tools/creator-tools/PirateTranslator";
 
-import { TopAd, BottomAd, SideAds } from "./ads/Ads";
+import { TopAd, BottomAd } from "./ads/Ads";
 // Symmetrical Ad Layout, Marketplace Theme, and Interstitial Style Architecture
 const STYLES_INJECTION = `
   body { margin: 0; background-color: #020617; color: #f8fafc; font-family: sans-serif; }
@@ -329,6 +329,62 @@ export default function App() {
   const [customTools, setCustomTools] = useState<CustomTool[]>([]);
   const [remainingRuns, setRemainingRuns] = useState<number>(5);
   const [adUnlocksUsed, setAdUnlocksUsed] = useState<number>(0);
+  const [unlockOverlayOpen, setUnlockOverlayOpen] = useState(false);
+const [unlockSecondsLeft, setUnlockSecondsLeft] = useState(10);
+const [unlockSessionId, setUnlockSessionId] = useState<string | null>(null);
+
+const AD_URL = "https://your-adsterra-popunder-link.com"; // replace with your real Adsterra link
+
+const startUnlock = async () => {
+  window.open(AD_URL, '_blank'); // fired synchronously inside the click to avoid popup blockers
+
+  try {
+    const res = await fetch('/api/unlock-start', { method: 'POST' });
+    const data = await res.json();
+    if (!res.ok) {
+      alert(data.message || "Could not start unlock.");
+      return;
+    }
+    setUnlockSessionId(data.sessionId);
+    setUnlockSecondsLeft(10);
+    setUnlockOverlayOpen(true);
+  } catch (err) {
+    console.error(err);
+    alert("Something went wrong starting the unlock.");
+  }
+};
+
+const completeUnlock = async () => {
+  try {
+    const res = await fetch('/api/unlock-complete', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sessionId: unlockSessionId })
+    });
+    const data = await res.json();
+    setUnlockOverlayOpen(false);
+    if (!res.ok) {
+      alert(data.message || "Unlock failed.");
+      return;
+    }
+    setRemainingRuns(data.remaining);
+    setAdUnlocksUsed(data.unlocksUsed);
+  } catch (err) {
+    console.error(err);
+    setUnlockOverlayOpen(false);
+    alert("Something went wrong completing the unlock.");
+  }
+};
+
+useEffect(() => {
+  if (!unlockOverlayOpen) return;
+  if (unlockSecondsLeft <= 0) {
+    completeUnlock();
+    return;
+  }
+  const t = setTimeout(() => setUnlockSecondsLeft(s => s - 1), 1000);
+  return () => clearTimeout(t);
+}, [unlockOverlayOpen, unlockSecondsLeft]);
 
   const [usageCount, setUsageCount] = useState<number>(() => {
     const count = localStorage.getItem('lazysuite_daily_count');
@@ -492,6 +548,12 @@ export default function App() {
         <div className={usageCount >= 4 ? "limit-warning-banner-danger" : "limit-warning-banner-safe"}>
           {usageCount >= 4 ? "🔒" : "✅"} Platform Account Usage Cap: <strong>{usageCount}/5 Free Runs Used Today</strong>. Resetting in: <strong>{resetTimeLeft || "calculating..."}</strong>
         </div>
+      )}
+
+      {adUnlocksUsed > 0 && (
+        <p style={{ fontSize: '11px', color: '#64748b', textAlign: 'center' }}>
+          Ad unlocks used today: {adUnlocksUsed}/3
+        </p>
       )}
 
       {authMode && (
@@ -694,7 +756,17 @@ export default function App() {
 )}
   </div>
 )}
-
+  {unlockOverlayOpen && (
+  <div className="overlay-bg">
+    <div className="overlay-card">
+      <div className="spinner-ring"></div>
+      <h3 style={{ margin: '0 0 8px 0', fontSize: '16px' }}>Verifying sponsorship tier...</h3>
+      <p style={{ margin: 0, fontSize: '12px', color: '#94a3b8', fontFamily: 'monospace' }}>
+        {unlockSecondsLeft} seconds remaining
+      </p>
+    </div>
+  </div>
+)}
   {processing && <ProcessingOverlay message={msg} onComplete={handleComplete} />}
 </AdLayoutWrapper>
   );
