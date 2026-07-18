@@ -383,45 +383,47 @@ New Filename
 
 {files.map((file,index)=>(
 
-
 <div
-  key={index}
-  style={{
-    display: "grid",
-    gridTemplateColumns: "1fr 40px 1fr",
-    alignItems: "center",
-    padding: "8px 0",
-    borderBottom: "1px solid #1e293b",
-    fontSize: "12px",
-  }}
+key={index}
+style={{
+  padding:"12px 0",
+  borderBottom:"1px solid #1e293b",
+  fontSize:"12px"
+}}
 >
-  <span>
+
+  <div
+  style={{
+    color:"#cbd5e1",
+    marginBottom:"8px"
+  }}
+  >
+    <strong>Current:</strong>
+    <br/>
     {file.oldName}
-  </span>
+  </div>
 
 
   <div
-    style={{
-      height: "100%",
-      borderLeft: "1px solid #334155",
-      borderRight: "1px solid #334155",
-      margin: "0 20px",
-    }}
+  style={{
+    borderTop:"1px solid #334155",
+    margin:"8px 0"
+  }}
   />
 
 
-  <span
-    style={{
-      color: "#2dd4bf",
-      textAlign: "right",
-    }}
+  <div
+  style={{
+    color:"#2dd4bf"
+  }}
   >
+    <strong>New:</strong>
+    <br/>
     {file.newName}
-  </span>
+  </div>
+
 
 </div>
-
-
 
 ))}
 
