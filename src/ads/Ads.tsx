@@ -1,21 +1,33 @@
-export default function Ads() {
+export default function Ads(){
+
     return (
-      <>
-        <div className="ad-slot ad-top">
-          TOP AD
-        </div>
-  
-        <div className="ad-slot ad-left">
-          LEFT AD
-        </div>
-  
-        <div className="ad-slot ad-right">
-          RIGHT AD
-        </div>
-  
-        <div className="ad-slot ad-bottom">
-          BOTTOM AD
-        </div>
-      </>
+    
+    <>
+    <div className="top-ad">
+      TOP AD
+    </div>
+    
+    
+    <div className="side-ads">
+    
+      <div className="left-ad">
+        LEFT AD
+      </div>
+    
+    
+      <div className="right-ad">
+        RIGHT AD
+      </div>
+    
+    </div>
+    
+    
+    <div className="bottom-ad">
+      BOTTOM AD
+    </div>
+    
+    </>
+    
     );
-  }
+    
+    }
