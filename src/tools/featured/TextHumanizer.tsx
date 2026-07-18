@@ -146,7 +146,7 @@ try {
         />
         <button
           onClick={handleGenerate}
-          disabled={!input || isLoading}
+          disabled={remainingRuns > 0 && !input}
           className={remainingRuns === 0 ? "btn-generate-locked" : "btn-generate"}
         >
           {remainingRuns === 0

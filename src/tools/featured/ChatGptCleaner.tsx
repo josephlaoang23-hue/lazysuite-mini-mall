@@ -125,7 +125,7 @@ try {
       />
       <button
         onClick={handleGenerate}
-        disabled={!input}
+        disabled={remainingRuns > 0 && !input}
         className={remainingRuns === 0 ? "btn-generate-locked" : "btn-generate"}
       >
         {remainingRuns === 0 ? "Limit Exhausted – Click to Unlock" : "Clean Text & Refresh Layout"}

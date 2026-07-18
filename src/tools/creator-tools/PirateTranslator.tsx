@@ -124,11 +124,11 @@ Rules:
 
       <button
 
-        className={remainingRuns === 0 ? "btn-generate-locked" : "btn-generate"}
+      className={remainingRuns === 0 ? "btn-generate-locked" : "btn-generate"}
 
-        onClick={runTranslator}
+      onClick={runTranslator}
 
-        disabled={!input.trim()}
+      disabled={remainingRuns > 0 && !input.trim()}
 
       >
 

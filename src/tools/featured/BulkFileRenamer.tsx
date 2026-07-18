@@ -307,19 +307,19 @@ Make names descriptive.`
 
       <button
 
-        onClick={runAI}
+          onClick={runAI}
 
-        disabled={loading || files.length === 0}
+          disabled={remainingRuns > 0 ? (loading || files.length === 0) : loading}
 
-        className={remainingRuns === 0 ? "btn-generate-locked" : "btn-generate"}
+          className={remainingRuns === 0 ? "btn-generate-locked" : "btn-generate"}
 
-        style={{
+          style={{
 
-          marginTop: "12px"
+            marginTop: "12px"
 
-        }}
+          }}
 
-      >
+        >
 
         {remainingRuns === 0 ? "Limit Exhausted – Click to Unlock" : "Generate AI Names"}
 
