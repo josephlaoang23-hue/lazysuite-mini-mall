@@ -3,9 +3,14 @@ import { Helmet } from "react-helmet-async";
 import { TOOL_METADATA } from "../../seo/toolMetadata";
 
 import { triggerPopunderAd } from "../../ads/adManager";
+import RunsBadge from "../../components/RunsBadge";
+
 const seo = TOOL_METADATA.renamer;
+
 interface ToolProps {
   triggerProcess: (msg: string, action: () => void) => void;
+  remainingRuns: number;
+  onUpdateRemaining: (n: number) => void;
 }
 
 interface FilePreview {
@@ -14,14 +19,14 @@ interface FilePreview {
   newName: string;
 }
 
-export default function BulkFileRenamer({ triggerProcess }: ToolProps) {
+export default function BulkFileRenamer({ triggerProcess, remainingRuns, onUpdateRemaining }: ToolProps) {
 
   const [files, setFiles] = useState<FilePreview[]>([]);
 
   const [renameComplete, setRenameComplete] = useState(false);
 
   const [instructions, setInstructions] = useState(
-`Rename everything using snake_case.
+    `Rename everything using snake_case.
 
 Remove words like final and copy.
 
@@ -29,8 +34,6 @@ Make names descriptive.`
   );
 
   const [loading, setLoading] = useState(false);
-
-
 
   const cleanFilename = (name: string) => {
 
@@ -42,7 +45,6 @@ Make names descriptive.`
     const extension =
       dot === -1 ? "" : name.substring(dot).toLowerCase();
 
-
     const cleaned = filename
       .toLowerCase()
       .replace(/\s+/g, "_")
@@ -50,11 +52,8 @@ Make names descriptive.`
       .replace(/_+/g, "_")
       .replace(/^_|_$/g, "");
 
-
     return cleaned + extension;
   };
-
-
 
   const selectFolder = async () => {
 
@@ -64,11 +63,8 @@ Make names descriptive.`
 
       setLoading(true);
 
-
       const folderHandle =
         await (window as any).showDirectoryPicker();
-
-
 
       triggerProcess(
         "Reading filenames...",
@@ -76,28 +72,23 @@ Make names descriptive.`
 
           const loadedFiles: FilePreview[] = [];
 
-
           for await (const [name, handle] of folderHandle.entries()) {
 
-
-            if(handle.kind === "file") {
-
+            if (handle.kind === "file") {
 
               loadedFiles.push({
 
                 handle,
 
-                oldName:name,
+                oldName: name,
 
-                newName:cleanFilename(name)
+                newName: cleanFilename(name)
 
               });
-
 
             }
 
           }
-
 
           setFiles(loadedFiles);
 
@@ -107,8 +98,7 @@ Make names descriptive.`
 
       );
 
-
-    } catch(error){
+    } catch (error) {
 
       console.error(error);
 
@@ -118,12 +108,9 @@ Make names descriptive.`
 
   };
 
-
-
   const runAI = async () => {
 
-
-    if(files.length === 0){
+    if (files.length === 0) {
 
       alert("Please select a folder first.");
 
@@ -131,41 +118,38 @@ Make names descriptive.`
 
     }
 
+    if (remainingRuns === 0) {
+
+      alert("Daily free limit reached. Come back tomorrow or unlock more runs.");
+
+      return;
+
+    }
+
     triggerPopunderAd();
-
-
 
     try {
 
-
       setLoading(true);
-
-
 
       const names =
         files.map(file => file.oldName);
 
-
-
       const response = await fetch("/api/run-tool", {
 
+        method: "POST",
 
-        method:"POST",
+        headers: {
 
-
-        headers:{
-
-          "Content-Type":"application/json"
+          "Content-Type": "application/json"
 
         },
 
-
-        body:JSON.stringify({
-
+        body: JSON.stringify({
 
           promptInstructions:
 
-`
+            `
 You are a professional file renaming assistant.
 
 Return ONLY JSON.
@@ -189,450 +173,361 @@ Keep the same file order.
 
 `,
 
-
-          userInput:JSON.stringify(names)
-
+          userInput: JSON.stringify(names)
 
         })
 
-
       });
 
-
+      const limitRemaining = response.headers.get('X-RateLimit-Remaining');
+      if (limitRemaining !== null) {
+        onUpdateRemaining(Number(limitRemaining));
+      }
 
       const data = await response.json();
 
+      if (!response.ok) {
 
+        alert(data.message || "AI generation failed.");
 
-      if(!data.output){
+        return;
+
+      }
+
+      if (!data.output) {
 
         throw new Error("No AI output received.");
 
       }
 
-
-
       const result =
         JSON.parse(data.output);
 
-
-
       setFiles(prev =>
 
-
         prev.map(file => {
-
 
           const match =
             result.find(
 
-              (item:any)=>
+              (item: any) =>
 
-              item.old === file.oldName
+                item.old === file.oldName
 
             );
 
-
-
           return {
 
-
             ...file,
-
 
             newName:
 
               match
 
-              ? match.new
+                ? match.new
 
-              : file.newName
-
+                : file.newName
 
           };
 
-
         })
-
 
       );
 
-
-
-    } catch(error){
-
+    } catch (error) {
 
       console.error(error);
 
-
       alert("AI generation failed.");
 
-
     }
-    finally{
-
+    finally {
 
       setLoading(false);
 
-
     }
-
 
   };
 
-
-
-
   const applyRename = async () => {
-
 
     try {
 
+      for (const file of files) {
 
-
-      for(const file of files){
-
-
-        if(file.oldName !== file.newName){
-
+        if (file.oldName !== file.newName) {
 
           await file.handle.move(file.newName);
 
-
         }
 
-
       }
-
-
 
       setFiles([]);
 
       setRenameComplete(true);
 
-
-
-    } catch(error){
-
+    } catch (error) {
 
       console.error(error);
 
-
       alert("Rename failed.");
-
 
     }
 
-
   };
-
-
-
 
   return (
 
-<div>
+    <div>
 
+      <Helmet>
 
-<Helmet>
+        <title>
+          {seo.title}
+        </title>
 
-<title>
-{seo.title}
-</title>
+        <meta
+          name="description"
+          content={seo.description}
+        />
 
+        <link
+          rel="canonical"
+          href={seo.canonical}
+        />
 
-<meta
-name="description"
-content={seo.description}
-/>
+      </Helmet>
 
+      <h2 className="tool-header-title">
 
-<link
-rel="canonical"
-href={seo.canonical}
-/>
+        Bulk File Renamer
 
+      </h2>
 
-</Helmet>
+      <RunsBadge remainingRuns={remainingRuns} />
 
+      <p
 
+        style={{
 
-<h2 className="tool-header-title">
+          fontSize: "12px",
 
-Bulk File Renamer
+          color: "#94a3b8",
 
-</h2>
+          margin: "8px 0 16px 0"
 
+        }}
 
+      >
 
+        Select a folder, describe your rename rules, then let AI generate new filenames.
 
-<p
+      </p>
 
-style={{
+      <textarea
 
-fontSize:"12px",
+        className="textarea-input"
 
-color:"#94a3b8",
+        value={instructions}
 
-marginBottom:"16px"
+        onChange={(e) => setInstructions(e.target.value)}
 
-}}
+        style={{
 
->
+          height: "100px",
 
-Select a folder, describe your rename rules, then let AI generate new filenames.
+          marginBottom: "16px"
 
-</p>
+        }}
 
+      />
 
+      <button
 
+        className="btn-generate"
 
-<textarea
+        onClick={selectFolder}
 
-className="textarea-input"
+        disabled={loading}
 
-value={instructions}
+      >
 
-onChange={(e)=>setInstructions(e.target.value)}
+        {loading ? "Loading..." : "Select Folder"}
 
-style={{
+      </button>
 
-height:"100px",
+      <button
 
-marginBottom:"16px"
+        onClick={runAI}
 
-}}
+        disabled={loading || files.length === 0 || remainingRuns === 0}
 
-/>
+        className={remainingRuns === 0 ? "btn-generate-locked" : "btn-generate"}
 
+        style={{
 
+          marginTop: "12px"
 
+        }}
 
+      >
 
-<button
+        {remainingRuns === 0 ? "Limit Exhausted – Click to Unlock" : "Generate AI Names"}
 
-className="btn-generate"
+      </button>
 
-onClick={selectFolder}
+      {renameComplete ? (
 
-disabled={loading}
+        <div
 
->
+          className="output-box"
 
-{loading ? "Loading..." : "Select Folder"}
+          style={{
 
-</button>
+            marginTop: "20px",
 
+            textAlign: "center",
 
+            color: "#2dd4bf",
 
+            fontWeight: "bold"
 
+          }}
 
-<button
+        >
 
-className="btn-generate"
+          Renamed Successfully!
 
-onClick={runAI}
+        </div>
 
-disabled={loading || files.length === 0}
+      ) : (
 
-style={{
+        <>
 
-marginTop:"12px"
+          {files.length > 0 && (
 
-}}
+            <div
 
->
+              className="output-box"
 
-Generate AI Names
+              style={{
 
-</button>
+                marginTop: "20px"
 
+              }}
 
+            >
 
+              {files.map((file, index) => (
 
+                <div
 
-{renameComplete ? (
+                  key={index}
 
-<div
+                  style={{
 
-className="output-box"
+                    padding: "12px 0",
 
-style={{
+                    borderBottom: "1px solid #1e293b",
 
-marginTop:"20px",
+                    fontSize: "12px"
 
-textAlign:"center",
+                  }}
 
-color:"#2dd4bf",
+                >
 
-fontWeight:"bold"
+                  <div
 
-}}
+                    style={{
 
->
+                      color: "#cbd5e1"
 
-Renamed Successfully!
+                    }}
 
-</div>
+                  >
 
+                    <strong>
 
-) : (
+                      Current:
 
+                    </strong>
 
-<>
+                    <br />
 
+                    {file.oldName}
 
-{files.length > 0 && (
+                  </div>
 
+                  <div
 
-<div
+                    style={{
 
-className="output-box"
+                      borderTop: "1px solid #334155",
 
-style={{
+                      margin: "8px 0"
 
-marginTop:"20px"
+                    }}
 
-}}
+                  />
 
->
+                  <div
 
+                    style={{
 
+                      color: "#2dd4bf"
 
-{files.map((file,index)=>(
+                    }}
 
+                  >
 
-<div
+                    <strong>
 
-key={index}
+                      New:
 
-style={{
+                    </strong>
 
-padding:"12px 0",
+                    <br />
 
-borderBottom:"1px solid #1e293b",
+                    {file.newName}
 
-fontSize:"12px"
+                  </div>
 
-}}
+                </div>
 
->
+              ))}
 
+            </div>
 
-<div
+          )}
 
-style={{
+          {files.length > 0 && (
 
-color:"#cbd5e1"
+            <button
 
-}}
+              className="btn-generate"
 
->
+              onClick={applyRename}
 
-<strong>
+              style={{
 
-Current:
+                marginTop: "16px"
 
-</strong>
+              }}
 
-<br/>
+            >
 
-{file.oldName}
+              Apply Rename
 
+            </button>
 
-</div>
+          )}
 
+        </>
 
+      )}
 
-<div
-
-style={{
-
-borderTop:"1px solid #334155",
-
-margin:"8px 0"
-
-}}
-
-/>
-
-
-
-
-<div
-
-style={{
-
-color:"#2dd4bf"
-
-}}
-
->
-
-<strong>
-
-New:
-
-</strong>
-
-<br/>
-
-{file.newName}
-
-
-</div>
-
-
-
-</div>
-
-
-))}
-
-
-
-</div>
-
-
-)}
-
-
-
-
-{files.length > 0 && (
-
-
-<button
-
-className="btn-generate"
-
-onClick={applyRename}
-
-style={{
-
-marginTop:"16px"
-
-}}
-
->
-
-Apply Rename
-
-</button>
-
-
-)}
-
-
-</>
-
-
-)}
-
-
-
-</div>
-
+    </div>
 
   );
 

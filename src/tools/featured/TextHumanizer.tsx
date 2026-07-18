@@ -4,11 +4,15 @@ import { Helmet } from "react-helmet-async";
 import { TOOL_METADATA } from "../../seo/toolMetadata";
 
 import { triggerPopunderAd } from "../../ads/adManager";
+import RunsBadge from "../../components/RunsBadge";
+
 interface ToolProps {
   triggerProcess: (msg: string, action: () => void) => void;
+  remainingRuns: number;
+  onUpdateRemaining: (n: number) => void;
 }
 
-export default function TextHumanizer({ triggerProcess }: ToolProps) {
+export default function TextHumanizer({ triggerProcess, remainingRuns, onUpdateRemaining }: ToolProps) {
   const [input, setInput] = useState<string>("");
   const [output, setOutput] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
@@ -23,13 +27,14 @@ export default function TextHumanizer({ triggerProcess }: ToolProps) {
       setCopied(false);
     }, 2000);
   };
+
   const handleGenerate = async () => {
-    if (!input.trim()) return;
-  
+    if (!input.trim() || remainingRuns === 0) return;
+
     triggerPopunderAd();
-  
+
     setIsLoading(true);
-  
+
     triggerProcess("Streaming organic language syntax models across serverless rails...", async () => {
       const promptText = `
       You are an expert writing editor.
@@ -61,6 +66,11 @@ export default function TextHumanizer({ triggerProcess }: ToolProps) {
           body: JSON.stringify({ promptInstructions: promptText, userInput: input })
         });
 
+        const limitRemaining = response.headers.get('X-RateLimit-Remaining');
+        if (limitRemaining !== null) {
+          onUpdateRemaining(Number(limitRemaining));
+        }
+
         const responseText = await response.text();
 
         console.log("Raw API Response:", responseText);
@@ -75,14 +85,6 @@ export default function TextHumanizer({ triggerProcess }: ToolProps) {
 
         if (!response.ok) {
           throw new Error(data.message || "Request failed");
-        }
-
-        setOutput(data.output);
-        setIsLoading(false);
-
-        if (!response.ok) {
-          alert(data.message || "Something went wrong. Please try again.");
-          return;
         }
 
         setOutput(data.output);
@@ -124,46 +126,50 @@ export default function TextHumanizer({ triggerProcess }: ToolProps) {
           content={TOOL_METADATA.humanizer.description}
         />
       </Helmet>
-  
+
       <div>
-      <h2 className="tool-header-title">AI Text Humanizer</h2>
-      <textarea
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        placeholder="Paste sentence loops here to watch the edge processor humanize them in real-time..."
-        className="textarea-input"
-      />
-      <button
-        onClick={handleGenerate}
-        disabled={!input || isLoading}
-        className="btn-generate"
-      >
-        {isLoading
-          ? "⏳ Humanizing..."
-          : "Humanize"}
-      </button>
-      {output && (
-  <div className="output-box">
+        <h2 className="tool-header-title">AI Text Humanizer</h2>
+        <RunsBadge remainingRuns={remainingRuns} />
+        <textarea
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Paste sentence loops here to watch the edge processor humanize them in real-time..."
+          className="textarea-input"
+          style={{ marginTop: '12px' }}
+        />
+        <button
+          onClick={handleGenerate}
+          disabled={!input || isLoading || remainingRuns === 0}
+          className={remainingRuns === 0 ? "btn-generate-locked" : "btn-generate"}
+        >
+          {remainingRuns === 0
+            ? "Limit Exhausted – Click to Unlock"
+            : isLoading
+              ? "⏳ Humanizing..."
+              : "Humanize"}
+        </button>
+        {output && (
+          <div className="output-box">
 
-    <div className="output-header">
-      <span>Humanized Text</span>
+            <div className="output-header">
+              <span>Humanized Text</span>
 
-      <button
-        className="copy-button"
-        onClick={copyOutput}
-      >
-        {copied ? <Check size={18} /> : <Copy size={18} />}
-      </button>
+              <button
+                className="copy-button"
+                onClick={copyOutput}
+              >
+                {copied ? <Check size={18} /> : <Copy size={18} />}
+              </button>
 
-    </div>
+            </div>
 
-    <div className="output-content">
-      {output}
-    </div>
+            <div className="output-content">
+              {output}
+            </div>
 
-  </div>
-)}
-        </div>
-  </>
-);
+          </div>
+        )}
+      </div>
+    </>
+  );
 }

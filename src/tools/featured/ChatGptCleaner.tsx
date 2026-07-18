@@ -4,32 +4,36 @@ import { TOOL_METADATA } from "../../seo/toolMetadata";
 import { Copy, Check } from "lucide-react";
 
 import { triggerPopunderAd } from "../../ads/adManager";
+import RunsBadge from "../../components/RunsBadge";
+
 interface ToolProps {
   triggerProcess: (msg: string, action: () => void) => void;
+  remainingRuns: number;
+  onUpdateRemaining: (n: number) => void;
 }
 
-export default function ChatGptCleaner({ triggerProcess }: ToolProps) {
+export default function ChatGptCleaner({ triggerProcess, remainingRuns, onUpdateRemaining }: ToolProps) {
   const [input, setInput] = useState<string>("");
   const [output, setOutput] = useState<string>("");
   const [copied, setCopied] = useState(false);
+
   const copyOutput = async () => {
     await navigator.clipboard.writeText(output);
-  
     setCopied(true);
-  
     setTimeout(() => {
       setCopied(false);
     }, 2000);
   };
+
   const handleGenerate = async () => {
-    if (!input.trim()) return;
-  
+    if (!input.trim() || remainingRuns === 0) return;
+
     triggerPopunderAd();
-  
+
     triggerProcess(
       "Removing ChatGPT formatting artifacts and cleaning your text...",
       async () => {
-      const promptText = `
+        const promptText = `
 You are an expert ChatGPT formatting cleaner.
 
 Your task is to clean copied AI text and return a polished plain-text version.
@@ -50,26 +54,31 @@ Rules:
 Output only the cleaned text.
 `;
 
-      try {
-        const response = await fetch('/api/run-tool', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ promptInstructions: promptText, userInput: input })
-        });
+        try {
+          const response = await fetch('/api/run-tool', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ promptInstructions: promptText, userInput: input })
+          });
 
-        const data = await response.json();
+          const limitRemaining = response.headers.get('X-RateLimit-Remaining');
+          if (limitRemaining !== null) {
+            onUpdateRemaining(Number(limitRemaining));
+          }
 
-        if (!response.ok) {
-          alert(data.message || "Something went wrong. Please try again.");
-          return;
+          const data = await response.json();
+
+          if (!response.ok) {
+            alert(data.message || "Something went wrong. Please try again.");
+            return;
+          }
+
+          setOutput(data.output);
+        } catch (error) {
+          console.error("Request failed:", error);
+          setOutput("Something went wrong generating a response. Please try again.");
         }
-
-        setOutput(data.output);
-      } catch (error) {
-        console.error("Request failed:", error);
-        setOutput("Something went wrong generating a response. Please try again.");
-      }
-    });
+      });
   };
 
   return (
@@ -98,39 +107,45 @@ Output only the cleaned text.
         />
       </Helmet>
       <h2 className="tool-header-title">ChatGPT Formatting Cleaner</h2>
+      <RunsBadge remainingRuns={remainingRuns} />
       <textarea
         value={input}
         onChange={(e) => setInput(e.target.value)}
         placeholder="Paste text from ChatGPT with annoying grey background boxes here..."
         className="textarea-input"
+        style={{ marginTop: '12px' }}
       />
-      <button onClick={handleGenerate} disabled={!input} className="btn-generate">
-        Clean Text & Refresh Layout
+      <button
+        onClick={handleGenerate}
+        disabled={!input || remainingRuns === 0}
+        className={remainingRuns === 0 ? "btn-generate-locked" : "btn-generate"}
+      >
+        {remainingRuns === 0 ? "Limit Exhausted – Click to Unlock" : "Clean Text & Refresh Layout"}
       </button>
       {output && (
-  <div className="output-box">
+        <div className="output-box">
 
-    <div className="output-header">
-      <span>Cleaned Text</span>
+          <div className="output-header">
+            <span>Cleaned Text</span>
 
-      <button
-        className="copy-button"
-        onClick={copyOutput}
-      >
-        {copied 
-          ? <Check size={18} /> 
-          : <Copy size={18} />
-        }
-      </button>
+            <button
+              className="copy-button"
+              onClick={copyOutput}
+            >
+              {copied
+                ? <Check size={18} />
+                : <Copy size={18} />
+              }
+            </button>
 
-    </div>
+          </div>
 
-    <div className="output-content">
-      {output}
-    </div>
+          <div className="output-content">
+            {output}
+          </div>
 
-  </div>
-)}
+        </div>
+      )}
     </div>
   );
 }

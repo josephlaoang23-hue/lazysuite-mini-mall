@@ -1,11 +1,17 @@
 import { useState } from "react";
 import { triggerPopunderAd } from "../../ads/adManager";
+import RunsBadge from "../../components/RunsBadge";
+
 interface ToolProps {
   triggerProcess: (msg: string, action: () => void) => void;
+  remainingRuns: number;
+  onUpdateRemaining: (n: number) => void;
 }
 
 export default function PirateTranslator({
-  triggerProcess
+  triggerProcess,
+  remainingRuns,
+  onUpdateRemaining
 }: ToolProps) {
 
   const [input, setInput] = useState("");
@@ -13,7 +19,7 @@ export default function PirateTranslator({
 
   const runTranslator = () => {
 
-    if (!input.trim()) return;
+    if (!input.trim() || remainingRuns === 0) return;
 
     triggerPopunderAd();
 
@@ -27,14 +33,14 @@ export default function PirateTranslator({
 
             method: "POST",
 
-            headers:{
-              "Content-Type":"application/json"
+            headers: {
+              "Content-Type": "application/json"
             },
 
             body: JSON.stringify({
 
               promptInstructions:
-`
+                `
 You are a pirate translator.
 
 Convert the user's text into authentic pirate speech.
@@ -51,14 +57,21 @@ Rules:
 
           });
 
+          const limitRemaining = response.headers.get('X-RateLimit-Remaining');
+          if (limitRemaining !== null) {
+            onUpdateRemaining(Number(limitRemaining));
+          }
 
           const data = await response.json();
 
+          if (!response.ok) {
+            setOutput(data.message || "Translation failed.");
+            return;
+          }
 
           setOutput(data.output || "No response generated.");
 
-
-        } catch(error){
+        } catch (error) {
 
           console.error(error);
 
@@ -71,7 +84,6 @@ Rules:
 
   };
 
-
   return (
 
     <div>
@@ -80,11 +92,11 @@ Rules:
         Pirate Translator
       </h2>
 
-
       <p className="tool-header-seo">
         Converts normal English into classic pirate speech.
       </p>
 
+      <RunsBadge remainingRuns={remainingRuns} />
 
       <textarea
 
@@ -92,26 +104,27 @@ Rules:
 
         value={input}
 
-        onChange={(e)=>setInput(e.target.value)}
+        onChange={(e) => setInput(e.target.value)}
 
         placeholder="Enter text to translate..."
 
-      />
+        style={{ marginTop: '12px' }}
 
+      />
 
       <button
 
-        className="btn-generate"
+        className={remainingRuns === 0 ? "btn-generate-locked" : "btn-generate"}
 
         onClick={runTranslator}
 
+        disabled={!input.trim() || remainingRuns === 0}
+
       >
 
-        Translate
+        {remainingRuns === 0 ? "Limit Exhausted – Click to Unlock" : "Translate"}
 
       </button>
-
-
 
       {output && (
 
@@ -122,7 +135,6 @@ Rules:
         </div>
 
       )}
-
 
     </div>
 

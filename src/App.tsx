@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './App.css';
 import Home from "./pages/Home";
 // Import our individual clean modular component files directly from our folder pool
 import ChatGptCleaner from "./tools/featured/ChatGptCleaner";
@@ -7,7 +8,7 @@ import BulkFileRenamer from "./tools/featured/BulkFileRenamer";
 
 import PirateTranslator from "./tools/creator-tools/PirateTranslator";
 
-import Ads from "./ads/Ads";
+import { TopAd, BottomAd, SideAds } from "./ads/Ads";
 // Symmetrical Ad Layout, Marketplace Theme, and Interstitial Style Architecture
 const STYLES_INJECTION = `
   body { margin: 0; background-color: #020617; color: #f8fafc; font-family: sans-serif; }
@@ -279,13 +280,24 @@ interface CustomTool {
 
 function AdLayoutWrapper({ children }: { children: React.ReactNode }) {
   return (
-    <div className="app-container">
+    <div className="viewport-frame">
       <style>{STYLES_INJECTION}</style>
-      <div className="ad-banner-top"><div className="ad-placeholder-leaderboard">Leaderboard_728x90</div></div>
-      <div className="main-layout">
-        <main className="main-content">{children}</main>
+
+      <div className="ad-col-left">
+        <div className="left-ad">LEFT AD</div>
       </div>
-      <div className="ad-banner-bottom"><div className="ad-placeholder-footer">Sticky_Footer_Banner</div></div>
+
+      <div className="scroll-center">
+        <div className="ad-banner-top"><TopAd /></div>
+        <div className="scroll-center-inner">
+          {children}
+        </div>
+        <div className="ad-banner-bottom"><BottomAd /></div>
+      </div>
+
+      <div className="ad-col-right">
+        <div className="right-ad">RIGHT AD</div>
+      </div>
     </div>
   );
 }
@@ -315,6 +327,8 @@ export default function App() {
   });
 
   const [customTools, setCustomTools] = useState<CustomTool[]>([]);
+  const [remainingRuns, setRemainingRuns] = useState<number>(5);
+  const [adUnlocksUsed, setAdUnlocksUsed] = useState<number>(0);
 
   const [usageCount, setUsageCount] = useState<number>(() => {
     const count = localStorage.getItem('lazysuite_daily_count');
@@ -443,7 +457,6 @@ export default function App() {
 
   return (
     <AdLayoutWrapper>
-      <Ads />
       <div className="marketplace-nav">
         <div className="nav-brand" onClick={() => setRoute('hub')}>LazySuite Builder Hub</div>
         <div className="nav-user-badge">
@@ -608,14 +621,14 @@ export default function App() {
 
   </div>
 )}
-      {route === 'cleaner' && <ChatGptCleaner triggerProcess={triggerProcess} />}
-      {route === 'humanizer' && <TextHumanizer triggerProcess={triggerProcess} />}
-      {route === 'renamer' && <BulkFileRenamer triggerProcess={triggerProcess} />}
+      {route === 'cleaner' && <ChatGptCleaner triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} />}
+      {route === 'humanizer' && <TextHumanizer triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} />}
+      {route === 'renamer' && <BulkFileRenamer triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} />}
 
 
       {route === 'pirate' && (
-        <PirateTranslator triggerProcess={triggerProcess} />
-      )}
+  <PirateTranslator triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} />
+)}
       {route === 'create-tool' && (
         <div style={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', padding: '24px', borderRadius: '12px' }}>
           <h2 style={{ fontSize: '18px', margin: '0 0 4px 0' }}>Build Your Own Custom Tool</h2>
