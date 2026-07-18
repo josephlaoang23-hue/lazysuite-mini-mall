@@ -135,7 +135,7 @@ export default function TextHumanizer({ triggerProcess }: ToolProps) {
       >
         {isLoading
           ? "⏳ Humanizing..."
-          : "Breathe Organic Speech Into String"}
+          : "Humanize"}
       </button>
       {output && (
   <div className="output-box">
