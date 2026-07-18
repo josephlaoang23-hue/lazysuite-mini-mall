@@ -522,36 +522,61 @@ export default function App() {
             <h1 className="lobby-title">LazySuite Mall</h1>
             <p className="lobby-desc">Launch hyper-focused data engines or engineer your own monetized micro-utility pipelines.</p>
             <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', marginTop: '16px' }}>
-            <button onClick={() => alert("Coming in the next update!")} className="btn-other-tools">📁 Other Tools</button>
+            <button
+              onClick={() => setRoute("other-tools")}
+              className="btn-other-tools"
+            >
+            📁 Other Tools
+            </button>
             <button onClick={() => alert("Coming in the next update!")} className="btn-create-earn">🔥 Create and Earn Money</button>
             </div>
           </div>
 
           <div className="section-label">Featured Core Boutiques</div>
-          <div className="grid-container" style={{ marginBottom: '24px' }}>
-            <div onClick={() => setRoute('cleaner')} className="tool-card">
-              <h3 className="tool-card-title">ChatGPT Copy-Paste Formatting Cleaner</h3>
-              <p className="tool-card-desc">Strips annoying gray text background artifact sheets straight from prompt outputs.</p>
-            </div>
-            <div onClick={() => setRoute('humanizer')} className="tool-card">
-              <h3 className="tool-card-title">Zero-Cost AI Conversational Text Humanizer</h3>
-              <p className="tool-card-desc">Breathes organic prose sentence loops straight into rigid text layers.</p>
-            </div>
-            <div onClick={() => setRoute('renamer')} className="tool-card">
-              <h3 className="tool-card-title">AI Contextual Bulk File Renamer</h3>
-              <p className="tool-card-desc">Intelligently renames batch files inside zip archives with plain instructions.</p>
-            </div>
-            <div onClick={() => setRoute('shield')} className="tool-card">
-              <h3 className="tool-card-title">Metadata Privacy Shield & Tag Purger</h3>
-              <p className="tool-card-desc">Scrubs tracking coordinates, EXIF markers, and hardware signatures from media.</p>
-            </div>
-            <div onClick={() => setRoute('transcript')} className="tool-card">
-              <h3 className="tool-card-title">Intelligent Transcript Structurer</h3>
-              <p className="tool-card-desc">Cleans chaotic Zoom and Teams log files into summary actions instantly.</p>
-            </div>
-          </div>
 
-          <div className="section-label">User-Generated App Marketplace (10% Commission Shared)</div>
+          <div className="grid-container" style={{ marginBottom: '24px' }}>
+
+            <div
+              onClick={() => setRoute('cleaner')}
+              className="tool-card"
+            >
+              <h3 className="tool-card-title">
+                ChatGPT Copy-Paste Formatting Cleaner
+              </h3>
+
+              <p className="tool-card-desc">
+                Removes ChatGPT formatting artifacts for clean pasting anywhere.
+              </p>
+            </div>
+
+            <div
+              onClick={() => setRoute('humanizer')}
+              className="tool-card"
+            >
+              <h3 className="tool-card-title">
+                Zero-Cost AI Conversational Text Humanizer
+              </h3>
+
+              <p className="tool-card-desc">
+                Rewrites robotic AI writing into natural human-sounding text.
+              </p>
+            </div>
+
+            <div
+              onClick={() => setRoute('renamer')}
+              className="tool-card"
+            >
+              <h3 className="tool-card-title">
+                  Smart AI File Renamer
+              </h3>
+
+              <p className="tool-card-desc">
+                Generates smart bulk filename mappings from simple instructions.
+              </p>
+            </div>
+
+          </div>
+          {/*
           <div className="grid-container">
             {customTools.map(t => (
               <div key={t.id} onClick={() => { setActiveTool(t); setToolInput(""); setToolOutput(""); setRoute('run-custom'); }} className="tool-card">
@@ -561,9 +586,88 @@ export default function App() {
               </div>
             ))}
           </div>
+          */}
         </div>
       )}
+      {route === "other-tools" && (
+  <div>
 
+    <h2 className="tool-header-title">
+      Other Tools
+    </h2>
+
+    <p className="tool-header-seo">
+      Experimental tools currently in development.
+    </p>
+
+    <div
+      className="grid-container"
+      style={{ marginTop: "24px" }}
+    >
+
+      <div
+        onClick={() => {
+          setActiveTool(customTools[0]);
+          setToolInput("");
+          setToolOutput("");
+          setRoute("run-custom");
+        }}
+        className="tool-card"
+      >
+        <span className="tool-badge-creator">
+          Community
+        </span>
+
+        <h3 className="tool-card-title">
+          Pirate Translator
+        </h3>
+
+        <p className="tool-card-desc">
+          Converts normal English into classic pirate speech.
+        </p>
+
+      </div>
+
+      <div
+        className="tool-card"
+        style={{
+          opacity: .45,
+          cursor: "default"
+        }}
+      >
+
+        <h3 className="tool-card-title">
+          Metadata Privacy Shield
+        </h3>
+
+        <p className="tool-card-desc">
+          Coming Soon
+        </p>
+
+      </div>
+
+      <div
+        className="tool-card"
+        style={{
+          opacity: .45,
+          cursor: "default"
+        }}
+      >
+
+        <h3 className="tool-card-title">
+          Intelligent Transcript Structurer
+        </h3>
+
+        <p className="tool-card-desc">
+          Coming Soon
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+)}
       {route === 'cleaner' && <ChatGptCleaner triggerProcess={triggerProcess} />}
       {route === 'humanizer' && <TextHumanizer triggerProcess={triggerProcess} />}
       {route === 'renamer' && <BulkFileRenamer triggerProcess={triggerProcess} />}
@@ -592,19 +696,49 @@ export default function App() {
         </div>
       )}
 
-      {route === 'run-custom' && activeTool && (
-        <div>
-          <button onClick={() => setRoute('hub')} className="btn-back">&larr; Back To Marketplace Grid</button>
-          <h2 className="tool-header-title">{activeTool.title}</h2>
-          <p className="tool-header-seo">Engineered Array Pipeline Managed by: <strong>@{activeTool.creator}</strong></p>
-          <p style={{ fontSize: '12px', color: '#94a3b8', marginTop: '-8px', marginBottom: '16px' }}>{activeTool.desc}</p>
-          
-          <textarea value={toolInput} onChange={(e) => setToolInput(e.target.value)} placeholder="Enter your text to trigger the prompt logic execution loop..." className="textarea-input" />
-          <button onClick={executeCustomTool} disabled={!toolInput} className="btn-generate">Execute Tool & Refresh Ad Placements</button>
-          
-          {toolOutput && <div className="output-box">{toolOutput}</div>}
-        </div>
-      )}
+{route === 'run-custom' && activeTool && (
+  <div>
+    <h2 className="tool-header-title">
+      {activeTool.title}
+    </h2>
+
+    <p className="tool-header-seo">
+      Community Tool • Created by <strong>@{activeTool.creator}</strong>
+    </p>
+
+    <p
+      style={{
+        fontSize: "12px",
+        color: "#94a3b8",
+        marginTop: "12px",
+        marginBottom: "20px",
+      }}
+    >
+      {activeTool.desc}
+    </p>
+
+    <textarea
+      value={toolInput}
+      onChange={(e) => setToolInput(e.target.value)}
+      placeholder="Enter your text..."
+      className="textarea-input"
+    />
+
+    <button
+      onClick={executeCustomTool}
+      disabled={!toolInput.trim()}
+      className="btn-generate"
+    >
+      Translate
+    </button>
+
+    {toolOutput && (
+      <div className="output-box">
+        {toolOutput}
+      </div>
+    )}
+  </div>
+)}
 
       {processing && <ProcessingOverlay message={msg} onComplete={handleComplete} />}
     </AdLayoutWrapper>
