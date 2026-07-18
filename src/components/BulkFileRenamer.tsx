@@ -14,7 +14,7 @@ interface FilePreview {
 export default function BulkFileRenamer({ triggerProcess }: ToolProps) {
   const [files, setFiles] = useState<FilePreview[]>([]);
   const [instructions, setInstructions] = useState(
-    `   Rename everything using snake_case.
+    `Rename everything using snake_case.
     
     Remove words like final and copy.
     
@@ -45,7 +45,48 @@ export default function BulkFileRenamer({ triggerProcess }: ToolProps) {
       setLoading(true);
   
       const folderHandle = await (window as any).showDirectoryPicker();
-  
+      const runAI = async () => {
+
+        const names = files.map(file => file.oldName);
+      
+        const response = await fetch("/api/run-tool", {
+          method:"POST",
+          headers:{
+            "Content-Type":"application/json"
+          },
+          body:JSON.stringify({
+      
+            promptInstructions:
+      `
+      You are a file renaming assistant.
+      
+      Return ONLY JSON.
+      
+      Example:
+      [
+      {
+      "old":"Vacation FINAL.jpg",
+      "new":"vacation_photo.jpg"
+      }
+      ]
+      
+      Rules:
+      ${instructions}
+      `,
+      
+            userInput: JSON.stringify(names)
+      
+          })
+        });
+      
+      
+        const data = await response.json();
+      
+      
+        console.log(data);
+      
+      
+      };
       triggerProcess(
         "Reading filenames...",
         async () => {
@@ -106,12 +147,24 @@ export default function BulkFileRenamer({ triggerProcess }: ToolProps) {
         height: "100px",
       }}
     />
+    <textarea
+      value={instructions}
+      onChange={(e)=>setInstructions(e.target.value)}
+      className="textarea-input"
+    />
       <button
         className="btn-generate"
         onClick={selectFolder}
         disabled={loading}
       >
         Select Folder
+      </button>
+      <button
+        className="btn-generate"
+        onClick={runAI}
+        style={{ marginTop: "12px" }}
+      >
+        Generate AI Names
       </button>
 
       {files.length > 0 && (
