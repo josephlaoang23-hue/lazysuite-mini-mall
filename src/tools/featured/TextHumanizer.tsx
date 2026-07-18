@@ -3,7 +3,6 @@ import { Copy, Check } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { TOOL_METADATA } from "../../seo/toolMetadata";
 
-import { triggerPopunderAd } from "../../ads/adManager";
 import RunsBadge from "../../components/RunsBadge";
 
 interface ToolProps {
@@ -37,8 +36,6 @@ export default function TextHumanizer({ triggerProcess, remainingRuns, onUpdateR
       onRequestUnlock();
       return;
     }
-
-    triggerPopunderAd();
 
     setIsLoading(true);
 

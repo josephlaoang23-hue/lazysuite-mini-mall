@@ -3,7 +3,6 @@ import { Helmet } from "react-helmet-async";
 import { TOOL_METADATA } from "../../seo/toolMetadata";
 import { Copy, Check } from "lucide-react";
 
-import { triggerPopunderAd } from "../../ads/adManager";
 import RunsBadge from "../../components/RunsBadge";
 
 interface ToolProps {
@@ -33,8 +32,6 @@ export default function ChatGptCleaner({ triggerProcess, remainingRuns, onUpdate
       onRequestUnlock();
       return;
     }
-
-    triggerPopunderAd();
 
     triggerProcess(
       "Removing ChatGPT formatting artifacts and cleaning your text...",

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { triggerPopunderAd } from "../../ads/adManager";
 import RunsBadge from "../../components/RunsBadge";
 
 interface ToolProps {
@@ -30,7 +29,6 @@ export default function PirateTranslator({
       return;
     }
 
-    triggerPopunderAd();
 
     const promptInstructions = `
 You are a pirate translator.
