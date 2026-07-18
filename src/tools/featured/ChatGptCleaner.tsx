@@ -10,9 +10,10 @@ interface ToolProps {
   triggerProcess: (msg: string, action: () => void) => void;
   remainingRuns: number;
   onUpdateRemaining: (n: number) => void;
+  onRequestUnlock: () => void;
 }
 
-export default function ChatGptCleaner({ triggerProcess, remainingRuns, onUpdateRemaining }: ToolProps) {
+export default function ChatGptCleaner({ triggerProcess, remainingRuns, onUpdateRemaining, onRequestUnlock }: ToolProps) {
   const [input, setInput] = useState<string>("");
   const [output, setOutput] = useState<string>("");
   const [copied, setCopied] = useState(false);
@@ -26,7 +27,12 @@ export default function ChatGptCleaner({ triggerProcess, remainingRuns, onUpdate
   };
 
   const handleGenerate = async () => {
-    if (!input.trim() || remainingRuns === 0) return;
+    if (!input.trim()) return;
+
+    if (remainingRuns === 0) {
+      onRequestUnlock();
+      return;
+    }
 
     triggerPopunderAd();
 
@@ -117,7 +123,7 @@ Output only the cleaned text.
       />
       <button
         onClick={handleGenerate}
-        disabled={!input || remainingRuns === 0}
+        disabled={!input}
         className={remainingRuns === 0 ? "btn-generate-locked" : "btn-generate"}
       >
         {remainingRuns === 0 ? "Limit Exhausted – Click to Unlock" : "Clean Text & Refresh Layout"}

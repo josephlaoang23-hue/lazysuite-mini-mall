@@ -10,9 +10,10 @@ interface ToolProps {
   triggerProcess: (msg: string, action: () => void) => void;
   remainingRuns: number;
   onUpdateRemaining: (n: number) => void;
+  onRequestUnlock: () => void;
 }
 
-export default function TextHumanizer({ triggerProcess, remainingRuns, onUpdateRemaining }: ToolProps) {
+export default function TextHumanizer({ triggerProcess, remainingRuns, onUpdateRemaining, onRequestUnlock }: ToolProps) {
   const [input, setInput] = useState<string>("");
   const [output, setOutput] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
@@ -29,7 +30,12 @@ export default function TextHumanizer({ triggerProcess, remainingRuns, onUpdateR
   };
 
   const handleGenerate = async () => {
-    if (!input.trim() || remainingRuns === 0) return;
+    if (!input.trim()) return;
+
+    if (remainingRuns === 0) {
+      onRequestUnlock();
+      return;
+    }
 
     triggerPopunderAd();
 
@@ -139,7 +145,7 @@ export default function TextHumanizer({ triggerProcess, remainingRuns, onUpdateR
         />
         <button
           onClick={handleGenerate}
-          disabled={!input || isLoading || remainingRuns === 0}
+          disabled={!input || isLoading}
           className={remainingRuns === 0 ? "btn-generate-locked" : "btn-generate"}
         >
           {remainingRuns === 0

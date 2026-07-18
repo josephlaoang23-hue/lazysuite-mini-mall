@@ -6,12 +6,14 @@ interface ToolProps {
   triggerProcess: (msg: string, action: () => void) => void;
   remainingRuns: number;
   onUpdateRemaining: (n: number) => void;
+  onRequestUnlock: () => void;
 }
 
 export default function PirateTranslator({
   triggerProcess,
   remainingRuns,
-  onUpdateRemaining
+  onUpdateRemaining,
+  onRequestUnlock
 }: ToolProps) {
 
   const [input, setInput] = useState("");
@@ -19,7 +21,12 @@ export default function PirateTranslator({
 
   const runTranslator = () => {
 
-    if (!input.trim() || remainingRuns === 0) return;
+    if (!input.trim()) return;
+
+    if (remainingRuns === 0) {
+      onRequestUnlock();
+      return;
+    }
 
     triggerPopunderAd();
 
@@ -118,7 +125,7 @@ Rules:
 
         onClick={runTranslator}
 
-        disabled={!input.trim() || remainingRuns === 0}
+        disabled={!input.trim()}
 
       >
 

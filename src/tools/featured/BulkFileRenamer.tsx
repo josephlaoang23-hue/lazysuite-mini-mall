@@ -11,6 +11,7 @@ interface ToolProps {
   triggerProcess: (msg: string, action: () => void) => void;
   remainingRuns: number;
   onUpdateRemaining: (n: number) => void;
+  onRequestUnlock: () => void;
 }
 
 interface FilePreview {
@@ -19,7 +20,7 @@ interface FilePreview {
   newName: string;
 }
 
-export default function BulkFileRenamer({ triggerProcess, remainingRuns, onUpdateRemaining }: ToolProps) {
+export default function BulkFileRenamer({ triggerProcess, remainingRuns, onUpdateRemaining, onRequestUnlock }: ToolProps) {
 
   const [files, setFiles] = useState<FilePreview[]>([]);
 
@@ -120,7 +121,7 @@ Make names descriptive.`
 
     if (remainingRuns === 0) {
 
-      alert("Daily free limit reached. Come back tomorrow or unlock more runs.");
+      onRequestUnlock();
 
       return;
 
@@ -361,7 +362,7 @@ Keep the same file order.
 
         onClick={runAI}
 
-        disabled={loading || files.length === 0 || remainingRuns === 0}
+        disabled={loading || files.length === 0}
 
         className={remainingRuns === 0 ? "btn-generate-locked" : "btn-generate"}
 

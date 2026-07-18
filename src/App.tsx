@@ -683,14 +683,13 @@ useEffect(() => {
 
   </div>
 )}
-      {route === 'cleaner' && <ChatGptCleaner triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} />}
-      {route === 'humanizer' && <TextHumanizer triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} />}
-      {route === 'renamer' && <BulkFileRenamer triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} />}
-
+      {route === 'cleaner' && <ChatGptCleaner triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} />}
+      {route === 'humanizer' && <TextHumanizer triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} />}
+      {route === 'renamer' && <BulkFileRenamer triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} />}
 
       {route === 'pirate' && (
-  <PirateTranslator triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} />
-)}
+        <PirateTranslator triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} />
+      )}
       {route === 'create-tool' && (
         <div style={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', padding: '24px', borderRadius: '12px' }}>
           <h2 style={{ fontSize: '18px', margin: '0 0 4px 0' }}>Build Your Own Custom Tool</h2>
