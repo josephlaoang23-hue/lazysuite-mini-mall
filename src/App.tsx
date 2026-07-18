@@ -6,6 +6,8 @@ import TextHumanizer from "./tools/featured/TextHumanizer";
 import BulkFileRenamer from "./tools/featured/BulkFileRenamer";
 
 import PirateTranslator from "./tools/creator-tools/PirateTranslator";
+
+import Ads from "./ads/Ads";
 // Symmetrical Ad Layout, Marketplace Theme, and Interstitial Style Architecture
 const STYLES_INJECTION = `
   body { margin: 0; background-color: #020617; color: #f8fafc; font-family: sans-serif; }
@@ -441,6 +443,7 @@ export default function App() {
 
   return (
     <AdLayoutWrapper>
+      <Ads />
       <div className="marketplace-nav">
         <div className="nav-brand" onClick={() => setRoute('hub')}>LazySuite Builder Hub</div>
         <div className="nav-user-badge">
