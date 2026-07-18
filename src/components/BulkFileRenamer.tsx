@@ -14,7 +14,7 @@ interface FilePreview {
 export default function BulkFileRenamer({ triggerProcess }: ToolProps) {
   const [files, setFiles] = useState<FilePreview[]>([]);
   const [instructions, setInstructions] = useState(
-    `Rename everything using snake_case.
+    `   Rename everything using snake_case.
     
     Remove words like final and copy.
     
