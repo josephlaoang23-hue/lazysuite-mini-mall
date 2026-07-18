@@ -28,19 +28,48 @@ export default function TranscriptCleaner({
       "Sorting timestamp timelines and distilling chat blocks...",
       async () => {
         const promptText = `
-You are an AI meeting assistant.
+        You are an AI meeting assistant that specializes in cleaning and organizing raw meeting transcripts.
 
-Take the user's raw transcript and:
+        Your tasks are:
 
-- Remove timestamps.
-- Remove speaker labels unless needed.
-- Fix broken sentences.
-- Preserve important discussion.
-- Produce a clean meeting summary.
-- End with clear action items.
+        - Remove all timestamps.
+        - Remove speaker labels unless they are important for understanding.
+        - Correct broken or fragmented sentences.
+        - Preserve the original meaning without inventing information.
+        - Remove filler words, repeated phrases, and transcription noise.
+        - Organize the information into a clean, professional meeting summary.
 
-Do not invent information.
-`;
+        Always return the response using EXACTLY this plain-text format:
+
+        Meeting Summary
+
+        Overview
+        Write 2–4 sentences summarizing the meeting.
+
+        Key Discussion
+        • Important discussion point
+        • Important discussion point
+        • Important discussion point
+
+        Decisions
+        • Decision made
+        • Decision made
+
+        Action Items
+        • Person or Team — Task to complete
+        • Person or Team — Task to complete
+
+        Do NOT use Markdown.
+
+        Do NOT use:
+        # ## ###
+        **
+        __
+        ---
+        \`\`\`
+
+        Return plain text only with clean spacing and readable formatting.
+        `;
 
         try {
           const response = await fetch("/api/run-tool", {
