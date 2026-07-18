@@ -9,6 +9,7 @@ import BulkFileRenamer from "./tools/featured/BulkFileRenamer";
 import PirateTranslator from "./tools/creator-tools/PirateTranslator";
 import AdsterraSkyscraper from './ads/AdsterraSkyscraper';
 import { injectSocialBar } from './ads/adManager';
+import { triggerPopunderAd } from './ads/adManager';
 // Symmetrical Ad Layout, Marketplace Theme, and Interstitial Style Architecture
 const STYLES_INJECTION = `
   body { margin: 0; background-color: #020617; color: #f8fafc; font-family: sans-serif; }
@@ -331,7 +332,6 @@ export default function App() {
 const [unlockSecondsLeft, setUnlockSecondsLeft] = useState(10);
 const [unlockSessionId, setUnlockSessionId] = useState<string | null>(null);
 
-const AD_URL = "https://your-adsterra-popunder-link.com"; // replace with your real Adsterra link
 
 // --- NEW: Tier 3 unlimited-mode state ---
 const [unlimitedModeActive, setUnlimitedModeActive] = useState(false);
@@ -342,7 +342,7 @@ const [pendingUnlimitedPayload, setPendingUnlimitedPayload] = useState<{
   onDone: (output: string) => void;
 } | null>(null);
 const startUnlock = async () => {
-  window.open(AD_URL, '_blank'); // fired synchronously inside the click to avoid popup blockers
+  triggerPopunderAd(); // fired synchronously inside the click to avoid popup blockers
 
   try {
     const res = await fetch('/api/unlock-start', { method: 'POST' });
@@ -387,7 +387,7 @@ const startUnlimitedGate = async (
   userInput: string,
   onDone: (output: string) => void
 ) => {
-  window.open(AD_URL, '_blank'); // must stay synchronous inside the click chain
+  triggerPopunderAd(); // must stay synchronous inside the click chain
 
   try {
     const res = await fetch('/api/unlock-start', { method: 'POST' });
