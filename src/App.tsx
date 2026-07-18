@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
-
+import Home from "./pages/Home";
 // Import our individual clean modular component files directly from our folder pool
-import ChatGptCleaner from './components/ChatGptCleaner';
-import TextHumanizer from './components/TextHumanizer';
-import BulkFileRenamer from './components/BulkFileRenamer';
 import PrivacyShield from './components/PrivacyShield';
 import TranscriptCleaner from './components/TranscriptCleaner';
 
@@ -518,64 +515,10 @@ export default function App() {
             </div>
           )}
 
-          <div className="lobby-header">
-            <h1 className="lobby-title">LazySuite Mall</h1>
-            <p className="lobby-desc">Launch hyper-focused data engines or engineer your own monetized micro-utility pipelines.</p>
-            <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', marginTop: '16px' }}>
-            <button
-              onClick={() => setRoute("other-tools")}
-              className="btn-other-tools"
-            >
-            📁 Other Tools
-            </button>
-            <button onClick={() => alert("Coming in the next update!")} className="btn-create-earn">🔥 Create and Earn Money</button>
-            </div>
-          </div>
+    <Home
+      setRoute={setRoute}
+    />
 
-          <div className="section-label">Featured Core Boutiques</div>
-
-          <div className="grid-container" style={{ marginBottom: '24px' }}>
-
-            <div
-              onClick={() => setRoute('cleaner')}
-              className="tool-card"
-            >
-              <h3 className="tool-card-title">
-                ChatGPT Copy-Paste Formatting Cleaner
-              </h3>
-
-              <p className="tool-card-desc">
-                Removes ChatGPT formatting artifacts for clean pasting anywhere.
-              </p>
-            </div>
-
-            <div
-              onClick={() => setRoute('humanizer')}
-              className="tool-card"
-            >
-              <h3 className="tool-card-title">
-                Zero-Cost AI Conversational Text Humanizer
-              </h3>
-
-              <p className="tool-card-desc">
-                Rewrites robotic AI writing into natural human-sounding text.
-              </p>
-            </div>
-
-            <div
-              onClick={() => setRoute('renamer')}
-              className="tool-card"
-            >
-              <h3 className="tool-card-title">
-                  Smart AI File Renamer
-              </h3>
-
-              <p className="tool-card-desc">
-                Generates smart bulk filename mappings from simple instructions.
-              </p>
-            </div>
-
-          </div>
           {/*
           <div className="grid-container">
             {customTools.map(t => (
