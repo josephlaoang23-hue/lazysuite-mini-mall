@@ -26,7 +26,7 @@ Make names descriptive.`
   const [loading, setLoading] = useState(false);
 
 
-  const cleanFilename = (name:string) => {
+  const cleanFilename = (name: string) => {
 
     const dot = name.lastIndexOf(".");
 
@@ -49,7 +49,6 @@ Make names descriptive.`
   };
 
 
-
   const selectFolder = async () => {
 
     try {
@@ -64,23 +63,17 @@ Make names descriptive.`
         "Reading filenames...",
         async () => {
 
-
           const loadedFiles: FilePreview[] = [];
 
 
           for await (const [name, handle] of folderHandle.entries()) {
 
-
-            if(handle.kind === "file") {
+            if (handle.kind === "file") {
 
               loadedFiles.push({
-
                 handle,
-
-                oldName:name,
-
-                newName:cleanFilename(name)
-
+                oldName: name,
+                newName: cleanFilename(name)
               });
 
             }
@@ -108,10 +101,7 @@ Make names descriptive.`
 
 
 
-
-
   const runAI = async () => {
-
 
     if(files.length === 0){
 
@@ -124,7 +114,6 @@ Make names descriptive.`
 
     try {
 
-
       setLoading(true);
 
 
@@ -133,7 +122,7 @@ Make names descriptive.`
 
 
 
-      const response = await fetch("/api/run-tool",{
+      const response = await fetch("/api/run-tool", {
 
         method:"POST",
 
@@ -145,7 +134,7 @@ Make names descriptive.`
 
           promptInstructions:
 `
-You are a file renaming assistant.
+You are a professional file renaming assistant.
 
 Return ONLY JSON.
 
@@ -153,7 +142,7 @@ Format:
 
 [
  {
-  "old":"old filename",
+  "old":"original filename",
   "new":"new filename"
  }
 ]
@@ -163,61 +152,61 @@ Rules:
 
 ${instructions}
 
+Keep file extensions.
+Keep the same file order.
+
 `,
 
-          userInput:JSON.stringify(names)
+          userInput: JSON.stringify(names)
 
         })
 
       });
 
 
-
       const data = await response.json();
 
 
-      console.log("AI RESULT:",data);
+      if(!data.output){
 
-
-      if(data.output){
-
-        const result =
-          JSON.parse(data.output);
-
-
-        setFiles(prev =>
-
-          prev.map(file=>{
-
-            const match =
-              result.find(
-                (item:any)=>
-                item.old === file.oldName
-              );
-
-
-            return {
-
-              ...file,
-
-              newName:
-              match
-              ? match.new
-              : file.newName
-
-            };
-
-
-          })
-
-        );
-
+        throw new Error("No AI output received.");
 
       }
 
 
-    }
-    catch(error){
+      const result =
+        JSON.parse(data.output);
+
+
+
+      setFiles(prev =>
+
+        prev.map(file => {
+
+          const match =
+            result.find(
+              (item:any) =>
+              item.old === file.oldName
+            );
+
+
+          return {
+
+            ...file,
+
+            newName:
+              match
+              ? match.new
+              : file.newName
+
+          };
+
+        })
+
+      );
+
+
+    } catch(error){
 
       console.error(error);
 
@@ -230,211 +219,267 @@ ${instructions}
 
     }
 
-
   };
 
 
 
+  const applyRename = async () => {
+
+    try {
+
+      for(const file of files){
+
+        if(file.oldName !== file.newName){
+
+          await file.handle.move(file.newName);
+
+        }
+
+      }
 
 
+      alert("Files renamed successfully.");
+
+
+    } catch(error){
+
+      console.error(error);
+
+      alert(
+        "Rename failed. Browser may not support direct rename."
+      );
+
+    }
+
+  };
 
   return (
 
-<div>
+    <div>
 
+      <Helmet>
 
-<Helmet>
+        <title>
+          Bulk File Renamer
+        </title>
 
-<title>Bulk File Renamer</title>
+        <meta
+          name="description"
+          content="Clean messy filenames instantly."
+        />
 
-<meta
-name="description"
-content="Clean messy filenames instantly."
-/>
+      </Helmet>
 
-</Helmet>
 
+      <h2 className="tool-header-title">
+        Bulk File Renamer
+      </h2>
 
 
-<h2 className="tool-header-title">
-Bulk File Renamer
-</h2>
+      <p
+        style={{
+          fontSize:"12px",
+          color:"#94a3b8",
+          marginBottom:"16px"
+        }}
+      >
+        Select a folder, describe your rename rules, then let AI generate new filenames.
+      </p>
 
 
 
-<p
-style={{
-fontSize:"12px",
-color:"#94a3b8",
-marginBottom:"16px"
-}}
->
-Select a folder, describe how you want the files renamed, then let AI generate better filenames.
-</p>
+      <textarea
 
+        className="textarea-input"
 
+        value={instructions}
 
+        onChange={(e)=>setInstructions(e.target.value)}
 
-<textarea
+        style={{
+          height:"100px",
+          marginBottom:"16px"
+        }}
 
-className="textarea-input"
+      />
 
-value={instructions}
 
-onChange={(e)=>setInstructions(e.target.value)}
 
-style={{
-height:"100px",
-marginBottom:"16px"
-}}
+      <button
 
-/>
+        className="btn-generate"
 
+        onClick={selectFolder}
 
+        disabled={loading}
 
+      >
 
+        {loading ? "Loading..." : "Select Folder"}
 
-<button
+      </button>
 
-className="btn-generate"
 
-onClick={selectFolder}
 
-disabled={loading}
+      <button
 
->
+        className="btn-generate"
 
-{loading ? "Loading..." : "Select Folder"}
+        onClick={runAI}
 
-</button>
+        disabled={loading || files.length === 0}
 
+        style={{
+          marginTop:"12px"
+        }}
 
+      >
 
+        Generate AI Names
 
-<button
+      </button>
 
-className="btn-generate"
 
-onClick={runAI}
 
-disabled={loading}
 
-style={{
-marginTop:"12px"
-}}
+      {files.length > 0 && (
 
->
+        <div
 
-Generate AI Names
+          className="output-box"
 
-</button>
+          style={{
+            marginTop:"20px"
+          }}
 
+        >
 
 
+          {files.map((file,index)=>(
 
+            <div
 
+              key={index}
 
-{files.length > 0 && (
+              style={{
 
-<div
+                padding:"12px 0",
 
-className="output-box"
+                borderBottom:"1px solid #1e293b",
 
-style={{
-marginTop:"20px"
-}}
+                fontSize:"12px"
 
->
+              }}
 
+            >
 
-<div
 
-style={{
+              <div
 
-display:"flex",
+                style={{
 
-justifyContent:"space-between",
+                  color:"#cbd5e1",
 
-fontWeight:"bold",
+                  marginBottom:"8px"
 
-borderBottom:"1px solid #334155",
+                }}
 
-paddingBottom:"8px"
+              >
 
-}}
+                <strong>
+                  Current:
+                </strong>
 
->
+                <br/>
 
-<span>
-Current Filename
-</span>
+                {file.oldName}
 
 
-<span>
-New Filename
-</span>
+              </div>
 
 
-</div>
 
 
+              <div
 
+                style={{
 
+                  borderTop:"1px solid #334155",
 
-{files.map((file,index)=>(
+                  margin:"8px 0"
 
-<div
-key={index}
-style={{
-  padding:"12px 0",
-  borderBottom:"1px solid #1e293b",
-  fontSize:"12px"
-}}
->
+                }}
 
-  <div
-  style={{
-    color:"#cbd5e1",
-    marginBottom:"8px"
-  }}
-  >
-    <strong>Current:</strong>
-    <br/>
-    {file.oldName}
-  </div>
+              />
 
 
-  <div
-  style={{
-    borderTop:"1px solid #334155",
-    margin:"8px 0"
-  }}
-  />
 
 
-  <div
-  style={{
-    color:"#2dd4bf"
-  }}
-  >
-    <strong>New:</strong>
-    <br/>
-    {file.newName}
-  </div>
 
+              <div
 
-</div>
+                style={{
 
-))}
+                  color:"#2dd4bf"
 
+                }}
 
-</div>
+              >
 
-)}
+                <strong>
+                  New:
+                </strong>
 
+                <br/>
 
+                {file.newName}
 
-</div>
+
+              </div>
+
+
+
+            </div>
+
+
+          ))}
+
+
+
+        </div>
+
+      )}
+
+
+
+
+
+
+      {files.length > 0 && (
+
+        <button
+
+          className="btn-generate"
+
+          onClick={applyRename}
+
+          style={{
+
+            marginTop:"16px"
+
+          }}
+
+        >
+
+          Apply Rename
+
+        </button>
+
+      )}
+
+
+
+    </div>
 
   );
 
