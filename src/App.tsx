@@ -339,6 +339,9 @@ export default function App() {
   const [toolDesc, setToolDesc] = useState<string>("");
   const [toolPrompt, setToolPrompt] = useState<string>("");
 
+  const [activeTool, setActiveTool] = useState<CustomTool | null>(null);
+  const [toolInput, setToolInput] = useState<string>("");
+  const [toolOutput, setToolOutput] = useState<string>("");
 
   useEffect(() => {
     if (user) {
@@ -669,14 +672,14 @@ export default function App() {
     </button>
 
     {toolOutput && (
-      <div className="output-box">
-        {toolOutput}
-      </div>
-    )}
+  <div className="output-box">
+    {toolOutput}
+  </div>
+)}
   </div>
 )}
 
-      {processing && <ProcessingOverlay message={msg} onComplete={handleComplete} />}
-    </AdLayoutWrapper>
+  {processing && <ProcessingOverlay message={msg} onComplete={handleComplete} />}
+</AdLayoutWrapper>
   );
 }
