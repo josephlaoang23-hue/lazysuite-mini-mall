@@ -9,7 +9,6 @@ import BulkFileRenamer from "./tools/featured/BulkFileRenamer";
 import PirateTranslator from "./tools/creator-tools/PirateTranslator";
 import AdsterraSkyscraper from './ads/AdsterraSkyscraper';
 import { injectSocialBar } from './ads/adManager';
-import { TopAd, BottomAd } from "./ads/Ads";
 // Symmetrical Ad Layout, Marketplace Theme, and Interstitial Style Architecture
 const STYLES_INJECTION = `
   body { margin: 0; background-color: #020617; color: #f8fafc; font-family: sans-serif; }
@@ -289,11 +288,9 @@ function AdLayoutWrapper({ children }: { children: React.ReactNode }) {
       </div>
 
       <div className="scroll-center">
-        <div className="ad-banner-top"><TopAd /></div>
         <div className="scroll-center-inner">
           {children}
         </div>
-        <div className="ad-banner-bottom"><BottomAd /></div>
       </div>
 
       <div className="ad-col-right">
@@ -493,7 +490,7 @@ useEffect(() => {
       localStorage.removeItem('lazysuite_user');
     }
   }, [user]);
-  
+
   useEffect(() => {
     injectSocialBar();
   }, []);
