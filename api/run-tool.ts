@@ -7,7 +7,7 @@ const redis = new Redis({
 });
 
 const DAILY_LIMIT = 5;
-
+const UNLOCK_CAP = 3;
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
@@ -46,6 +46,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   if (currentCount > DAILY_LIMIT) {
+    const unlocksKey = `lazysuite:unlocks:${rawIp}:${dateString}`;
+    const unlocksUsed = (await redis.get<number>(unlocksKey)) ?? 0;
+  
+    if (unlocksUsed >= UNLOCK_CAP) {
+      return res.status(202).json({
+        unlimitedMode: true,
+        message: "Instant 10-Second Sponsor View Required to process this run."
+      });
+    }
+  
     return res.status(429).json({
       error: 'Daily free limit reached',
       limit: DAILY_LIMIT,

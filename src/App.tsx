@@ -7,7 +7,8 @@ import TextHumanizer from "./tools/featured/TextHumanizer";
 import BulkFileRenamer from "./tools/featured/BulkFileRenamer";
 
 import PirateTranslator from "./tools/creator-tools/PirateTranslator";
-
+import AdsterraSkyscraper from './ads/AdsterraSkyscraper';
+import { injectSocialBar } from './ads/adManager';
 import { TopAd, BottomAd } from "./ads/Ads";
 // Symmetrical Ad Layout, Marketplace Theme, and Interstitial Style Architecture
 const STYLES_INJECTION = `
@@ -284,7 +285,7 @@ function AdLayoutWrapper({ children }: { children: React.ReactNode }) {
       <style>{STYLES_INJECTION}</style>
 
       <div className="ad-col-left">
-        <div className="left-ad">LEFT AD</div>
+        <AdsterraSkyscraper />
       </div>
 
       <div className="scroll-center">
@@ -296,7 +297,7 @@ function AdLayoutWrapper({ children }: { children: React.ReactNode }) {
       </div>
 
       <div className="ad-col-right">
-        <div className="right-ad">RIGHT AD</div>
+        <AdsterraSkyscraper />
       </div>
     </div>
   );
@@ -335,6 +336,14 @@ const [unlockSessionId, setUnlockSessionId] = useState<string | null>(null);
 
 const AD_URL = "https://your-adsterra-popunder-link.com"; // replace with your real Adsterra link
 
+// --- NEW: Tier 3 unlimited-mode state ---
+const [unlimitedModeActive, setUnlimitedModeActive] = useState(false);
+const [unlimitedSecondsLeft, setUnlimitedSecondsLeft] = useState(10);
+const [pendingUnlimitedPayload, setPendingUnlimitedPayload] = useState<{
+  promptInstructions: string;
+  userInput: string;
+  onDone: (output: string) => void;
+} | null>(null);
 const startUnlock = async () => {
   window.open(AD_URL, '_blank'); // fired synchronously inside the click to avoid popup blockers
 
@@ -375,6 +384,68 @@ const completeUnlock = async () => {
     alert("Something went wrong completing the unlock.");
   }
 };
+
+const startUnlimitedGate = async (
+  promptInstructions: string,
+  userInput: string,
+  onDone: (output: string) => void
+) => {
+  window.open(AD_URL, '_blank'); // must stay synchronous inside the click chain
+
+  try {
+    const res = await fetch('/api/unlock-start', { method: 'POST' });
+    const data = await res.json();
+    if (!res.ok) {
+      alert(data.message || "Could not start sponsor view.");
+      return;
+    }
+    setUnlockSessionId(data.sessionId);
+    setPendingUnlimitedPayload({ promptInstructions, userInput, onDone });
+    setUnlimitedSecondsLeft(10);
+    setUnlimitedModeActive(true);
+  } catch (err) {
+    console.error(err);
+    alert("Something went wrong starting the sponsor view.");
+  }
+};
+
+const completeUnlimitedRun = async () => {
+  if (!pendingUnlimitedPayload) return;
+  try {
+    const res = await fetch('/api/run-unlimited-tool', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        sessionId: unlockSessionId,
+        promptInstructions: pendingUnlimitedPayload.promptInstructions,
+        userInput: pendingUnlimitedPayload.userInput
+      })
+    });
+    const data = await res.json();
+    setUnlimitedModeActive(false);
+    if (!res.ok) {
+      alert(data.message || "Sponsor view failed. Please try again.");
+      return;
+    }
+    pendingUnlimitedPayload.onDone(data.output);
+  } catch (err) {
+    console.error(err);
+    setUnlimitedModeActive(false);
+    alert("Something went wrong completing the run.");
+  } finally {
+    setPendingUnlimitedPayload(null);
+  }
+};
+
+useEffect(() => {
+  if (!unlimitedModeActive) return;
+  if (unlimitedSecondsLeft <= 0) {
+    completeUnlimitedRun();
+    return;
+  }
+  const t = setTimeout(() => setUnlimitedSecondsLeft(s => s - 1), 1000);
+  return () => clearTimeout(t);
+}, [unlimitedModeActive, unlimitedSecondsLeft]);
 
 useEffect(() => {
   if (!unlockOverlayOpen) return;
@@ -422,6 +493,10 @@ useEffect(() => {
       localStorage.removeItem('lazysuite_user');
     }
   }, [user]);
+  
+  useEffect(() => {
+    injectSocialBar();
+  }, []);
 
   useEffect(() => {
     localStorage.setItem('lazysuite_custom_tools', JSON.stringify(customTools));
@@ -683,12 +758,11 @@ useEffect(() => {
 
   </div>
 )}
-      {route === 'cleaner' && <ChatGptCleaner triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} />}
-      {route === 'humanizer' && <TextHumanizer triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} />}
-      {route === 'renamer' && <BulkFileRenamer triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} />}
-
+      {route === 'cleaner' && <ChatGptCleaner triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />}
+      {route === 'humanizer' && <TextHumanizer triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />}
+      {route === 'renamer' && <BulkFileRenamer triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />}
       {route === 'pirate' && (
-        <PirateTranslator triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} />
+        <PirateTranslator triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />
       )}
       {route === 'create-tool' && (
         <div style={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', padding: '24px', borderRadius: '12px' }}>
@@ -762,6 +836,18 @@ useEffect(() => {
       <h3 style={{ margin: '0 0 8px 0', fontSize: '16px' }}>Verifying sponsorship tier...</h3>
       <p style={{ margin: 0, fontSize: '12px', color: '#94a3b8', fontFamily: 'monospace' }}>
         {unlockSecondsLeft} seconds remaining
+      </p>
+    </div>
+  </div>
+)}
+
+{unlimitedModeActive && (
+  <div className="overlay-bg">
+    <div className="overlay-card">
+      <div className="spinner-ring"></div>
+      <h3 style={{ margin: '0 0 8px 0', fontSize: '16px' }}>Sponsor View Required...</h3>
+      <p style={{ margin: 0, fontSize: '12px', color: '#94a3b8', fontFamily: 'monospace' }}>
+        {unlimitedSecondsLeft} seconds remaining
       </p>
     </div>
   </div>
