@@ -339,9 +339,6 @@ export default function App() {
   const [toolDesc, setToolDesc] = useState<string>("");
   const [toolPrompt, setToolPrompt] = useState<string>("");
 
-  const [activeTool, setActiveTool] = useState<CustomTool | null>(null);
-  const [toolInput, setToolInput] = useState<string>("");
-  const [toolOutput, setToolOutput] = useState<string>("");
 
   useEffect(() => {
     if (user) {
