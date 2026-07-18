@@ -5,8 +5,6 @@ import ChatGptCleaner from "./tools/featured/ChatGptCleaner";
 import TextHumanizer from "./tools/featured/TextHumanizer";
 import BulkFileRenamer from "./tools/featured/BulkFileRenamer";
 
-import PrivacyShield from "./tools/other-tools/PrivacyShield";
-import TranscriptCleaner from "./tools/other-tools/TranscriptCleaner";
 
 // Symmetrical Ad Layout, Marketplace Theme, and Interstitial Style Architecture
 const STYLES_INJECTION = `
@@ -618,8 +616,6 @@ export default function App() {
       {route === 'cleaner' && <ChatGptCleaner triggerProcess={triggerProcess} />}
       {route === 'humanizer' && <TextHumanizer triggerProcess={triggerProcess} />}
       {route === 'renamer' && <BulkFileRenamer triggerProcess={triggerProcess} />}
-      {route === 'shield' && <PrivacyShield triggerProcess={triggerProcess} />}
-      {route === 'transcript' && <TranscriptCleaner triggerProcess={triggerProcess} />}
 
       {route === 'create-tool' && (
         <div style={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', padding: '24px', borderRadius: '12px' }}>
