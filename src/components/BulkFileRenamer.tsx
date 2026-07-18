@@ -385,39 +385,39 @@ New Filename
 
 
 <div
-
-key={index}
-
-style={{
-
-display:"flex",
-
-justifyContent:"space-between",
-
-padding:"8px 0",
-
-borderBottom:"1px solid #1e293b",
-
-fontSize:"12px"
-
-}}
-
+  key={index}
+  style={{
+    display: "grid",
+    gridTemplateColumns: "1fr 40px 1fr",
+    alignItems: "center",
+    padding: "8px 0",
+    borderBottom: "1px solid #1e293b",
+    fontSize: "12px",
+  }}
 >
+  <span>
+    {file.oldName}
+  </span>
 
 
-<span>
-{file.oldName}
-</span>
+  <div
+    style={{
+      height: "100%",
+      borderLeft: "1px solid #334155",
+      borderRight: "1px solid #334155",
+      margin: "0 20px",
+    }}
+  />
 
 
-<span
-style={{
-color:"#2dd4bf"
-}}
->
-{file.newName}
-</span>
-
+  <span
+    style={{
+      color: "#2dd4bf",
+      textAlign: "right",
+    }}
+  >
+    {file.newName}
+  </span>
 
 </div>
 
