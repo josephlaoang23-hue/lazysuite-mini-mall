@@ -5,7 +5,7 @@ import ChatGptCleaner from "./tools/featured/ChatGptCleaner";
 import TextHumanizer from "./tools/featured/TextHumanizer";
 import BulkFileRenamer from "./tools/featured/BulkFileRenamer";
 
-
+import PirateTranslator from "./tools/creator-tools/PirateTranslator";
 // Symmetrical Ad Layout, Marketplace Theme, and Interstitial Style Architecture
 const STYLES_INJECTION = `
   body { margin: 0; background-color: #020617; color: #f8fafc; font-family: sans-serif; }
@@ -312,12 +312,7 @@ export default function App() {
     return saved ? JSON.parse(saved) : null;
   });
 
-  const [customTools, setCustomTools] = useState<CustomTool[]>(() => {
-    const saved = localStorage.getItem('lazysuite_custom_tools');
-    return saved ? JSON.parse(saved) : [
-      { id: 'pirate-joke', title: 'Pirate Translator', desc: 'Converts any plain input text into custom high-sea pirate speak strings.', promptInstructions: 'Translate the following text into pirate jargon:', creator: 'CaptainJack', usesCount: 42 }
-    ];
-  });
+  const [customTools, setCustomTools] = useState<CustomTool[]>([]);
 
   const [usageCount, setUsageCount] = useState<number>(() => {
     const count = localStorage.getItem('lazysuite_daily_count');
@@ -550,28 +545,25 @@ export default function App() {
       style={{ marginTop: "24px" }}
     >
 
-      <div
-        onClick={() => {
-          setActiveTool(customTools[0]);
-          setToolInput("");
-          setToolOutput("");
-          setRoute("run-custom");
-        }}
-        className="tool-card"
-      >
-        <span className="tool-badge-creator">
-          Community
-        </span>
+<div
+  onClick={() => {
+    setRoute("pirate");
+  }}
+  className="tool-card"
+>
+  <span className="tool-badge-creator">
+    Community
+  </span>
 
-        <h3 className="tool-card-title">
-          Pirate Translator
-        </h3>
+  <h3 className="tool-card-title">
+    Pirate Translator
+  </h3>
 
-        <p className="tool-card-desc">
-          Converts normal English into classic pirate speech.
-        </p>
+  <p className="tool-card-desc">
+    Converts normal English into classic pirate speech.
+  </p>
 
-      </div>
+</div>
 
       <div
         className="tool-card"
@@ -617,6 +609,10 @@ export default function App() {
       {route === 'humanizer' && <TextHumanizer triggerProcess={triggerProcess} />}
       {route === 'renamer' && <BulkFileRenamer triggerProcess={triggerProcess} />}
 
+
+      {route === 'pirate' && (
+        <PirateTranslator triggerProcess={triggerProcess} />
+      )}
       {route === 'create-tool' && (
         <div style={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', padding: '24px', borderRadius: '12px' }}>
           <h2 style={{ fontSize: '18px', margin: '0 0 4px 0' }}>Build Your Own Custom Tool</h2>
