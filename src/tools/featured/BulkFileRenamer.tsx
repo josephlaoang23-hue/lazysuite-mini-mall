@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { TOOL_METADATA } from "../../seo/toolMetadata";
 
+import { triggerPopunderAd } from "../../ads/adManager";
 const seo = TOOL_METADATA.renamer;
 interface ToolProps {
   triggerProcess: (msg: string, action: () => void) => void;
@@ -129,6 +130,8 @@ Make names descriptive.`
       return;
 
     }
+
+    triggerPopunderAd();
 
 
 

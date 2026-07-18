@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import { triggerPopunderAd } from "../../ads/adManager";
 interface ToolProps {
   triggerProcess: (msg: string, action: () => void) => void;
 }
@@ -15,6 +15,7 @@ export default function PirateTranslator({
 
     if (!input.trim()) return;
 
+    triggerPopunderAd();
 
     triggerProcess(
       "Translating input into pirate language...",

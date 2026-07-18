@@ -3,6 +3,7 @@ import { Copy, Check } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { TOOL_METADATA } from "../../seo/toolMetadata";
 
+import { triggerPopunderAd } from "../../ads/adManager";
 interface ToolProps {
   triggerProcess: (msg: string, action: () => void) => void;
 }
@@ -23,8 +24,12 @@ export default function TextHumanizer({ triggerProcess }: ToolProps) {
     }, 2000);
   };
   const handleGenerate = async () => {
-    if (!input) return;
+    if (!input.trim()) return;
+  
+    triggerPopunderAd();
+  
     setIsLoading(true);
+  
     triggerProcess("Streaming organic language syntax models across serverless rails...", async () => {
       const promptText = `
       You are an expert writing editor.
