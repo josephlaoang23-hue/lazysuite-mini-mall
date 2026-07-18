@@ -334,16 +334,19 @@ Keep the same file order.
 <Helmet>
 
 <title>
-Bulk File Renamer
+{seo.title}
 </title>
 
 
 <meta
-
 name="description"
+content={seo.description}
+/>
 
-content="Clean messy filenames instantly."
 
+<link
+rel="canonical"
+href={seo.canonical}
 />
 
 

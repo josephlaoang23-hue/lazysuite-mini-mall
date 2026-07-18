@@ -1,8 +1,9 @@
 import ChatGptCleaner from "../tools/featured/ChatGptCleaner";
 import TextHumanizer from "../tools/featured/TextHumanizer";
 import BulkFileRenamer from "../tools/featured/BulkFileRenamer";
-import PrivacyShield from "../tools/featured/PrivacyShield";
-import TranscriptCleaner from "../tools/featured/TranscriptCleaner";
+import PrivacyShield from "../tools/other-tools/PrivacyShield";
+import TranscriptCleaner from "../tools/other-tools/TranscriptCleaner";
+
 
 export const featuredTools = [
   {
