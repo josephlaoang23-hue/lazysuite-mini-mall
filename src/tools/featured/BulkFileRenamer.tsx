@@ -12,6 +12,7 @@ interface ToolProps {
   remainingRuns: number;
   onUpdateRemaining: (n: number) => void;
   onRequestUnlock: () => void;
+  onRequestUnlimited: (promptInstructions: string, userInput: string, onDone: (output: string) => void) => void; // ← this line
 }
 
 interface FilePreview {
@@ -20,7 +21,7 @@ interface FilePreview {
   newName: string;
 }
 
-export default function BulkFileRenamer({ triggerProcess, remainingRuns, onUpdateRemaining, onRequestUnlock }: ToolProps) {
+export default function BulkFileRenamer({ triggerProcess, remainingRuns, onUpdateRemaining, onRequestUnlock, onRequestUnlimited }: ToolProps) {
 
   const [files, setFiles] = useState<FilePreview[]>([]);
 
@@ -112,142 +113,91 @@ Make names descriptive.`
   const runAI = async () => {
 
     if (files.length === 0) {
-
       alert("Please select a folder first.");
-
       return;
-
     }
-
+  
     if (remainingRuns === 0) {
-
       onRequestUnlock();
-
       return;
-
     }
-
+  
     triggerPopunderAd();
-
-    try {
-
-      setLoading(true);
-
-      const names =
-        files.map(file => file.oldName);
-
-      const response = await fetch("/api/run-tool", {
-
-        method: "POST",
-
-        headers: {
-
-          "Content-Type": "application/json"
-
-        },
-
-        body: JSON.stringify({
-
-          promptInstructions:
-
-            `
-You are a professional file renaming assistant.
-
-Return ONLY JSON.
-
-Format:
-
-[
- {
-  "old":"original filename",
-  "new":"new filename"
- }
-]
-
-
-Rules:
-
-${instructions}
-
-Keep file extensions.
-Keep the same file order.
-
-`,
-
-          userInput: JSON.stringify(names)
-
+  
+    const names = files.map(file => file.oldName);
+  
+    const promptInstructions = `
+  You are a professional file renaming assistant.
+  
+  Return ONLY JSON.
+  
+  Format:
+  
+  [
+   {
+    "old":"original filename",
+    "new":"new filename"
+   }
+  ]
+  
+  Rules:
+  
+  ${instructions}
+  
+  Keep file extensions.
+  Keep the same file order.
+  `;
+  
+    const applyRenameResult = (output: string) => {
+      const result = JSON.parse(output);
+      setFiles(prev =>
+        prev.map(file => {
+          const match = result.find((item: any) => item.old === file.oldName);
+          return { ...file, newName: match ? match.new : file.newName };
         })
-
+      );
+    };
+  
+    try {
+  
+      setLoading(true);
+  
+      const response = await fetch("/api/run-tool", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ promptInstructions, userInput: JSON.stringify(names) })
       });
-
+  
       const limitRemaining = response.headers.get('X-RateLimit-Remaining');
       if (limitRemaining !== null) {
         onUpdateRemaining(Number(limitRemaining));
       }
-
-      const data = await response.json();
-
-      if (!response.ok) {
-
-        alert(data.message || "AI generation failed.");
-
+  
+      if (response.status === 202) {
+        onRequestUnlimited(promptInstructions, JSON.stringify(names), applyRenameResult);
         return;
-
       }
-
+  
+      const data = await response.json();
+  
+      if (!response.ok) {
+        alert(data.message || "AI generation failed.");
+        return;
+      }
+  
       if (!data.output) {
-
         throw new Error("No AI output received.");
-
       }
-
-      const result =
-        JSON.parse(data.output);
-
-      setFiles(prev =>
-
-        prev.map(file => {
-
-          const match =
-            result.find(
-
-              (item: any) =>
-
-                item.old === file.oldName
-
-            );
-
-          return {
-
-            ...file,
-
-            newName:
-
-              match
-
-                ? match.new
-
-                : file.newName
-
-          };
-
-        })
-
-      );
-
+  
+      applyRenameResult(data.output);
+  
     } catch (error) {
-
       console.error(error);
-
       alert("AI generation failed.");
-
-    }
-    finally {
-
+    } finally {
       setLoading(false);
-
     }
-
+  
   };
 
   const applyRename = async () => {

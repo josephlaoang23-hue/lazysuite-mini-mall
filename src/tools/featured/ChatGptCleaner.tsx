@@ -11,10 +11,10 @@ interface ToolProps {
   remainingRuns: number;
   onUpdateRemaining: (n: number) => void;
   onRequestUnlock: () => void;
+  onRequestUnlimited: (promptInstructions: string, userInput: string, onDone: (output: string) => void) => void; // ← this line
 }
 
-export default function ChatGptCleaner({ triggerProcess, remainingRuns, onUpdateRemaining, onRequestUnlock }: ToolProps) {
-  const [input, setInput] = useState<string>("");
+export default function ChatGptCleaner({ triggerProcess, remainingRuns, onUpdateRemaining, onRequestUnlock, onRequestUnlimited }: ToolProps) {  const [input, setInput] = useState<string>("");
   const [output, setOutput] = useState<string>("");
   const [copied, setCopied] = useState(false);
 
@@ -60,30 +60,35 @@ Rules:
 Output only the cleaned text.
 `;
 
-        try {
-          const response = await fetch('/api/run-tool', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ promptInstructions: promptText, userInput: input })
-          });
+try {
+  const response = await fetch('/api/run-tool', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ promptInstructions: promptText, userInput: input })
+  });
 
-          const limitRemaining = response.headers.get('X-RateLimit-Remaining');
-          if (limitRemaining !== null) {
-            onUpdateRemaining(Number(limitRemaining));
-          }
+  const limitRemaining = response.headers.get('X-RateLimit-Remaining');
+  if (limitRemaining !== null) {
+    onUpdateRemaining(Number(limitRemaining));
+  }
 
-          const data = await response.json();
+  if (response.status === 202) {
+    onRequestUnlimited(promptText, input, (output) => setOutput(output));
+    return;
+  }
 
-          if (!response.ok) {
-            alert(data.message || "Something went wrong. Please try again.");
-            return;
-          }
+  const data = await response.json();
 
-          setOutput(data.output);
-        } catch (error) {
-          console.error("Request failed:", error);
-          setOutput("Something went wrong generating a response. Please try again.");
-        }
+  if (!response.ok) {
+    alert(data.message || "Something went wrong. Please try again.");
+    return;
+  }
+
+  setOutput(data.output);
+} catch (error) {
+  console.error("Request failed:", error);
+  setOutput("Something went wrong generating a response. Please try again.");
+}
       });
   };
 

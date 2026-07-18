@@ -11,9 +11,10 @@ interface ToolProps {
   remainingRuns: number;
   onUpdateRemaining: (n: number) => void;
   onRequestUnlock: () => void;
+  onRequestUnlimited: (promptInstructions: string, userInput: string, onDone: (output: string) => void) => void; // ← this line
 }
 
-export default function TextHumanizer({ triggerProcess, remainingRuns, onUpdateRemaining, onRequestUnlock }: ToolProps) {
+export default function TextHumanizer({ triggerProcess, remainingRuns, onUpdateRemaining, onRequestUnlock, onRequestUnlimited }: ToolProps) {
   const [input, setInput] = useState<string>("");
   const [output, setOutput] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
@@ -65,45 +66,48 @@ export default function TextHumanizer({ triggerProcess, remainingRuns, onUpdateR
       Output only the rewritten text.
 `;
 
-      try {
-        const response = await fetch('/api/run-tool', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ promptInstructions: promptText, userInput: input })
-        });
+try {
+  const response = await fetch('/api/run-tool', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ promptInstructions: promptText, userInput: input })
+  });
 
-        const limitRemaining = response.headers.get('X-RateLimit-Remaining');
-        if (limitRemaining !== null) {
-          onUpdateRemaining(Number(limitRemaining));
-        }
+  const limitRemaining = response.headers.get('X-RateLimit-Remaining');
+  if (limitRemaining !== null) {
+    onUpdateRemaining(Number(limitRemaining));
+  }
 
-        const responseText = await response.text();
+  if (response.status === 202) {
+    setIsLoading(false);
+    onRequestUnlimited(promptText, input, (output) => setOutput(output));
+    return;
+  }
 
-        console.log("Raw API Response:", responseText);
+  const responseText = await response.text();
 
-        let data;
+  let data;
+  try {
+    data = JSON.parse(responseText);
+  } catch {
+    throw new Error(`Server returned invalid JSON:\n${responseText}`);
+  }
 
-        try {
-          data = JSON.parse(responseText);
-        } catch {
-          throw new Error(`Server returned invalid JSON:\n${responseText}`);
-        }
+  if (!response.ok) {
+    throw new Error(data.message || "Request failed");
+  }
 
-        if (!response.ok) {
-          throw new Error(data.message || "Request failed");
-        }
-
-        setOutput(data.output);
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Request failed:", error);
-        setIsLoading(false);
-        if (error instanceof Error) {
-          setOutput(error.message);
-        } else {
-          setOutput("Unknown error");
-        }
-      }
+  setOutput(data.output);
+  setIsLoading(false);
+} catch (error) {
+  console.error("Request failed:", error);
+  setIsLoading(false);
+  if (error instanceof Error) {
+    setOutput(error.message);
+  } else {
+    setOutput("Unknown error");
+  }
+}
     });
   };
 

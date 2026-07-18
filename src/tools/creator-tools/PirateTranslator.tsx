@@ -7,13 +7,15 @@ interface ToolProps {
   remainingRuns: number;
   onUpdateRemaining: (n: number) => void;
   onRequestUnlock: () => void;
+  onRequestUnlimited: (promptInstructions: string, userInput: string, onDone: (output: string) => void) => void;
 }
 
 export default function PirateTranslator({
   triggerProcess,
   remainingRuns,
   onUpdateRemaining,
-  onRequestUnlock
+  onRequestUnlock,
+  onRequestUnlimited
 }: ToolProps) {
 
   const [input, setInput] = useState("");
@@ -30,6 +32,17 @@ export default function PirateTranslator({
 
     triggerPopunderAd();
 
+    const promptInstructions = `
+You are a pirate translator.
+
+Convert the user's text into authentic pirate speech.
+
+Rules:
+- Keep the original meaning.
+- Use pirate vocabulary.
+- Return only the translated text.
+`;
+
     triggerProcess(
       "Translating input into pirate language...",
       async () => {
@@ -45,21 +58,8 @@ export default function PirateTranslator({
             },
 
             body: JSON.stringify({
-
-              promptInstructions:
-                `
-You are a pirate translator.
-
-Convert the user's text into authentic pirate speech.
-
-Rules:
-- Keep the original meaning.
-- Use pirate vocabulary.
-- Return only the translated text.
-`,
-
+              promptInstructions,
               userInput: input
-
             })
 
           });
@@ -67,6 +67,11 @@ Rules:
           const limitRemaining = response.headers.get('X-RateLimit-Remaining');
           if (limitRemaining !== null) {
             onUpdateRemaining(Number(limitRemaining));
+          }
+
+          if (response.status === 202) {
+            onRequestUnlimited(promptInstructions, input, (output) => setOutput(output));
+            return;
           }
 
           const data = await response.json();
