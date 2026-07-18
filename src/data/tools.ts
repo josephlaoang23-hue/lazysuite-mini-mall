@@ -22,16 +22,4 @@ export const featuredTools = [
     desc: "Generates smart bulk filename mappings.",
     component: BulkFileRenamer,
   },
-  {
-    id: "shield",
-    title: "Metadata Privacy Shield",
-    desc: "Protects files before sharing.",
-    component: PrivacyShield,
-  },
-  {
-    id: "transcript",
-    title: "Intelligent Transcript Cleaner",
-    desc: "Structures messy transcripts.",
-    component: TranscriptCleaner,
-  },
 ];
