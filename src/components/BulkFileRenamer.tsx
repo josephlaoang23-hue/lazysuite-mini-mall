@@ -29,7 +29,15 @@ export default function BulkFileRenamer({ triggerProcess }: ToolProps) {
       async () => {
 
       const promptText =
-        "You are a file organization assistant. Create a clean rename mapping plan based on the user's instructions. Show examples of old filenames becoming descriptive professional filenames. Keep the format easy to copy.";
+        `You are a file renaming assistant.
+
+        Generate only a clean filename mapping table.
+        
+        Format:
+        
+        OLD FILE NAME | NEW FILE NAME
+        
+        Do not add explanations, tutorials, or extra advice.`;
 
       try {
         const response = await fetch('/api/run-tool', {
