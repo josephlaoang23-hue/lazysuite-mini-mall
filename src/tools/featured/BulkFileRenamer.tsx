@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
+import { TOOL_METADATA } from "../../seo/toolMetadata";
 
+const seo = TOOL_METADATA.renamer;
 interface ToolProps {
   triggerProcess: (msg: string, action: () => void) => void;
 }

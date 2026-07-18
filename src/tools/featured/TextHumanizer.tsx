@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Copy, Check } from "lucide-react";
 import { Helmet } from "react-helmet-async";
-import { TOOL_METADATA } from "../seo/toolMetadata";
+import { TOOL_METADATA } from "../../seo/toolMetadata";
 
 interface ToolProps {
   triggerProcess: (msg: string, action: () => void) => void;

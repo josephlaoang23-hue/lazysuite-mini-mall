@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Helmet } from "react-helmet-async";
-import { TOOL_METADATA } from "../seo/toolMetadata";
+import { TOOL_METADATA } from "../../seo/toolMetadata";
 import { Copy, Check } from "lucide-react";
 
 interface ToolProps {

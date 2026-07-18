@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Home from "./pages/Home";
 // Import our individual clean modular component files directly from our folder pool
-import PrivacyShield from './components/PrivacyShield';
-import TranscriptCleaner from './components/TranscriptCleaner';
+import ChatGptCleaner from "./tools/featured/ChatGptCleaner";
+import TextHumanizer from "./tools/featured/TextHumanizer";
+import BulkFileRenamer from "./tools/featured/BulkFileRenamer";
+
+import PrivacyShield from "./tools/other-tools/PrivacyShield";
+import TranscriptCleaner from "./tools/other-tools/TranscriptCleaner";
 
 // Symmetrical Ad Layout, Marketplace Theme, and Interstitial Style Architecture
 const STYLES_INJECTION = `
