@@ -331,7 +331,6 @@ export default function App() {
   const [unlockOverlayOpen, setUnlockOverlayOpen] = useState(false);
 const [unlockSecondsLeft, setUnlockSecondsLeft] = useState(10);
 const [unlockSessionId, setUnlockSessionId] = useState<string | null>(null);
-const [popunderWindowRef, setPopunderWindowRef] = useState<Window | null>(null);
 
 // --- NEW: Tier 3 unlimited-mode state ---
 const [unlimitedModeActive, setUnlimitedModeActive] = useState(false);
@@ -342,8 +341,7 @@ const [pendingUnlimitedPayload, setPendingUnlimitedPayload] = useState<{
   onDone: (output: string) => void;
 } | null>(null);
 const startUnlock = async () => {
-  const adWindow = triggerPopunderAd();
-  setPopunderWindowRef(adWindow);
+  triggerPopunderAd();
 
   try {
     const res = await fetch('/api/unlock-start', { method: 'POST' });
@@ -362,9 +360,6 @@ const startUnlock = async () => {
 };
 
 const completeUnlock = async () => {
-  if (popunderWindowRef && !popunderWindowRef.closed) {
-    popunderWindowRef.close();
-  }
   try {
     const res = await fetch('/api/unlock-complete', {
       method: 'POST',
@@ -391,8 +386,7 @@ const startUnlimitedGate = async (
   userInput: string,
   onDone: (output: string) => void
 ) => {
-  const adWindow = triggerPopunderAd(); // must stay synchronous inside the click chain
-  setPopunderWindowRef(adWindow);
+  triggerPopunderAd(); // must stay synchronous inside the click chain
 
   try {
     const res = await fetch('/api/unlock-start', { method: 'POST' });
@@ -413,10 +407,6 @@ const startUnlimitedGate = async (
 
 const completeUnlimitedRun = async () => {
   if (!pendingUnlimitedPayload) return;
-
-  if (popunderWindowRef && !popunderWindowRef.closed) {
-    popunderWindowRef.close();
-  }
 
   try {
     const res = await fetch('/api/run-unlimited-tool', {
