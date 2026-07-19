@@ -501,6 +501,21 @@ useEffect(() => {
   useEffect(() => {
     injectSocialBar();
   }, []);
+  
+  useEffect(() => {
+    if (remainingRuns !== 0) return;
+  
+    let fired = false;
+    const handleFirstClick = () => {
+      if (fired) return;
+      fired = true;
+      triggerPopunderAd();
+      document.removeEventListener('click', handleFirstClick);
+    };
+  
+    document.addEventListener('click', handleFirstClick);
+    return () => document.removeEventListener('click', handleFirstClick);
+  }, [remainingRuns]);
 
   useEffect(() => {
     const fetchUsageStatus = async () => {
