@@ -454,34 +454,36 @@ Make names descriptive.`
 
           )}
 
-          {files.length > 0 && (
+    {files.length > 0 && (
 
-            <button
+    <button
 
-              className="btn-generate"
+      className="btn-generate"
 
-              onClick={applyRename}
+      onClick={applyRename}
 
-              style={{
+      style={{
 
-                marginTop: "16px"
+        marginTop: "16px"
 
-              }}
+      }}
 
-            >
+    >
 
-              Apply Rename
+      Apply Rename
 
-            </button>
+    </button>
 
-          )}
+    )}
 
-        </>
+    </>
 
-      )}
+    )}
+
+    {renameComplete && <AdsterraNativeBanner />}
 
     </div>
 
-  );
+);
 
 }

@@ -162,6 +162,7 @@ try {
 
         </div>
       )}
+      {output && <AdsterraNativeBanner />}
     </div>
   );
 }

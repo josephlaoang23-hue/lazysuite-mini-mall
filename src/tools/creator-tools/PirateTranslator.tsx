@@ -147,16 +147,18 @@ triggerProcess(
 
       {output && (
 
-        <div className="output-box">
+      <div className="output-box">
 
-          {output}
+        {output}
 
-        </div>
+      </div>
 
       )}
 
-    </div>
+      {output && <AdsterraNativeBanner />}
 
-  );
+</div>
+
+);
 
 }
