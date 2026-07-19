@@ -16,7 +16,7 @@ interface ToolProps {
 export default function ChatGptCleaner({ triggerProcess, remainingRuns, onUpdateRemaining, onRequestUnlock, onRequestUnlimited }: ToolProps) {  const [input, setInput] = useState<string>("");
   const [output, setOutput] = useState<string>("");
   const [copied, setCopied] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(false);
   const copyOutput = async () => {
     await navigator.clipboard.writeText(output);
     setCopied(true);
@@ -36,6 +36,7 @@ export default function ChatGptCleaner({ triggerProcess, remainingRuns, onUpdate
     triggerProcess(
       "Removing ChatGPT formatting artifacts and cleaning your text...",
       async () => {
+        setIsLoading(true);
         const promptText = `
 You are an expert ChatGPT formatting cleaner.
 
@@ -85,6 +86,8 @@ try {
 } catch (error) {
   console.error("Request failed:", error);
   setOutput("Something went wrong generating a response. Please try again.");
+} finally {
+  setIsLoading(false);
 }
       });
   };
@@ -125,10 +128,14 @@ try {
       />
       <button
         onClick={handleGenerate}
-        disabled={remainingRuns > 0 && !input}
+        disabled={remainingRuns > 0 ? !input : false}
         className={remainingRuns === 0 ? "btn-generate-locked" : "btn-generate"}
       >
-        {remainingRuns === 0 ? "Limit Exhausted – Click to Unlock" : "Clean Text & Refresh Layout"}
+        {remainingRuns === 0
+          ? "Limit Exhausted – Click to Unlock"
+          : isLoading
+            ? "⏳ Cleaning..."
+            : "Clean Text & Refresh Layout"}
       </button>
       {output && (
         <div className="output-box">

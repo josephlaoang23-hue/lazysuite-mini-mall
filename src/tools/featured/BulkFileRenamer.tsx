@@ -25,7 +25,7 @@ export default function BulkFileRenamer({ triggerProcess, remainingRuns, onUpdat
   const [files, setFiles] = useState<FilePreview[]>([]);
 
   const [renameComplete, setRenameComplete] = useState(false);
-
+  
   const [instructions, setInstructions] = useState(
     `Rename everything using snake_case.
 
@@ -307,21 +307,25 @@ Make names descriptive.`
 
       <button
 
-          onClick={runAI}
+        onClick={runAI}
 
-          disabled={remainingRuns > 0 ? (loading || files.length === 0) : loading}
+        disabled={remainingRuns > 0 ? (loading || files.length === 0) : loading}
 
-          className={remainingRuns === 0 ? "btn-generate-locked" : "btn-generate"}
+        className={remainingRuns === 0 ? "btn-generate-locked" : "btn-generate"}
 
-          style={{
+        style={{
 
-            marginTop: "12px"
+          marginTop: "12px"
 
-          }}
+        }}
 
-        >
+      >
 
-        {remainingRuns === 0 ? "Limit Exhausted – Click to Unlock" : "Generate AI Names"}
+        {remainingRuns === 0
+          ? "Limit Exhausted – Click to Unlock"
+          : loading
+            ? "⏳ Renaming..."
+            : "Generate AI Names"}
 
       </button>
 

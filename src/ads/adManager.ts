@@ -3,22 +3,19 @@ import { POPUNDER_URL, SOCIAL_BAR_URL } from './adConfig';
 let lastAdTrigger = 0;
 const AD_COOLDOWN = 5000;
 
-export function triggerPopunderAd(): Window | null {
-    const now = Date.now();
-    if (now - lastAdTrigger < AD_COOLDOWN) {
-      return null;
-    }
-    lastAdTrigger = now;
-  
-    const adWindow = window.open(POPUNDER_URL, "_blank");
-  
-    if (adWindow) {
-      adWindow.blur();
-      window.focus();
-    }
-  
-    return adWindow;
+export function triggerPopunderAd(): void {
+  const now = Date.now();
+  if (now - lastAdTrigger < AD_COOLDOWN) {
+    return;
   }
+  lastAdTrigger = now;
+
+  const script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src = POPUNDER_URL;
+  script.async = true;
+  document.body.appendChild(script);
+}
 
 let socialBarInjected = false;
 

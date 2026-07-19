@@ -19,6 +19,7 @@ export default function PirateTranslator({
 
   const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const runTranslator = () => {
 
@@ -41,11 +42,11 @@ Rules:
 - Return only the translated text.
 `;
 
-    triggerProcess(
-      "Translating input into pirate language...",
-      async () => {
-
-        try {
+triggerProcess(
+  "Translating input into pirate language...",
+  async () => {
+    setIsLoading(true);
+    try {
 
           const response = await fetch("/api/run-tool", {
 
@@ -87,6 +88,8 @@ Rules:
 
           setOutput("Translation failed.");
 
+        } finally {
+          setIsLoading(false);
         }
 
       }
@@ -132,7 +135,11 @@ Rules:
 
       >
 
-        {remainingRuns === 0 ? "Limit Exhausted – Click to Unlock" : "Translate"}
+      {remainingRuns === 0
+        ? "Limit Exhausted – Click to Unlock"
+        : isLoading
+          ? "⏳ Translating..."
+          : "Translate"}
 
       </button>
 
