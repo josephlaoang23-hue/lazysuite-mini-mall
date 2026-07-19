@@ -4,7 +4,7 @@ import { TOOL_METADATA } from "../../seo/toolMetadata";
 
 import RunsBadge from "../../components/RunsBadge";
 import { getDeviceId } from "../../utils/deviceId";
-
+import AdsterraNativeBanner from "../../ads/AdsterraNativeBanner";
 const seo = TOOL_METADATA.renamer;
 
 interface ToolProps {

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import RunsBadge from "../../components/RunsBadge";
 import { getDeviceId } from "../../utils/deviceId";
-
+import AdsterraNativeBanner from "../../ads/AdsterraNativeBanner";
 interface ToolProps {
   triggerProcess: (msg: string, action: () => void) => void;
   remainingRuns: number;
