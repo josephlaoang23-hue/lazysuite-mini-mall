@@ -123,7 +123,16 @@ try {
       <textarea
         value={input}
         onChange={(e) => setInput(e.target.value)}
-        placeholder="Paste text from ChatGPT with annoying grey background boxes here..."
+        placeholder={`Paste text from ChatGPT with annoying grey background boxes here...
+      Like this: 
+        
+      ### Quick Project Summary
+        
+      * **Tool Name:** ChatGPT Cleaner
+      * **Task:** Strip rich-text symbols
+        
+      Here is the configuration string:
+      \`const mode = "production";\``}
         className="textarea-input"
         style={{ marginTop: '12px' }}
       />

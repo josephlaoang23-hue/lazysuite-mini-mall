@@ -140,7 +140,13 @@ try {
         <textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Paste sentence loops here to watch the edge processor humanize them in real-time..."
+          placeholder="Paste sentence loops here to watch the edge processor humanize them in real-time...
+Like this:
+
+In the modern landscape of digital creation, the application of automation tools is expanding rapidly. 
+It is apparent that numerous professionals employ these systems to improve their productivity metrics. 
+Furthermore, it can be stated that this integration delivers significant benefits for diverse writing tasks across various industries.
+"
           className="textarea-input"
           style={{ marginTop: '12px' }}
         />
