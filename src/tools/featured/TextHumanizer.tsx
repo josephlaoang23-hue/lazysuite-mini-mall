@@ -177,6 +177,14 @@ try {
           </div>
         )}
         {output && <AdsterraNativeBanner />}
+
+        <section style={{ marginTop: '50px', borderTop: '1px solid #1e293b', paddingTop: '24px', color: '#94a3b8', fontSize: '14px', lineHeight: '1.6' }}>
+          <h2 style={{ color: '#fff', fontSize: '20px', marginBottom: '12px' }}>How to make AI text sound less robotic</h2>
+          <p>AI-generated writing often carries repetitive sentence structures, predictable transitions, and a flat, mechanical tone. This free tool rewrites robotic content into natural human flow — breaking up repetitive phrasing and varying sentence rhythm to sound like it was written by a person, without changing your core meaning.</p>
+
+          <h2 style={{ color: '#fff', fontSize: '20px', marginTop: '24px', marginBottom: '12px' }}>Remove stiff AI transition phrases</h2>
+          <p>Tired of rigid phrases like "in conclusion," "furthermore," "moreover," or "it is crucial to remember"? Our natural phrasing tool analyzes rigid paragraphs and transforms them into engaging, conversational copy that reads naturally and improves overall writing quality.</p>
+        </section>
       </div>
     </>
   );

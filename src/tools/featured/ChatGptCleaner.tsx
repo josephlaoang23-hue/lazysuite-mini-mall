@@ -163,6 +163,14 @@ try {
         </div>
       )}
       {output && <AdsterraNativeBanner />}
+
+      <section style={{ marginTop: '50px', borderTop: '1px solid #1e293b', paddingTop: '24px', color: '#94a3b8', fontSize: '14px', lineHeight: '1.6' }}>
+        <h2 style={{ color: '#fff', fontSize: '20px', marginBottom: '12px' }}>How to fix copy paste formatting from ChatGPT</h2>
+        <p>When you copy text directly from large language models, the clipboard carries over messy rich-text artifacts. This online utility lets you instantly paste ChatGPT text without background color or markdown bloating. It strips out annoying dark grey box elements and unneeded blockquotes, allowing clean integration directly into Microsoft Word, Google Docs, or email clients without manual editing.</p>
+
+        <h2 style={{ color: '#fff', fontSize: '20px', marginTop: '24px', marginBottom: '12px' }}>Convert markdown lists into standard narrative paragraphs</h2>
+        <p>Our free online formatting sanitizer flattens complex nested bullet matrices, raw hash headers, and bold text indicators into plain text. Perfect for developers, technical writers, copywriters, and students looking to isolate clean strings without system-generated code artifacts or rich text styling overrides.</p>
+      </section>
     </div>
   );
 }

@@ -454,35 +454,43 @@ Make names descriptive.`
 
           )}
 
-    {files.length > 0 && (
+{files.length > 0 && (
 
-    <button
+<button
 
-      className="btn-generate"
+  className="btn-generate"
 
-      onClick={applyRename}
+  onClick={applyRename}
 
-      style={{
+  style={{
 
-        marginTop: "16px"
+    marginTop: "16px"
 
-      }}
+  }}
 
-    >
+>
 
-      Apply Rename
+  Apply Rename
 
-    </button>
+</button>
 
-    )}
+)}
 
-    </>
+</>
 
-    )}
+)}
 
-    {renameComplete && <AdsterraNativeBanner />}
+{renameComplete && <AdsterraNativeBanner />}
 
-    </div>
+<section style={{ marginTop: '50px', borderTop: '1px solid #1e293b', paddingTop: '24px', color: '#94a3b8', fontSize: '14px', lineHeight: '1.6' }}>
+<h2 style={{ color: '#fff', fontSize: '20px', marginBottom: '12px' }}>Batch rename files in your browser for free</h2>
+<p>Renaming dozens or hundreds of files one at a time is slow and error-prone. This tool reads your folder, lets you describe rename rules in plain English, and generates consistent new filenames instantly — all inside your browser, with no software installation or file uploads required.</p>
+
+<h2 style={{ color: '#fff', fontSize: '20px', marginTop: '24px', marginBottom: '12px' }}>How to change multiple file extensions or naming patterns at once</h2>
+<p>Whether you're cleaning up snake_case naming, stripping words like "final" or "copy," or organizing media assets for a project, this renamer applies your instructions across every file in the selected folder in one pass, keeping file extensions and order intact.</p>
+</section>
+
+</div>
 
 );
 
