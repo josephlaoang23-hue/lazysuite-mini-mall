@@ -37,8 +37,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Identify user by IP, hash it, key by UTC date
   const forwarded = req.headers['x-forwarded-for'];
   const rawIp = typeof forwarded === 'string' ? forwarded.split(',')[0].trim() : 'anonymous';
+  const deviceId = typeof req.headers['x-device-id'] === 'string' ? req.headers['x-device-id'] : 'no-device';
   const dateString = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-  const usageKey = `lazysuite:usage:${rawIp}:${dateString}`;
+  const usageKey = `lazysuite:usage:${rawIp}:${deviceId}:${dateString}`;
 
   const currentCount = await redis.incr(usageKey);
   if (currentCount === 1) {
@@ -46,7 +47,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   if (currentCount > DAILY_LIMIT) {
-    const unlocksKey = `lazysuite:unlocks:${rawIp}:${dateString}`;
+    const unlocksKey = `lazysuite:unlocks:${rawIp}:${deviceId}:${dateString}`;
     const unlocksUsed = (await redis.get<number>(unlocksKey)) ?? 0;
   
     res.setHeader('X-RateLimit-Limit', String(DAILY_LIMIT));

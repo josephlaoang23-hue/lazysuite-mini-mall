@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet-async";
 import { TOOL_METADATA } from "../../seo/toolMetadata";
 
 import RunsBadge from "../../components/RunsBadge";
+import { getDeviceId } from "../../utils/deviceId";
 
 const seo = TOOL_METADATA.renamer;
 
@@ -161,7 +162,7 @@ Make names descriptive.`
   
       const response = await fetch("/api/run-tool", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "X-Device-Id": getDeviceId() },
         body: JSON.stringify({ promptInstructions, userInput: JSON.stringify(names) })
       });
   

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import RunsBadge from "../../components/RunsBadge";
+import { getDeviceId } from "../../utils/deviceId";
 
 interface ToolProps {
   triggerProcess: (msg: string, action: () => void) => void;
@@ -48,20 +49,21 @@ triggerProcess(
     setIsLoading(true);
     try {
 
-          const response = await fetch("/api/run-tool", {
+      const response = await fetch("/api/run-tool", {
 
-            method: "POST",
-
-            headers: {
-              "Content-Type": "application/json"
-            },
-
-            body: JSON.stringify({
-              promptInstructions,
-              userInput: input
-            })
-
-          });
+        method: "POST",
+      
+        headers: {
+          "Content-Type": "application/json",
+          "X-Device-Id": getDeviceId()
+        },
+      
+        body: JSON.stringify({
+          promptInstructions,
+          userInput: input
+        })
+      
+      });
 
           const limitRemaining = response.headers.get('X-RateLimit-Remaining');
           if (limitRemaining !== null) {

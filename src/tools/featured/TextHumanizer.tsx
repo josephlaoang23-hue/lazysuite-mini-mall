@@ -4,6 +4,7 @@ import { Helmet } from "react-helmet-async";
 import { TOOL_METADATA } from "../../seo/toolMetadata";
 
 import RunsBadge from "../../components/RunsBadge";
+import { getDeviceId } from "../../utils/deviceId";
 
 interface ToolProps {
   triggerProcess: (msg: string, action: () => void) => void;
@@ -66,10 +67,9 @@ export default function TextHumanizer({ triggerProcess, remainingRuns, onUpdateR
 try {
   const response = await fetch('/api/run-tool', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'X-Device-Id': getDeviceId() },
     body: JSON.stringify({ promptInstructions: promptText, userInput: input })
   });
-
   const limitRemaining = response.headers.get('X-RateLimit-Remaining');
   if (limitRemaining !== null) {
     onUpdateRemaining(Number(limitRemaining));

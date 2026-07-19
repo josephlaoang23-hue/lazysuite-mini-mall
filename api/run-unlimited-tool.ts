@@ -41,8 +41,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const forwarded = req.headers['x-forwarded-for'];
   const rawIp = typeof forwarded === 'string' ? forwarded.split(',')[0].trim() : 'anonymous';
+  const deviceId = typeof req.headers['x-device-id'] === 'string' ? req.headers['x-device-id'] : 'no-device';
   const dateString = new Date().toISOString().split('T')[0];
-  const unlimitedKey = `lazysuite:unlimited-count:${rawIp}:${dateString}`;
+  const unlimitedKey = `lazysuite:unlimited-count:${rawIp}:${deviceId}:${dateString}`;
 
   const unlimitedCount = await redis.incr(unlimitedKey);
   if (unlimitedCount === 1) {

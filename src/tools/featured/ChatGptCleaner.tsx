@@ -4,6 +4,7 @@ import { TOOL_METADATA } from "../../seo/toolMetadata";
 import { Copy, Check } from "lucide-react";
 
 import RunsBadge from "../../components/RunsBadge";
+import { getDeviceId } from "../../utils/deviceId";
 
 interface ToolProps {
   triggerProcess: (msg: string, action: () => void) => void;
@@ -61,7 +62,7 @@ Output only the cleaned text.
 try {
   const response = await fetch('/api/run-tool', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', 'X-Device-Id': getDeviceId() },
     body: JSON.stringify({ promptInstructions: promptText, userInput: input })
   });
 

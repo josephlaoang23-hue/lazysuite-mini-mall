@@ -35,9 +35,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const forwarded = req.headers['x-forwarded-for'];
   const rawIp = typeof forwarded === 'string' ? forwarded.split(',')[0].trim() : 'anonymous';
+  const deviceId = typeof req.headers['x-device-id'] === 'string' ? req.headers['x-device-id'] : 'no-device';
   const dateString = new Date().toISOString().split('T')[0];
-  const usageKey = `lazysuite:usage:${rawIp}:${dateString}`;
-  const unlocksKey = `lazysuite:unlocks:${rawIp}:${dateString}`;
+  const usageKey = `lazysuite:usage:${rawIp}:${deviceId}:${dateString}`;
+  const unlocksKey = `lazysuite:unlocks:${rawIp}:${deviceId}:${dateString}`;
 
   const unlocksUsed = await redis.incr(unlocksKey);
   if (unlocksUsed === 1) {

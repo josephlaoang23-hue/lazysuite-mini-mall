@@ -10,6 +10,7 @@ import PirateTranslator from "./tools/creator-tools/PirateTranslator";
 import AdsterraSkyscraper from './ads/AdsterraSkyscraper';
 import { injectSocialBar } from './ads/adManager';
 import { triggerPopunderAd } from './ads/adManager';
+import { getDeviceId } from './utils/deviceId';
 // Symmetrical Ad Layout, Marketplace Theme, and Interstitial Style Architecture
 const STYLES_INJECTION = `
   body { margin: 0; background-color: #020617; color: #f8fafc; font-family: sans-serif; }
@@ -344,7 +345,10 @@ const startUnlock = async () => {
   triggerPopunderAd();
 
   try {
-    const res = await fetch('/api/unlock-start', { method: 'POST' });
+    const res = await fetch('/api/unlock-start', {
+      method: 'POST',
+      headers: { 'X-Device-Id': getDeviceId() }
+    });
     const data = await res.json();
     if (!res.ok) {
       alert(data.message || "Could not start unlock.");
@@ -363,7 +367,7 @@ const completeUnlock = async () => {
   try {
     const res = await fetch('/api/unlock-complete', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'X-Device-Id': getDeviceId() },
       body: JSON.stringify({ sessionId: unlockSessionId })
     });
     const data = await res.json();
@@ -389,7 +393,10 @@ const startUnlimitedGate = async (
   triggerPopunderAd(); // must stay synchronous inside the click chain
 
   try {
-    const res = await fetch('/api/unlock-start', { method: 'POST' });
+    const res = await fetch('/api/unlock-start', {
+      method: 'POST',
+      headers: { 'X-Device-Id': getDeviceId() }
+    });
     const data = await res.json();
     if (!res.ok) {
       alert(data.message || "Could not start sponsor view.");
@@ -411,7 +418,7 @@ const completeUnlimitedRun = async () => {
   try {
     const res = await fetch('/api/run-unlimited-tool', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'X-Device-Id': getDeviceId() },
       body: JSON.stringify({
         sessionId: unlockSessionId,
         promptInstructions: pendingUnlimitedPayload.promptInstructions,
@@ -498,7 +505,9 @@ useEffect(() => {
   useEffect(() => {
     const fetchUsageStatus = async () => {
       try {
-        const res = await fetch('/api/usage-status');
+        const res = await fetch('/api/usage-status', {
+          headers: { 'X-Device-Id': getDeviceId() }
+        });
         const data = await res.json();
         if (res.ok) {
           setRemainingRuns(data.remaining);
