@@ -452,7 +452,7 @@ useEffect(() => {
           */}
         </div>
       )}
-{route === "other-tools" && (
+{route === "my-tools" && (
   <div>
 
     <h2 className="tool-header-title">
