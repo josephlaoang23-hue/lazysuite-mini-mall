@@ -1,45 +1,13 @@
-import { useEffect, useState } from "react";
-import { allTools } from "../data/tools";
-import type { ToolMeta } from "../data/tools";
+import { useRankedTools } from "../hooks/useRankedTools";
+import AdsterraNativeBanner from "../ads/AdsterraNativeBanner";
 
 interface HomeProps {
   setRoute: (route: string) => void;
 }
 
-interface RankedTool extends ToolMeta {
-  clicks: number;
-}
-
-
 export default function Home({ setRoute }: HomeProps) {
-  const [rankedTools, setRankedTools] = useState<RankedTool[]>(
-    allTools.map((t) => ({ ...t, clicks: 0 }))
-  );
-
-  useEffect(() => {
-    const fetchRankings = async () => {
-      try {
-        const res = await fetch("/api/tool-rankings");
-        const data = await res.json();
-
-        const clickMap: Record<string, number> = {};
-        (data.rankings || []).forEach((r: { id: string; clicks: number }) => {
-          clickMap[r.id] = r.clicks;
-        });
-
-        const merged = allTools
-          .map((t) => ({ ...t, clicks: clickMap[t.id] ?? 0 }))
-          .sort((a, b) => b.clicks - a.clicks)
-          .slice(0, 5);
-
-        setRankedTools(merged);
-      } catch (err) {
-        console.error("Failed to fetch tool rankings:", err);
-      }
-    };
-
-    fetchRankings();
-  }, []);
+  const { rankedTools } = useRankedTools();
+  const topFive = rankedTools.slice(0, 5);
 
   return (
     <>
@@ -78,7 +46,7 @@ export default function Home({ setRoute }: HomeProps) {
       <div className="section-label">Featured Core Boutiques</div>
 
       <div className="grid-container" style={{ marginBottom: "24px" }}>
-        {rankedTools.map((tool, index) => (
+        {topFive.map((tool, index) => (
           <div
             key={tool.id}
             onClick={() => setRoute(tool.id)}
@@ -99,6 +67,8 @@ export default function Home({ setRoute }: HomeProps) {
           </div>
         ))}
       </div>
+
+      <AdsterraNativeBanner />
     </>
   );
 }

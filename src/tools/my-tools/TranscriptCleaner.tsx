@@ -4,6 +4,7 @@ import { Helmet } from "react-helmet-async";
 import RunsBadge from "../../components/RunsBadge";
 import ToolLayout from "../../components/ToolLayout";
 import { getDeviceId } from "../../utils/deviceId";
+import AdsterraNativeBanner from "../../ads/AdsterraNativeBanner";
 import "../../styles/TranscriptCleaner.css";
 
 interface ToolProps {
@@ -272,7 +273,7 @@ export default function TranscriptCleaner({
               </div>
             )}
 
-            <button
+<button
               onClick={handleGenerate}
               disabled={!canSubmit || isLoading}
               className={remainingRuns === 0 ? "btn-generate-locked" : "btn-generate"}
@@ -283,6 +284,16 @@ export default function TranscriptCleaner({
                   ? "⏳ Processing..."
                   : "Extract Core Meeting Actions"}
             </button>
+
+            <AdsterraNativeBanner />
+
+            <section className="tool-seo-section">
+              <h2>Clean up messy meeting transcripts for free</h2>
+              <p>Raw transcripts from Zoom, Teams, or Google Meet are full of timestamps, filler words, and fragmented sentences that make them hard to actually use. This tool organizes the raw text into a clean summary — key discussion points, decisions made, and clear action items — without inventing information that wasn't said.</p>
+
+              <h2>Turn audio recordings into organized meeting notes</h2>
+              <p>Don't have a written transcript? Upload a short audio recording directly, and the tool listens to it, transcribes the content, and structures it the same way — labeling speakers where context makes it clear, and producing a summary you can act on right away.</p>
+            </section>
           </>
         }
         canvas={

@@ -8,10 +8,12 @@ import BulkFileRenamer from "./tools/featured/BulkFileRenamer";
 
 import PirateTranslator from "./tools/creator-tools/PirateTranslator";
 import LogicMapStudio from "./tools/my-tools/LogicMapStudio";
-import TranscriptCleaner from "./tools/my-tools/TranscriptCleaner";import AdsterraSkyscraper from './ads/AdsterraSkyscraper';
+import TranscriptCleaner from "./tools/my-tools/TranscriptCleaner";
+import AdsterraSkyscraper from './ads/AdsterraSkyscraper';
+import AdsterraNativeBanner from './ads/AdsterraNativeBanner';
 import { injectSocialBar } from './ads/adManager';
-import { triggerPopunderAd } from './ads/adManager';
 import { getDeviceId } from './utils/deviceId';
+import { useRankedTools } from './hooks/useRankedTools';
 
 
 interface UserAccount {
@@ -68,6 +70,9 @@ function ProcessingOverlay({ message, onComplete }: { message: string; onComplet
 }
 
 export default function App() {
+  const { rankedTools } = useRankedTools();
+  const myToolsList = rankedTools.slice(5);
+
   const [user, setUser] = useState<UserAccount | null>(() => {
     const saved = localStorage.getItem('lazysuite_user');
     return saved ? JSON.parse(saved) : null;
@@ -89,8 +94,6 @@ const [pendingUnlimitedPayload, setPendingUnlimitedPayload] = useState<{
   onDone: (output: string) => void;
 } | null>(null);
 const startUnlock = async () => {
-  triggerPopunderAd();
-
   try {
     const res = await fetch('/api/unlock-start', {
       method: 'POST',
@@ -137,8 +140,6 @@ const startUnlimitedGate = async (
   userInput: string,
   onDone: (output: string) => void
 ) => {
-  triggerPopunderAd(); // must stay synchronous inside the click chain
-
   try {
     const res = await fetch('/api/unlock-start', {
       method: 'POST',
@@ -248,21 +249,6 @@ useEffect(() => {
   useEffect(() => {
     injectSocialBar();
   }, []);
-  
-  useEffect(() => {
-    if (remainingRuns !== 0) return;
-  
-    let fired = false;
-    const handleFirstClick = () => {
-      if (fired) return;
-      fired = true;
-      triggerPopunderAd();
-      document.removeEventListener('click', handleFirstClick);
-    };
-  
-    document.addEventListener('click', handleFirstClick);
-    return () => document.removeEventListener('click', handleFirstClick);
-  }, [remainingRuns]);
 
   useEffect(() => {
     const fetchUsageStatus = async () => {
@@ -466,7 +452,7 @@ useEffect(() => {
           */}
         </div>
       )}
-{route === "my-tools" && (
+{route === "other-tools" && (
   <div>
 
     <h2 className="tool-header-title">
@@ -474,7 +460,7 @@ useEffect(() => {
     </h2>
 
     <p className="tool-header-seo">
-      Experimental tools currently in development.
+      More tools — ranked by usage, plus what's coming next.
     </p>
 
     <div
@@ -482,97 +468,26 @@ useEffect(() => {
       style={{ marginTop: "24px" }}
     >
 
-<div
-  onClick={() => {
-    setRoute("pirate");
-  }}
-  className="tool-card"
->
-  <span className="tool-badge-creator">
-    Community
-  </span>
+      {myToolsList.map((tool) => (
+        <div
+          key={tool.id}
+          onClick={() => tool.isLive && setRoute(tool.id)}
+          className="tool-card"
+          style={!tool.isLive ? { opacity: 0.45, cursor: "default" } : undefined}
+        >
+          <span className="tool-badge-creator">
+            {tool.creator}
+          </span>
 
-  <h3 className="tool-card-title">
-    Pirate Translator
-  </h3>
+          <h3 className="tool-card-title">
+            {tool.title}
+          </h3>
 
-  <p className="tool-card-desc">
-    Converts normal English into classic pirate speech.
-  </p>
-
-</div>
-
-      <div
-        className="tool-card"
-        style={{
-          opacity: .45,
-          cursor: "default"
-        }}
-      >
-
-        <h3 className="tool-card-title">
-          PDF Dashboard Converter
-        </h3>
-
-        <p className="tool-card-desc">
-          Coming Soon
-        </p>
-
-      </div>
-
-      <div
-        className="tool-card"
-        style={{
-          opacity: .45,
-          cursor: "default"
-        }}
-      >
-
-        <h3 className="tool-card-title">
-          Metadata Privacy Shield
-        </h3>
-
-        <p className="tool-card-desc">
-          Coming Soon
-        </p>
-
-      </div>
-
-      <div
-        className="tool-card"
-        style={{
-          opacity: .45,
-          cursor: "default"
-        }}
-      >
-
-        <h3 className="tool-card-title">
-          Repo Architecture Diagrammer
-        </h3>
-
-        <p className="tool-card-desc">
-          Coming Soon
-        </p>
-
-      </div>
-
-      <div
-        className="tool-card"
-        style={{
-          opacity: .45,
-          cursor: "default"
-        }}
-      >
-
-        <h3 className="tool-card-title">
-          UI Accessibility Auditor
-        </h3>
-
-        <p className="tool-card-desc">
-          Coming Soon
-        </p>
-
-      </div>
+          <p className="tool-card-desc">
+            {tool.isLive ? tool.desc : "Coming Soon"}
+          </p>
+        </div>
+      ))}
 
     </div>
 
@@ -658,10 +573,10 @@ useEffect(() => {
   {unlockOverlayOpen && (
   <div className="overlay-bg">
     <div className="overlay-card">
-      <div className="spinner-ring"></div>
-      <h3 style={{ margin: '0 0 8px 0', fontSize: '16px' }}>Verifying sponsorship tier...</h3>
-      <p style={{ margin: 0, fontSize: '12px', color: '#94a3b8', fontFamily: 'monospace' }}>
-        {unlockSecondsLeft} seconds remaining
+      <h3 style={{ margin: '0 0 12px 0', fontSize: '16px' }}>Watch this ad to unlock 3 more runs</h3>
+      <AdsterraNativeBanner />
+      <p style={{ margin: '16px 0 0 0', fontSize: '12px', color: '#94a3b8', fontFamily: 'monospace' }}>
+        {unlockSecondsLeft > 0 ? `Unlocking in ${unlockSecondsLeft}s...` : "Unlocking..."}
       </p>
     </div>
   </div>
@@ -670,10 +585,10 @@ useEffect(() => {
 {unlimitedModeActive && (
   <div className="overlay-bg">
     <div className="overlay-card">
-      <div className="spinner-ring"></div>
-      <h3 style={{ margin: '0 0 8px 0', fontSize: '16px' }}>Sponsor View Required...</h3>
-      <p style={{ margin: 0, fontSize: '12px', color: '#94a3b8', fontFamily: 'monospace' }}>
-        {unlimitedSecondsLeft} seconds remaining
+      <h3 style={{ margin: '0 0 12px 0', fontSize: '16px' }}>Watch this ad to run your request</h3>
+      <AdsterraNativeBanner />
+      <p style={{ margin: '16px 0 0 0', fontSize: '12px', color: '#94a3b8', fontFamily: 'monospace' }}>
+        {unlimitedSecondsLeft > 0 ? `Unlocking in ${unlimitedSecondsLeft}s...` : "Processing..."}
       </p>
     </div>
   </div>

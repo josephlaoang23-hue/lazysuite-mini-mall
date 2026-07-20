@@ -405,6 +405,8 @@ Apply Rename
 
 {renameComplete && <AdsterraNativeBanner />}
 
+<AdsterraNativeBanner />
+
 <section className="tool-seo-section">
 <h2>Batch rename files in your browser for free</h2>
 <p>Renaming dozens or hundreds of files one at a time is slow and error-prone. This tool reads your folder, lets you describe rename rules in plain English, and generates consistent new filenames instantly — all inside your browser, with no software installation or file uploads required.</p>

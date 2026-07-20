@@ -157,7 +157,9 @@ triggerProcess(
 
       )}
 
-      {output && <AdsterraNativeBanner />}
+{output && <AdsterraNativeBanner />}
+
+<AdsterraNativeBanner />
 
 </div>
 

@@ -185,8 +185,10 @@ Furthermore, it can be stated that this integration delivers significant benefit
         )}
         {output && <AdsterraNativeBanner />}
 
-        <section className="tool-seo-section">
-          <h2>How to make AI text sound less robotic</h2>
+<AdsterraNativeBanner />
+
+<section className="tool-seo-section">
+  <h2>How to make AI text sound less robotic</h2>
           <p>AI-generated writing often carries repetitive sentence structures, predictable transitions, and a flat, mechanical tone. This free tool rewrites robotic content into natural human flow — breaking up repetitive phrasing and varying sentence rhythm to sound like it was written by a person, without changing your core meaning.</p>
 
           <h2>Remove stiff AI transition phrases</h2>

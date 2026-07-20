@@ -174,8 +174,10 @@ try {
       )}
       {output && <AdsterraNativeBanner />}
 
-      <section className="tool-seo-section">
-        <h2>How to fix copy paste formatting from ChatGPT</h2>
+<AdsterraNativeBanner />
+
+<section className="tool-seo-section">
+  <h2>How to fix copy paste formatting from ChatGPT</h2>
         <p>When you copy text directly from large language models, the clipboard carries over messy rich-text artifacts. This online utility lets you instantly paste ChatGPT text without background color or markdown bloating. It strips out annoying dark grey box elements and unneeded blockquotes, allowing clean integration directly into Microsoft Word, Google Docs, or email clients without manual editing.</p>
 
         <h2>Convert markdown lists into standard narrative paragraphs</h2>

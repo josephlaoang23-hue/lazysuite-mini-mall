@@ -3,6 +3,7 @@ import mermaid from "mermaid";
 import RunsBadge from "../../components/RunsBadge";
 import ToolLayout from "../../components/ToolLayout";
 import { getDeviceId } from "../../utils/deviceId";
+import AdsterraNativeBanner from "../../ads/AdsterraNativeBanner";
 import "../../styles/LogicMapStudio.css";
 interface ToolProps {
   triggerProcess: (msg: string, action: () => void) => void;
@@ -182,6 +183,16 @@ Rules:
               {errorMsg}
             </div>
           )}
+
+          <AdsterraNativeBanner />
+
+          <section className="tool-seo-section">
+            <h2>Turn code logic into a visual flowchart</h2>
+            <p>Reading raw code to understand its branching logic — every if/else, loop, and error path — is slow, especially in unfamiliar codebases. This tool reads your pasted function or logic block and generates a clean visual flowchart, making it easy to see the actual decision paths at a glance instead of tracing through lines of code.</p>
+
+            <h2>Visualize auth gates, checkout flows, and business logic</h2>
+            <p>Whether you're documenting a login flow, a checkout sequence, or a game's rule engine, this tool converts your code into a labeled flowchart with decision diamonds and action steps — useful for onboarding teammates, writing documentation, or just understanding logic you wrote months ago.</p>
+          </section>
         </>
       }
       canvas={
