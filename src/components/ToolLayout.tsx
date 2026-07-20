@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import AdsterraNativeBanner from "../ads/AdsterraNativeBanner";
 
 interface ToolLayoutProps {
   controls: ReactNode;
@@ -17,9 +18,9 @@ export default function ToolLayout({ controls, canvas }: ToolLayoutProps) {
           {canvas}
         </div>
 
-        {/* Secondary sticky ad slot — sits directly under each tool's visual output */}
+        {/* Secondary ad slot — sits directly under each tool's visual output */}
         <div className="tool-layout-sticky-ad">
-          <span>SECONDARY_AD_SLOT</span>
+          <AdsterraNativeBanner />
         </div>
       </div>
     </div>

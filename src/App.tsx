@@ -11,7 +11,6 @@ import LogicMapStudio from "./tools/my-tools/LogicMapStudio";
 import TranscriptCleaner from "./tools/my-tools/TranscriptCleaner";
 import AdsterraSkyscraper from './ads/AdsterraSkyscraper';
 import AdsterraNativeBanner from './ads/AdsterraNativeBanner';
-import { injectSocialBar } from './ads/adManager';
 import { getDeviceId } from './utils/deviceId';
 import { useRankedTools } from './hooks/useRankedTools';
 
@@ -63,7 +62,7 @@ function ProcessingOverlay({ message, onComplete }: { message: string; onComplet
         <div className="spinner-ring"></div>
         <h3 style={{ margin: '0 0 8px 0', fontSize: '16px' }}>Processing Stream Matrix...</h3>
         <p style={{ margin: 0, fontSize: '12px', color: '#94a3b8', fontFamily: 'monospace' }}>{message}</p>
-        <div className="interstitial-ad">Interstitial_Ad_Slot_Hidden</div>
+        <AdsterraNativeBanner />
       </div>
     </div>
   );
@@ -245,10 +244,6 @@ useEffect(() => {
       localStorage.removeItem('lazysuite_user');
     }
   }, [user]);
-
-  useEffect(() => {
-    injectSocialBar();
-  }, []);
 
   useEffect(() => {
     const fetchUsageStatus = async () => {
