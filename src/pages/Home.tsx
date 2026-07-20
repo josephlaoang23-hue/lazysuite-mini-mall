@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { allTools, ToolMeta } from "../data/tools";
+import { allTools } from "../data/tools";
+import type { ToolMeta } from "../data/tools";
 
 interface HomeProps {
   setRoute: (route: string) => void;
