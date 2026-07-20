@@ -6,8 +6,16 @@ interface HomeProps {
 }
 
 export default function Home({ setRoute }: HomeProps) {
-  const { rankedTools } = useRankedTools();
+  const { rankedTools, loaded } = useRankedTools();
   const topFive = rankedTools.slice(0, 5);
+
+  if (!loaded) {
+    return (
+      <p style={{ textAlign: 'center', padding: '60px 0', color: '#64748b', fontSize: '13px' }}>
+        Loading tools...
+      </p>
+    );
+  }
 
   return (
     <>
