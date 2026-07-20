@@ -2,6 +2,7 @@ import { useState } from "react";
 import RunsBadge from "../../components/RunsBadge";
 import { getDeviceId } from "../../utils/deviceId";
 import AdsterraNativeBanner from "../../ads/AdsterraNativeBanner";
+import "../../styles/PirateTranslator.css";
 interface ToolProps {
   triggerProcess: (msg: string, action: () => void) => void;
   remainingRuns: number;
@@ -60,7 +61,8 @@ triggerProcess(
       
         body: JSON.stringify({
           promptInstructions,
-          userInput: input
+          userInput: input,
+          toolId: 'pirate'
         })
       
       });

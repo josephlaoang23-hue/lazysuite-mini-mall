@@ -1,0 +1,89 @@
+.repo-drop-zone {
+    margin-top: 12px;
+    padding: 32px 20px;
+    background-color: #0f172a;
+    border: 2px dashed #334155;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 200ms ease, background-color 200ms ease;
+  }
+  
+  .repo-drop-zone:hover {
+    border-color: #2dd4bf;
+    background-color: #16223d;
+  }
+  
+  .repo-file-input-hidden {
+    display: none;
+  }
+  
+  .repo-drop-text {
+    margin: 0;
+    color: #94a3b8;
+    font-size: 12px;
+    font-family: monospace;
+  }
+  
+  .repo-file-list {
+    margin-top: 12px;
+    background-color: #0f172a;
+    border: 1px solid #1e293b;
+    border-radius: 8px;
+    padding: 12px;
+  }
+  
+  .repo-file-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    color: #94a3b8;
+    font-family: monospace;
+    margin-bottom: 8px;
+  }
+  
+  .repo-file-chip {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 10px;
+    background-color: #16223d;
+    border-radius: 6px;
+    margin-bottom: 6px;
+    font-size: 11px;
+    color: #cbd5e1;
+    font-family: monospace;
+  }
+  
+  .repo-file-chip button {
+    background: none;
+    border: none;
+    color: #64748b;
+    cursor: pointer;
+    font-size: 12px;
+  }
+  
+  .repo-file-chip button:hover {
+    color: #f87171;
+  }
+  
+  .repo-arch-output {
+    margin-top: 20px;
+    background-color: #0f172a;
+    border: 1px solid #1e293b;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .repo-arch-diagram {
+    padding: 20px;
+    overflow-x: auto;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .repo-arch-diagram svg {
+    max-width: 100%;
+    height: auto;
+  }

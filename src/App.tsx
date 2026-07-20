@@ -7,263 +7,12 @@ import TextHumanizer from "./tools/featured/TextHumanizer";
 import BulkFileRenamer from "./tools/featured/BulkFileRenamer";
 
 import PirateTranslator from "./tools/creator-tools/PirateTranslator";
-import AdsterraSkyscraper from './ads/AdsterraSkyscraper';
+import LogicMapStudio from "./tools/my-tools/LogicMapStudio";
+import TranscriptCleaner from "./tools/my-tools/TranscriptCleaner";import AdsterraSkyscraper from './ads/AdsterraSkyscraper';
 import { injectSocialBar } from './ads/adManager';
 import { triggerPopunderAd } from './ads/adManager';
 import { getDeviceId } from './utils/deviceId';
-// Symmetrical Ad Layout, Marketplace Theme, and Interstitial Style Architecture
-const STYLES_INJECTION = `
-  body { margin: 0; background-color: #020617; color: #f8fafc; font-family: sans-serif; }
-  .app-container { min-height: 100vh; background-color: #020617; color: #f8fafc; flex-direction: column; display: flex; }
-  .ad-banner-top { width: 100%; background-color: #020617; padding: 0px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 20px; position: relative; box-sizing: border-box; }
-  .ad-banner-bottom { width: 100%; background-color: #020617; padding: 0px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 20px; position: sticky; bottom: 0; z-index: 40; box-sizing: border-box; }
-  .ad-label { display: none; }
-  .ad-placeholder-leaderboard { width: 100%; max-width: 728px; height: 0px; display: none; }
-  .ad-placeholder-footer { width: 100%; max-width: 728px; height: 0px; display: none; }
-  .main-layout { display: flex; flex: 1 1 0%; width: 100%; max-width: 1920px; margin-left: auto; margin-right: auto; position: relative; justify-content: center; box-sizing: border-box; }
-  .ad-skyscraper { width: 0px; display: none; }
-  .ad-skyscraper-right { display: none; }
-  .ad-placeholder-sky { display: none; }
-  .view-lock { display: none; }
-  .main-content { flex: 1 1 0%; padding-left: 16px; padding-right: 16px; padding-top: 32px; padding-bottom: 32px; max-width: 44rem; margin-left: auto; margin-right: auto; width: 100%; display: flex; flex-direction: column; justify-content: flex-start; min-height: 100vh; box-sizing: border-box; }
-  
-  .marketplace-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; border-bottom: 1px solid #1e293b; padding-bottom: 12px; }
-  .nav-brand { font-size: 20px; font-weight: 900; background: linear-gradient(to right, #2dd4bf, #34d399); -webkit-background-clip: text; -webkit-text-fill-color: transparent; cursor: pointer; }
-  .nav-user-badge { display: flex; align-items: center; gap: 12px; font-size: 12px; font-family: monospace; }
-  .btn-premium { padding: 4px 8px; background-color: #eab308; color: #020617; font-weight: bold; border-radius: 4px; border: none; cursor: pointer; }
-  .btn-logout { background: none; border: none; color: #f87171; cursor: pointer; text-decoration: underline; font-family: monospace; }
-  
-  .lobby-header { text-align: center; max-width: 28rem; margin-left: auto; margin-right: auto; margin-bottom: 24px; }
-  .lobby-title { font-size: 32px; font-weight: 900; background: linear-gradient(to right, #2dd4bf, #22d3ee); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0 0 8px 0; }
-  .lobby-desc { font-size: 12px; color: #94a3b8; margin: 0; }
-  
-  .auth-card { background-color: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 24px; max-width: 24rem; margin: 40px auto; width: 100%; box-sizing: border-box; }
-  .form-input { width: 100%; padding: 10px; background-color: #020617; border: 1px solid #1e293b; border-radius: 6px; color: white; margin-bottom: 12px; font-size: 12px; box-sizing: border-box; }
-  
-  .grid-container { display: flex; flex-direction: column; gap: 16px; }
-  .section-label { font-size: 11px; font-weight: bold; text-transform: uppercase; color: #64748b; font-family: monospace; margin: 16px 0 8px 0; }
-  .tool-card {
-    background-color: rgba(15, 23, 42, 0.6);
-    border: 1px solid #1e293b;
-    padding: 20px;
-    border-radius: 12px;
-    cursor: pointer;
-    position: relative;
-    transform: translateY(0) scale(1);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-    transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1),
-                box-shadow 300ms cubic-bezier(0.22, 1, 0.36, 1),
-                border-color 300ms cubic-bezier(0.22, 1, 0.36, 1),
-                background-color 300ms cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  .tool-card:hover {
-    transform: translateY(-6px) scale(1.04);
-    background-color: rgba(30, 41, 59, 0.55);
-    border-color: rgba(45, 212, 191, 0.6);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(45, 212, 191, 0.15), 0 0 24px rgba(45, 212, 191, 0.18);
-  }
-  .tool-card-title {
-    font-size: 14px;
-    font-weight: bold;
-    color: #cbd5e1;
-    margin: 0 0 4px 0;
-    transition: color 300ms cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  .tool-card:hover .tool-card-title {
-    color: #f8fafc;
-  }
-  .tool-card-desc {
-    font-size: 12px;
-    color: #64748b;
-    margin: 0;
-    transition: color 300ms cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  .tool-card:hover .tool-card-desc {
-    color: #94a3b8;
-  }
-  .tool-card-icon {
-    display: inline-block;
-    transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  .tool-card:hover .tool-card-icon {
-    transform: scale(1.08);
-  }
-  .tool-badge-creator { position: absolute; top: 12px; right: 12px; font-size: 9px; font-family: monospace; color: #2dd4bf; background-color: rgba(45,212,191,0.1); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(45,212,191,0.2); }
-  
-  .dashboard-banner { background: linear-gradient(to right, rgba(15,23,42,0.8), rgba(2,6,23,0.8)); border: 1px dashed #eab308; border-radius: 12px; padding: 16px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; }
-  .limit-warning-banner-safe { background-color: rgba(52, 211, 153, 0.1); border: 1px solid #34d399; border-radius: 8px; padding: 12px; color: #6ee7b7; font-size: 12px; text-align: center; margin-bottom: 16px; font-family: monospace; transition: background-color 300ms cubic-bezier(0.22, 1, 0.36, 1), border-color 300ms cubic-bezier(0.22, 1, 0.36, 1), color 300ms cubic-bezier(0.22, 1, 0.36, 1); }
-  .limit-warning-banner-danger { background-color: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; border-radius: 8px; padding: 12px; color: #f87171; font-size: 12px; text-align: center; margin-bottom: 16px; font-family: monospace; transition: background-color 300ms cubic-bezier(0.22, 1, 0.36, 1), border-color 300ms cubic-bezier(0.22, 1, 0.36, 1), color 300ms cubic-bezier(0.22, 1, 0.36, 1); }
-  
-  .textarea-input { width: 100%; height: 120px; background-color: #0f172a; border: 1px solid #1e293b; border-radius: 8px; padding: 12px; font-size: 12px; color: #cbd5e1; font-family: monospace; resize: none; box-sizing: border-box; }
-  .btn-generate { width: 100%; padding: 12px; background: linear-gradient(to right, #2dd4bf, #34d399); color: #020617; font-weight: bold; font-size: 12px; border: none; border-radius: 8px; cursor: pointer; margin-top: 12px; }
-  .output-box { padding: 16px; background-color: #0f172a; border: 1px solid #1e293b; border-radius: 8px; font-size: 12px; color: #e2e8f0; white-space: pre-wrap; margin-top: 16px; }
-  .output-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-  }
-  
-  .output-content {
-    white-space: pre-wrap;
-    line-height: 1.7;
-  }
-  
-  .copy-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 34px;
-    height: 34px;
-    border-radius: 8px;
-    border: 1px solid #334155;
-    background: #16223d;
-    color: #cbd5e1;
-    cursor: pointer;
-    transition: all .2s ease;
-  }
-  
-  .copy-button:hover {
-    background: #233554;
-    border-color: #2dd4bf;
-    color: #2dd4bf;
-  }
-  
-  .copy-button:active {
-    transform: scale(.95);
-  }
-  .output-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-  }
-  
-  .copy-button {
-    background: #1e293b;
-    border: 1px solid #334155;
-    color: #cbd5e1;
-    width: 34px;
-    height: 34px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 200ms ease;
-  }
-  
-  .copy-button:hover {
-    background: #334155;
-    color: #ffffff;
-  }
-  
-  .output-content {
-    white-space: pre-wrap;
-  }
-  .overlay-bg { position: fixed; inset: 0; background-color: rgba(2, 6, 23, 0.95); z-index: 50; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; box-sizing: border-box; }
-  .overlay-card { width: 100%; max-width: 32rem; padding: 24px; background-color: #0f172a; border: 1px solid #1e293b; border-radius: 12px; text-align: center; }
-  .spinner-ring { width: 48px; height: 48px; border: 4px solid #1e293b; border-top-color: #2dd4bf; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 16px auto; }
-  .interstitial-ad { width: 100%; height: 100px; background-color: #020617; border: 1px dashed #334155; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #64748b; font-family: monospace; margin-top: 16px; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  @media (max-width: 1279px) { .ad-skyscraper { display: none; } }
 
-  .btn-back { background: none; border: none; color: #2dd4bf; font-size: 12px; font-family: monospace; cursor: pointer; padding: 0; margin-bottom: 16px; text-align: left; }
-  .btn-back:hover { color: #5eead4; text-decoration: underline; }
-  .tool-header-title { font-size: 20px; font-weight: 900; color: #f8fafc; margin: 0 0 4px 0; }
-  .tool-header-seo { font-size: 11px; color: #64748b; font-family: monospace; margin: 0; }
-  .btn-other-tools {
-    background-color: #0f172a;
-    border: 1px solid #1e293b;
-    color: #34d399;
-    font-size: 12px;
-    font-weight: bold;
-    padding: 8px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-family: monospace;
-    transform: scale(1) translateY(0);
-    transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1),
-                border-color 300ms cubic-bezier(0.22, 1, 0.36, 1),
-                background-color 300ms cubic-bezier(0.22, 1, 0.36, 1),
-                box-shadow 300ms cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  .btn-other-tools:hover {
-    transform: scale(1.03) translateY(-2px);
-    border-color: rgba(45, 212, 191, 0.5);
-    background-color: #16223d;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 16px rgba(45, 212, 191, 0.12);
-  }
-
-  .btn-create-earn {
-    background: linear-gradient(to right, #eab308, #ca8a04);
-    border: none;
-    color: #020617;
-    font-size: 12px;
-    font-weight: bold;
-    padding: 8px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-family: monospace;
-    transform: scale(1) translateY(0);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-    transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1),
-                background 300ms cubic-bezier(0.22, 1, 0.36, 1),
-                box-shadow 300ms cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  .btn-create-earn:hover {
-    transform: scale(1.03) translateY(-2px);
-    background: linear-gradient(to right, #facc15, #eab308);
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3), 0 0 20px rgba(234, 179, 8, 0.35);
-  }
-
-  .btn-nav-login {
-    background: none;
-    border: 1px solid #1e293b;
-    color: white;
-    padding: 4px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    transform: scale(1);
-    transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1),
-                border-color 300ms cubic-bezier(0.22, 1, 0.36, 1),
-                box-shadow 300ms cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  .btn-nav-login:hover {
-    transform: scale(1.05);
-    border-color: rgba(148, 163, 184, 0.6);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-  }
-
-  .btn-nav-signup {
-    background: linear-gradient(to right, #2dd4bf, #34d399);
-    border: none;
-    color: #020617;
-    font-weight: bold;
-    padding: 4px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    transform: scale(1);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-    transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1),
-                box-shadow 300ms cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  .btn-nav-signup:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3), 0 0 14px rgba(45, 212, 191, 0.3);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .tool-card, .tool-card-title, .tool-card-desc, .tool-card-icon,
-    .btn-other-tools, .btn-create-earn, .btn-nav-login, .btn-nav-signup {
-      transition: none;
-    }
-    .tool-card:hover, .btn-other-tools:hover, .btn-create-earn:hover,
-    .btn-nav-login:hover, .btn-nav-signup:hover {
-      transform: none;
-    }
-  }
-  `;
 
 interface UserAccount {
   username: string;
@@ -282,9 +31,7 @@ interface CustomTool {
 
 function AdLayoutWrapper({ children }: { children: React.ReactNode }) {
   return (
-    <div className="viewport-frame">
-      <style>{STYLES_INJECTION}</style>
-
+<div className="viewport-frame">
       <div className="ad-col-left">
         <AdsterraSkyscraper />
       </div>
@@ -719,11 +466,11 @@ useEffect(() => {
           */}
         </div>
       )}
-      {route === "other-tools" && (
+        {route === "my-tools" && (
   <div>
 
     <h2 className="tool-header-title">
-      Other Tools
+      My Tools
     </h2>
 
     <p className="tool-header-seo">
@@ -800,6 +547,12 @@ useEffect(() => {
       {route === 'renamer' && <BulkFileRenamer triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />}
       {route === 'pirate' && (
         <PirateTranslator triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />
+      )}
+      {route === 'logicmap' && (
+        <LogicMapStudio triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />
+      )}
+      {route === 'transcript' && (
+        <TranscriptCleaner triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />
       )}
       {route === 'create-tool' && (
         <div style={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', padding: '24px', borderRadius: '12px' }}>

@@ -5,6 +5,7 @@ import { TOOL_METADATA } from "../../seo/toolMetadata";
 import RunsBadge from "../../components/RunsBadge";
 import { getDeviceId } from "../../utils/deviceId";
 import AdsterraNativeBanner from "../../ads/AdsterraNativeBanner";
+import "../../styles/BulkFileRenamer.css";
 const seo = TOOL_METADATA.renamer;
 
 interface ToolProps {
@@ -163,7 +164,7 @@ Make names descriptive.`
       const response = await fetch("/api/run-tool", {
         method: "POST",
         headers: { "Content-Type": "application/json", "X-Device-Id": getDeviceId() },
-        body: JSON.stringify({ promptInstructions, userInput: JSON.stringify(names) })
+        body: JSON.stringify({ promptInstructions, userInput: JSON.stringify(names), toolId: 'renamer' })
       });
   
       const limitRemaining = response.headers.get('X-RateLimit-Remaining');
@@ -332,145 +333,67 @@ Make names descriptive.`
 
       {renameComplete ? (
 
-        <div
+<div className="output-box renamer-success-box">
 
-          className="output-box"
+  Renamed Successfully!
 
-          style={{
+</div>
 
-            marginTop: "20px",
+) : (
 
-            textAlign: "center",
+<>
 
-            color: "#2dd4bf",
+  {files.length > 0 && (
 
-            fontWeight: "bold"
+    <div className="output-box renamer-file-list">
 
-          }}
+      {files.map((file, index) => (
 
-        >
+        <div key={index} className="renamer-file-row">
 
-          Renamed Successfully!
+          <div className="renamer-file-current">
+
+            <strong>
+
+              Current:
+
+            </strong>
+
+            <br />
+
+            {file.oldName}
+
+          </div>
+
+          <div className="renamer-file-divider" />
+
+          <div className="renamer-file-new">
+
+            <strong>
+
+              New:
+
+            </strong>
+
+            <br />
+
+            {file.newName}
+
+          </div>
 
         </div>
 
-      ) : (
+      ))}
 
-        <>
+    </div>
 
-          {files.length > 0 && (
-
-            <div
-
-              className="output-box"
-
-              style={{
-
-                marginTop: "20px"
-
-              }}
-
-            >
-
-              {files.map((file, index) => (
-
-                <div
-
-                  key={index}
-
-                  style={{
-
-                    padding: "12px 0",
-
-                    borderBottom: "1px solid #1e293b",
-
-                    fontSize: "12px"
-
-                  }}
-
-                >
-
-                  <div
-
-                    style={{
-
-                      color: "#cbd5e1"
-
-                    }}
-
-                  >
-
-                    <strong>
-
-                      Current:
-
-                    </strong>
-
-                    <br />
-
-                    {file.oldName}
-
-                  </div>
-
-                  <div
-
-                    style={{
-
-                      borderTop: "1px solid #334155",
-
-                      margin: "8px 0"
-
-                    }}
-
-                  />
-
-                  <div
-
-                    style={{
-
-                      color: "#2dd4bf"
-
-                    }}
-
-                  >
-
-                    <strong>
-
-                      New:
-
-                    </strong>
-
-                    <br />
-
-                    {file.newName}
-
-                  </div>
-
-                </div>
-
-              ))}
-
-            </div>
-
-          )}
+  )}
 
 {files.length > 0 && (
 
-<button
+<button className="btn-generate renamer-apply-btn" onClick={applyRename}>
 
-  className="btn-generate"
-
-  onClick={applyRename}
-
-  style={{
-
-    marginTop: "16px"
-
-  }}
-
->
-
-  Apply Rename
+Apply Rename
 
 </button>
 
@@ -482,11 +405,11 @@ Make names descriptive.`
 
 {renameComplete && <AdsterraNativeBanner />}
 
-<section style={{ marginTop: '50px', borderTop: '1px solid #1e293b', paddingTop: '24px', color: '#94a3b8', fontSize: '14px', lineHeight: '1.6' }}>
-<h2 style={{ color: '#fff', fontSize: '20px', marginBottom: '12px' }}>Batch rename files in your browser for free</h2>
+<section className="tool-seo-section">
+<h2>Batch rename files in your browser for free</h2>
 <p>Renaming dozens or hundreds of files one at a time is slow and error-prone. This tool reads your folder, lets you describe rename rules in plain English, and generates consistent new filenames instantly — all inside your browser, with no software installation or file uploads required.</p>
 
-<h2 style={{ color: '#fff', fontSize: '20px', marginTop: '24px', marginBottom: '12px' }}>How to change multiple file extensions or naming patterns at once</h2>
+<h2>How to change multiple file extensions or naming patterns at once</h2>
 <p>Whether you're cleaning up snake_case naming, stripping words like "final" or "copy," or organizing media assets for a project, this renamer applies your instructions across every file in the selected folder in one pass, keeping file extensions and order intact.</p>
 </section>
 

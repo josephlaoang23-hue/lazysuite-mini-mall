@@ -1,0 +1,28 @@
+/* BulkFileRenamer-specific styles */
+.renamer-file-list {
+    margin-top: 20px;
+  }
+  .renamer-file-row {
+    padding: 12px 0;
+    border-bottom: 1px solid #1e293b;
+    font-size: 12px;
+  }
+  .renamer-file-current {
+    color: #cbd5e1;
+  }
+  .renamer-file-divider {
+    border-top: 1px solid #334155;
+    margin: 8px 0;
+  }
+  .renamer-file-new {
+    color: #2dd4bf;
+  }
+  .renamer-success-box {
+    margin-top: 20px;
+    text-align: center;
+    color: #2dd4bf;
+    font-weight: bold;
+  }
+  .renamer-apply-btn {
+    margin-top: 16px;
+  }

@@ -6,6 +6,7 @@ import { TOOL_METADATA } from "../../seo/toolMetadata";
 import RunsBadge from "../../components/RunsBadge";
 import { getDeviceId } from "../../utils/deviceId";
 import AdsterraNativeBanner from "../../ads/AdsterraNativeBanner";
+import "../../styles/TextHumanizer.css";
 interface ToolProps {
   triggerProcess: (msg: string, action: () => void) => void;
   remainingRuns: number;
@@ -68,7 +69,7 @@ try {
   const response = await fetch('/api/run-tool', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'X-Device-Id': getDeviceId() },
-    body: JSON.stringify({ promptInstructions: promptText, userInput: input })
+    body: JSON.stringify({ promptInstructions: promptText, userInput: input, toolId: 'humanizer' })
   });
   const limitRemaining = response.headers.get('X-RateLimit-Remaining');
   if (limitRemaining !== null) {
@@ -184,11 +185,11 @@ Furthermore, it can be stated that this integration delivers significant benefit
         )}
         {output && <AdsterraNativeBanner />}
 
-        <section style={{ marginTop: '50px', borderTop: '1px solid #1e293b', paddingTop: '24px', color: '#94a3b8', fontSize: '14px', lineHeight: '1.6' }}>
-          <h2 style={{ color: '#fff', fontSize: '20px', marginBottom: '12px' }}>How to make AI text sound less robotic</h2>
+        <section className="tool-seo-section">
+          <h2>How to make AI text sound less robotic</h2>
           <p>AI-generated writing often carries repetitive sentence structures, predictable transitions, and a flat, mechanical tone. This free tool rewrites robotic content into natural human flow — breaking up repetitive phrasing and varying sentence rhythm to sound like it was written by a person, without changing your core meaning.</p>
 
-          <h2 style={{ color: '#fff', fontSize: '20px', marginTop: '24px', marginBottom: '12px' }}>Remove stiff AI transition phrases</h2>
+          <h2>Remove stiff AI transition phrases</h2>
           <p>Tired of rigid phrases like "in conclusion," "furthermore," "moreover," or "it is crucial to remember"? Our natural phrasing tool analyzes rigid paragraphs and transforms them into engaging, conversational copy that reads naturally and improves overall writing quality.</p>
         </section>
       </div>

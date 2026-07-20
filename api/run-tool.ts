@@ -69,7 +69,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const { promptInstructions, userInput } = req.body;
+    const { promptInstructions, userInput, toolId } = req.body;
 
     const models = [
       "gemini-3.5-flash",
@@ -146,6 +146,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     res.setHeader('X-RateLimit-Limit', String(DAILY_LIMIT));
     res.setHeader('X-RateLimit-Remaining', String(Math.max(0, DAILY_LIMIT - currentCount)));
+
+    if (toolId) {
+      try {
+        await redis.zincrby('lazysuite:tool-clicks', 1, toolId);
+      } catch (clickErr) {
+        console.error('Failed to record tool click:', clickErr);
+      }
+    }
 
     return res.status(200).json({
       allowed: true,
