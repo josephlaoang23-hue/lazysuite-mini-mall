@@ -170,8 +170,12 @@ export default function TranscriptCleaner({
             onUpdateRemaining(Number(limitRemaining));
           }
 
-          if (response.status === 202 && activeTab === "text") {
-            onRequestUnlimited(SUMMARY_INSTRUCTIONS, input, (output) => setOutput(output));
+          if (response.status === 202) {
+            if (activeTab === "text") {
+              onRequestUnlimited(SUMMARY_INSTRUCTIONS, input, (output) => setOutput(output));
+            } else {
+              alert("You've reached your daily limit for audio processing. Please try the text tab, or come back tomorrow.");
+            }
             return;
           }
 
