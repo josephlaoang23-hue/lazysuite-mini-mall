@@ -10,7 +10,6 @@ interface RankedTool extends ToolMeta {
   clicks: number;
 }
 
-const RANK_LABELS = ["First", "Second", "Third", "Fourth", "Fifth"];
 
 export default function Home({ setRoute }: HomeProps) {
   const [rankedTools, setRankedTools] = useState<RankedTool[]>(
@@ -85,8 +84,8 @@ export default function Home({ setRoute }: HomeProps) {
             onClick={() => setRoute(tool.id)}
             className="tool-card"
           >
-            <span className="tool-rank-badge">
-              #{index + 1} {RANK_LABELS[index]}
+            <span className={`tool-rank-badge ${index === 0 ? "tool-rank-gold" : index === 1 ? "tool-rank-silver" : index === 2 ? "tool-rank-bronze" : ""}`}>
+              #{index + 1}
             </span>
             <span className="tool-badge-admin">{tool.creator}</span>
 

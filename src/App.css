@@ -186,6 +186,9 @@ body { margin: 0; background-color: #020617; color: #f8fafc; font-family: sans-s
   position: absolute; top: 12px; left: 12px; font-size: 9px; font-family: monospace; font-weight: bold;
   color: #020617; background-color: #2dd4bf; padding: 2px 6px; border-radius: 4px;
 }
+.tool-rank-gold { background-color: #ffd700; }
+.tool-rank-silver { background-color: #c0c0c0; }
+.tool-rank-bronze { background-color: #cd7f32; }
 .tool-card-category {
   font-size: 10px; font-style: italic; color: #64748b; margin: 8px 0 0 0; font-family: monospace;
 }

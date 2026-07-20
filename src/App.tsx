@@ -466,7 +466,7 @@ useEffect(() => {
           */}
         </div>
       )}
-        {route === "my-tools" && (
+{route === "my-tools" && (
   <div>
 
     <h2 className="tool-header-title">
@@ -511,6 +511,24 @@ useEffect(() => {
       >
 
         <h3 className="tool-card-title">
+          PDF Dashboard Converter
+        </h3>
+
+        <p className="tool-card-desc">
+          Coming Soon
+        </p>
+
+      </div>
+
+      <div
+        className="tool-card"
+        style={{
+          opacity: .45,
+          cursor: "default"
+        }}
+      >
+
+        <h3 className="tool-card-title">
           Metadata Privacy Shield
         </h3>
 
@@ -529,7 +547,25 @@ useEffect(() => {
       >
 
         <h3 className="tool-card-title">
-          Intelligent Transcript Structurer
+          Repo Architecture Diagrammer
+        </h3>
+
+        <p className="tool-card-desc">
+          Coming Soon
+        </p>
+
+      </div>
+
+      <div
+        className="tool-card"
+        style={{
+          opacity: .45,
+          cursor: "default"
+        }}
+      >
+
+        <h3 className="tool-card-title">
+          UI Accessibility Auditor
         </h3>
 
         <p className="tool-card-desc">
