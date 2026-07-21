@@ -382,11 +382,11 @@ useEffect(() => {
         </div>
       )}
 
-      {adUnlocksUsed > 0 && (
-        <p style={{ fontSize: '11px', color: '#64748b', textAlign: 'center' }}>
-          Ad unlocks used today: {adUnlocksUsed}/3
-        </p>
-      )}
+{adUnlocksUsed > 0 && (
+  <p style={{ fontSize: '11px', color: '#64748b', textAlign: 'center' }}>
+    Ad unlocks used today: {adUnlocksUsed}/1
+  </p>
+)}
 
       {authMode && (
         <div className="auth-card">
