@@ -43,10 +43,10 @@ export default function Home({ setRoute }: HomeProps) {
           </button>
 
           <button
-            onClick={() => alert("Coming in the next update!")}
+            onClick={() => setRoute("business-tools")}
             className="btn-create-earn"
           >
-            🔥 Create and Earn Money
+            💼 Business Tools
           </button>
         </div>
       </div>
