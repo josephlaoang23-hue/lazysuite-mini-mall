@@ -80,6 +80,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     const { promptInstructions, userInput, toolId } = req.body;
+    const refundOnFailure = async () => {
+      await redis.decr(usageKey);
+    };
 
     const models = [
       "gemini-3.5-flash",
@@ -120,6 +123,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     if (!aiResponse) {
+      await refundOnFailure();
       return res.status(500).json({
         allowed: false,
         message: "No model response received."
@@ -133,6 +137,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     console.log("Headers:", Object.fromEntries(aiResponse.headers.entries()));
     console.log("Raw:", raw);
     if (!raw.trim()) {
+      await refundOnFailure();
       return res.status(500).json({
         allowed: false,
         message: "Gemini returned an empty response."
@@ -150,7 +155,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       !aiData.candidates[0]?.content?.parts?.[0]?.text
     ) {
       console.error("Gemini Error:", aiData);
-
+      await refundOnFailure();
       return res.status(500).send(raw);
     }
 
@@ -172,6 +177,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   } catch (error) {
     console.error(error);
+    await redis.decr(usageKey);
 
     return res.status(500).json({
       allowed: false,
