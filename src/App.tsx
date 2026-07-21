@@ -9,8 +9,9 @@ import BulkFileRenamer from "./tools/featured/BulkFileRenamer";
 import PirateTranslator from "./tools/creator-tools/PirateTranslator";
 import LogicMapStudio from "./tools/my-tools/LogicMapStudio";
 import TranscriptCleaner from "./tools/my-tools/TranscriptCleaner";
-import AdsterraSkyscraper from './ads/AdsterraSkyscraper';
-import AdsterraNativeBanner from './ads/AdsterraNativeBanner';
+// Ads temporarily disabled — imports commented out, components untouched in /ads
+// import AdsterraSkyscraper from './ads/AdsterraSkyscraper';
+// import AdsterraNativeBanner from './ads/AdsterraNativeBanner';
 import { getDeviceId } from './utils/deviceId';
 import { useRankedTools } from './hooks/useRankedTools';
 
@@ -33,18 +34,10 @@ interface CustomTool {
 function AdLayoutWrapper({ children }: { children: React.ReactNode }) {
   return (
 <div className="viewport-frame">
-      <div className="ad-col-left">
-        <AdsterraSkyscraper />
-      </div>
-
-      <div className="scroll-center">
+<div className="scroll-center">
         <div className="scroll-center-inner">
           {children}
         </div>
-      </div>
-
-      <div className="ad-col-right">
-        <AdsterraSkyscraper />
       </div>
     </div>
   );
@@ -62,7 +55,6 @@ function ProcessingOverlay({ message, onComplete }: { message: string; onComplet
         <div className="spinner-ring"></div>
         <h3 style={{ margin: '0 0 8px 0', fontSize: '16px' }}>Processing Stream Matrix...</h3>
         <p style={{ margin: 0, fontSize: '12px', color: '#94a3b8', fontFamily: 'monospace' }}>{message}</p>
-        <AdsterraNativeBanner />
       </div>
     </div>
   );
@@ -568,8 +560,7 @@ useEffect(() => {
   {unlockOverlayOpen && (
   <div className="overlay-bg">
     <div className="overlay-card">
-      <h3 style={{ margin: '0 0 12px 0', fontSize: '16px' }}>Watch this ad to unlock 3 more runs</h3>
-      <AdsterraNativeBanner />
+    <h3 style={{ margin: '0 0 12px 0', fontSize: '16px' }}>Unlocking 3 more runs...</h3>
       <p style={{ margin: '16px 0 0 0', fontSize: '12px', color: '#94a3b8', fontFamily: 'monospace' }}>
         {unlockSecondsLeft > 0 ? `Unlocking in ${unlockSecondsLeft}s...` : "Unlocking..."}
       </p>
@@ -580,8 +571,7 @@ useEffect(() => {
 {unlimitedModeActive && (
   <div className="overlay-bg">
     <div className="overlay-card">
-      <h3 style={{ margin: '0 0 12px 0', fontSize: '16px' }}>Watch this ad to run your request</h3>
-      <AdsterraNativeBanner />
+    <h3 style={{ margin: '0 0 12px 0', fontSize: '16px' }}>Processing your request...</h3>
       <p style={{ margin: '16px 0 0 0', fontSize: '12px', color: '#94a3b8', fontFamily: 'monospace' }}>
         {unlimitedSecondsLeft > 0 ? `Unlocking in ${unlimitedSecondsLeft}s...` : "Processing..."}
       </p>

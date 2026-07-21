@@ -1,7 +1,13 @@
-import { useEffect, useRef } from 'react';
-import { NATIVE_BANNER_SRC, NATIVE_BANNER_CONTAINER_PREFIX } from './adConfig';
+// import { useEffect, useRef } from 'react';
+// import { NATIVE_BANNER_SRC, NATIVE_BANNER_CONTAINER_PREFIX } from './adConfig';
 
+// --- ADS TEMPORARILY DISABLED ---
+// Original iframe/script-injection logic commented out below.
+// Re-enable by uncommenting everything and restoring the early return removal.
 export default function AdsterraNativeBanner() {
+  return null;
+
+  /*
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
@@ -30,4 +36,5 @@ export default function AdsterraNativeBanner() {
       title="advertisement"
     />
   );
+  */
 }
