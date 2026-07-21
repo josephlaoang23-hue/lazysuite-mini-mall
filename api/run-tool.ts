@@ -8,9 +8,16 @@ const redis = new Redis({
 
 const DAILY_LIMIT = 5;
 const UNLOCK_CAP = 3;
-export default async function handler(req: VercelRequest, res: VercelResponse) {
-  const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const TOOL_KEY_MAP: Record<string, string | undefined> = {
+  cleaner: process.env.GEMINI_KEY_CLEANER,
+  humanizer: process.env.GEMINI_KEY_HUMANIZER,
+  renamer: process.env.GEMINI_KEY_RENAMER,
+  logicmap: process.env.GEMINI_KEY_LOGICMAP,
+  transcript: process.env.GEMINI_KEY_TRANSCRIPT,
+  pirate: process.env.GEMINI_KEY_PIRATE,
+};
 
+export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({
       allowed: false,
@@ -18,11 +25,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     });
   }
 
+  const { toolId } = req.body || {};
+  const GEMINI_API_KEY = (toolId && TOOL_KEY_MAP[toolId]) || process.env.GEMINI_API_KEY;
+
   if (!GEMINI_API_KEY) {
-    console.error('Missing GEMINI_API_KEY.');
+    console.error(`Missing Gemini API key for toolId: ${toolId || 'unknown'}.`);
     return res.status(500).json({
       allowed: false,
-      message: 'Server misconfiguration. Missing GEMINI_API_KEY.'
+      message: 'Server misconfiguration. Missing Gemini API key.'
     });
   }
 
