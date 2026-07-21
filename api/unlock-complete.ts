@@ -6,10 +6,10 @@ const redis = new Redis({
   token: process.env.UPSTASH_REDIS_REST_TOKEN!,
 });
 
-const DAILY_UNLOCK_CAP = 3;
-const DAILY_LIMIT = 5;
+const DAILY_UNLOCK_CAP = 1;
+const DAILY_LIMIT = 10;
 const MIN_WATCH_MS = 10000;
-const BONUS_RUNS = 3;
+const BONUS_RUNS = 5;
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {

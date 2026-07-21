@@ -6,8 +6,8 @@ const redis = new Redis({
   token: process.env.UPSTASH_REDIS_REST_TOKEN!,
 });
 
-const DAILY_LIMIT = 5;
-const UNLOCK_CAP = 3;
+const DAILY_LIMIT = 10;
+const UNLOCK_CAP = 1;
 const TOOL_KEY_MAP: Record<string, string | undefined> = {
   cleaner: process.env.GEMINI_KEY_CLEANER,
   humanizer: process.env.GEMINI_KEY_HUMANIZER,

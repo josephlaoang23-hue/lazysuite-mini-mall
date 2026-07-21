@@ -6,8 +6,8 @@ const redis = new Redis({
   token: process.env.UPSTASH_REDIS_REST_TOKEN!,
 });
 
-const DAILY_LIMIT = 5;
-const UNLOCK_CAP = 3;
+const DAILY_LIMIT = 10;
+const UNLOCK_CAP = 1;
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
@@ -55,14 +55,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       error: 'Daily free limit reached',
       limit: DAILY_LIMIT,
       current: currentCount,
-      message: 'You have used your 5 free daily runs. Come back tomorrow or unlock more.'
+      message: 'You have used your 10 free daily runs. Come back tomorrow or unlock more.'
     });
   }
 
   try {
     const { promptInstructions, audioBase64, mimeType } = req.body;
+    const refundOnFailure = async () => {
+      await redis.decr(usageKey);
+    };
 
     if (!audioBase64 || !mimeType) {
+      await refundOnFailure();
       return res.status(400).json({ allowed: false, message: 'No audio file received.' });
     }
 
@@ -101,11 +105,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     if (!aiResponse) {
+      await refundOnFailure();
       return res.status(500).json({ allowed: false, message: "No model response received." });
     }
 
     const raw = await aiResponse.text();
     if (!raw.trim()) {
+      await refundOnFailure();
       return res.status(500).json({ allowed: false, message: "Gemini returned an empty response." });
     }
 
@@ -113,6 +119,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     if (!aiData.candidates?.[0]?.content?.parts?.[0]?.text) {
       console.error("Gemini Error:", aiData);
+      await refundOnFailure();
       return res.status(500).send(raw);
     }
 
@@ -126,6 +133,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   } catch (error) {
     console.error(error);
+    await redis.decr(usageKey);
     return res.status(500).json({ allowed: false, message: "Internal server error." });
   }
 }

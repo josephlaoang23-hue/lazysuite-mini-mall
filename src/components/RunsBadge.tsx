@@ -12,7 +12,7 @@ interface RunsBadgeProps {
   
     return (
       <span className={`runs-badge ${variantClass}`}>
-        ⚡ {remainingRuns} of 5 daily runs left
+        ⚡ {remainingRuns} of 10 daily runs left
       </span>
     );
   }
