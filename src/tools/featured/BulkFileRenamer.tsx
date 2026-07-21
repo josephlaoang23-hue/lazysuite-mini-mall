@@ -38,6 +38,8 @@ Make names descriptive.`
 
   const [loading, setLoading] = useState(false);
 
+  const MAX_FILES = 20;
+
   const cleanFilename = (name: string) => {
 
     const dot = name.lastIndexOf(".");
@@ -58,58 +60,88 @@ Make names descriptive.`
     return cleaned + extension;
   };
 
-  const selectFolder = async () => {
+  const supportsFolderPicker =
+    typeof (window as any).showDirectoryPicker === "function";
 
-    try {
+    const [skippedCount, setSkippedCount] = useState(0);
 
-      setRenameComplete(false);
-
-      setLoading(true);
-
-      const folderHandle =
-        await (window as any).showDirectoryPicker();
-
-      triggerProcess(
-        "Reading filenames...",
-        async () => {
-
-          const loadedFiles: FilePreview[] = [];
-
-          for await (const [name, handle] of folderHandle.entries()) {
-
-            if (handle.kind === "file") {
-
-              loadedFiles.push({
-
-                handle,
-
-                oldName: name,
-
-                newName: cleanFilename(name)
-
-              });
-
+    const selectFolder = async () => {
+  
+      try {
+  
+        setRenameComplete(false);
+  
+        setLoading(true);
+  
+        const folderHandle =
+          await (window as any).showDirectoryPicker();
+  
+        triggerProcess(
+          "Reading filenames...",
+          async () => {
+  
+            const loadedFiles: FilePreview[] = [];
+  
+            for await (const [name, handle] of folderHandle.entries()) {
+  
+              if (handle.kind === "file") {
+  
+                loadedFiles.push({
+  
+                  handle,
+  
+                  oldName: name,
+  
+                  newName: cleanFilename(name)
+  
+                });
+  
+              }
+  
             }
-
+  
+            const capped = loadedFiles.slice(0, MAX_FILES);
+            setSkippedCount(Math.max(0, loadedFiles.length - MAX_FILES));
+            setFiles(capped);
+            setLoading(false);
+  
           }
-
-          setFiles(loadedFiles);
-
-          setLoading(false);
-
-        }
-
-      );
-
-    } catch (error) {
-
-      console.error(error);
-
-      setLoading(false);
-
-    }
-
-  };
+  
+        );
+  
+      } catch (error) {
+  
+        console.error(error);
+  
+        setLoading(false);
+  
+      }
+  
+    };
+  
+    const selectIndividualFiles = (fileList: FileList) => {
+  
+      setRenameComplete(false);
+  
+      const allFiles = Array.from(fileList);
+      const capped = allFiles.slice(0, MAX_FILES);
+      setSkippedCount(Math.max(0, allFiles.length - MAX_FILES));
+  
+      const loadedFiles: FilePreview[] = capped.map((file) => ({
+        handle: file, // a plain File object here — no in-place rename capability
+        oldName: file.name,
+        newName: cleanFilename(file.name)
+      }));
+  
+      setFiles(loadedFiles);
+  
+    };
+  
+    const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (e.target.files && e.target.files.length > 0) {
+        selectIndividualFiles(e.target.files);
+      }
+    };
 
   const runAI = async () => {
 
@@ -207,7 +239,10 @@ Make names descriptive.`
 
         if (file.oldName !== file.newName) {
 
-          await file.handle.move(file.newName);
+          // showDirectoryPicker gives real FileSystemFileHandle objects, which support .move()
+          if (typeof file.handle.move === "function") {
+            await file.handle.move(file.newName);
+          }
 
         }
 
@@ -224,6 +259,26 @@ Make names descriptive.`
       alert("Rename failed.");
 
     }
+
+  };
+
+  const downloadRenamedFiles = () => {
+
+    files.forEach((file) => {
+      // file.handle is a plain browser File object in this path (from <input>, not showDirectoryPicker)
+      const rawFile: File = file.handle;
+      const url = URL.createObjectURL(rawFile);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = file.newName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    });
+
+    setFiles([]);
+    setRenameComplete(true);
 
   };
 
@@ -293,19 +348,34 @@ Make names descriptive.`
 
       />
 
-      <button
+{supportsFolderPicker ? (
+        <button
+          className="btn-generate"
+          onClick={selectFolder}
+          disabled={loading}
+        >
+          {loading ? "Loading..." : "Select Folder"}
+        </button>
+      ) : (
+        <>
+          <input
+            type="file"
+            multiple
+            onChange={handleFileInputChange}
+            style={{ display: "none" }}
+            id="renamer-file-input"
+          />
+          <label htmlFor="renamer-file-input" className="btn-generate" style={{ display: "block", textAlign: "center", cursor: "pointer" }}>
+            Select Files
+          </label>
+        </>
+      )}
 
-        className="btn-generate"
-
-        onClick={selectFolder}
-
-        disabled={loading}
-
-      >
-
-        {loading ? "Loading..." : "Select Folder"}
-
-      </button>
+      {skippedCount > 0 && (
+        <p style={{ fontSize: "11px", color: "#fbbf24", margin: "8px 0 0 0" }}>
+          Only the first {MAX_FILES} files were loaded — {skippedCount} additional file{skippedCount !== 1 ? "s were" : " was"} skipped.
+        </p>
+      )}
 
       <button
 
@@ -391,10 +461,11 @@ Make names descriptive.`
 
 {files.length > 0 && (
 
-<button className="btn-generate renamer-apply-btn" onClick={applyRename}>
-
-Apply Rename
-
+<button
+  className="btn-generate renamer-apply-btn"
+  onClick={supportsFolderPicker ? applyRename : downloadRenamedFiles}
+>
+  {supportsFolderPicker ? "Apply Rename" : "Download Renamed Files"}
 </button>
 
 )}
