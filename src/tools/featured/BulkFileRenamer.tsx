@@ -64,6 +64,7 @@ Make names descriptive.`
     typeof (window as any).showDirectoryPicker === "function";
 
     const [skippedCount, setSkippedCount] = useState(0);
+    const [usedFolderPicker, setUsedFolderPicker] = useState(false);
 
     const selectFolder = async () => {
   
@@ -101,9 +102,10 @@ Make names descriptive.`
             }
   
             const capped = loadedFiles.slice(0, MAX_FILES);
-            setSkippedCount(Math.max(0, loadedFiles.length - MAX_FILES));
-            setFiles(capped);
-            setLoading(false);
+          setSkippedCount(Math.max(0, loadedFiles.length - MAX_FILES));
+          setFiles(capped);
+          setUsedFolderPicker(true);
+          setLoading(false);
   
           }
   
@@ -134,6 +136,7 @@ Make names descriptive.`
       }));
   
       setFiles(loadedFiles);
+      setUsedFolderPicker(false);
   
     };
   
@@ -348,27 +351,26 @@ Make names descriptive.`
 
       />
 
-{supportsFolderPicker ? (
+<input
+        type="file"
+        multiple
+        onChange={handleFileInputChange}
+        style={{ display: "none" }}
+        id="renamer-file-input"
+      />
+      <label htmlFor="renamer-file-input" className="btn-generate" style={{ display: "block", textAlign: "center", cursor: "pointer", marginBottom: supportsFolderPicker ? "8px" : "0" }}>
+        Select Files
+      </label>
+
+      {supportsFolderPicker && (
         <button
           className="btn-generate"
           onClick={selectFolder}
           disabled={loading}
+          style={{ background: "#1e293b", color: "#cbd5e1" }}
         >
-          {loading ? "Loading..." : "Select Folder"}
+          {loading ? "Loading..." : "Or Select Entire Folder"}
         </button>
-      ) : (
-        <>
-          <input
-            type="file"
-            multiple
-            onChange={handleFileInputChange}
-            style={{ display: "none" }}
-            id="renamer-file-input"
-          />
-          <label htmlFor="renamer-file-input" className="btn-generate" style={{ display: "block", textAlign: "center", cursor: "pointer" }}>
-            Select Files
-          </label>
-        </>
       )}
 
       {skippedCount > 0 && (
@@ -463,9 +465,9 @@ Make names descriptive.`
 
 <button
   className="btn-generate renamer-apply-btn"
-  onClick={supportsFolderPicker ? applyRename : downloadRenamedFiles}
+  onClick={usedFolderPicker ? applyRename : downloadRenamedFiles}
 >
-  {supportsFolderPicker ? "Apply Rename" : "Download Renamed Files"}
+  {usedFolderPicker ? "Apply Rename" : "Download Renamed Files"}
 </button>
 
 )}
