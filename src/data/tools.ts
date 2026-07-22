@@ -113,7 +113,7 @@ export const allTools: ToolMeta[] = [
     desc: "Coming Soon",
     component: UiAccessibilityAuditor,
     creator: "Admin",
-    category: "General Utility Tools",
+    category: "General Utility Tool",
     isLive: false,
   },
   {
