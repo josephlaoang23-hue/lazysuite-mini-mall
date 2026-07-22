@@ -81,6 +81,20 @@ export const TOOL_METADATA = {
       description:
         "Compress a wordy, conversational system prompt into a dense, token-efficient structure — free, powered by Gemini.",
       canonical: "/prompt-compressor",
+    },
+
+    conflictauditor: {
+      title: "Free Multi-Source Document Conflict & Gap Auditor",
+      description:
+        "Paste text from multiple sources and get a structured matrix of conflicting facts, statistics, and gaps — free.",
+      canonical: "/conflict-auditor",
+    },
+
+    transcriptevidence: {
+      title: "Free Transcript-to-Structured Evidence Matrix",
+      description:
+        "Turn a messy interview or podcast transcript into a themed matrix of quotes, speakers, and research takeaways.",
+      canonical: "/transcript-evidence-matrix",
     }
   };
 

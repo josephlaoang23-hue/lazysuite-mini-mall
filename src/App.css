@@ -260,6 +260,17 @@ body { margin: 0; background-color: #020617; color: #f8fafc; font-family: sans-s
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 16px rgba(251, 146, 60, 0.15);
 }
 
+.btn-research-tools {
+  background: linear-gradient(to right, #10b981, #059669); border: none; color: #ffffff; font-size: 12px;
+  font-weight: bold; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-family: monospace;
+  transform: scale(1) translateY(0); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1), background 300ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 300ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.btn-research-tools:hover {
+  transform: scale(1.03) translateY(-2px); background: linear-gradient(to right, #34d399, #10b981);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3), 0 0 20px rgba(16, 185, 129, 0.35);
+}
+
 /* Output box — themed dark version (single source of truth, replaces the old generic one) */
 .output-box { padding: 16px; background-color: #0f172a; border: 1px solid #1e293b; border-radius: 8px; font-size: 12px; color: #e2e8f0; white-space: pre-wrap; margin-top: 16px; }
 .output-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
