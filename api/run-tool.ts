@@ -16,13 +16,10 @@ const TOOL_KEY_MAP: Record<string, string | undefined> = {
   logicmap: process.env.GEMINI_KEY_LOGICMAP,
   transcript: process.env.GEMINI_KEY_TRANSCRIPT,
   pirate: process.env.GEMINI_KEY_PIRATE,
-  trashcheatsheet: process.env.GEMINI_KEY_TRASHSHEET,
-  thriftappraisal: process.env.GEMINI_KEY_THRIFTGRID,
-  roadsideestimate: process.env.GEMINI_KEY_ROADPROOFER,
-  dotlogauditor: process.env.GEMINI_KEY_LOGAUDITOR,
-  amazoninvoiceauditor: process.env.GEMINI_KEY_AMZAUDITOR,
   conflictauditor: process.env.GEMINI_KEY_CONFLICTAUDITOR,
   transcriptevidence: process.env.GEMINI_KEY_TRANSCRIPTEVIDENCE,
+  multiagentblueprint: process.env.GEMINI_KEY_MULTIAGENT,
+  promptcompressor: process.env.GEMINI_KEY_PROMPTCOMPRESSOR,
 };
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
