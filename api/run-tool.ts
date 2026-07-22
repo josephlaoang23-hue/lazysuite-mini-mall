@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { Redis } from '@upstash/redis';
-import { trackDailyRun, trackDailyFailure } from './_utils/dailyTracking';
+import { trackDailyRun, trackDailyFailure } from './utils/dailyTracking';
 
 const redis = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL!,
@@ -16,6 +16,11 @@ const TOOL_KEY_MAP: Record<string, string | undefined> = {
   logicmap: process.env.GEMINI_KEY_LOGICMAP,
   transcript: process.env.GEMINI_KEY_TRANSCRIPT,
   pirate: process.env.GEMINI_KEY_PIRATE,
+  trashcheatsheet: process.env.GEMINI_KEY_TRASHSHEET,
+  thriftappraisal: process.env.GEMINI_KEY_THRIFTGRID,
+  roadsideestimate: process.env.GEMINI_KEY_ROADPROOFER,
+  dotlogauditor: process.env.GEMINI_KEY_LOGAUDITOR,
+  amazoninvoiceauditor: process.env.GEMINI_KEY_AMZAUDITOR,
 };
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -52,9 +57,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const dateString = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
   const usageKey = `lazysuite:usage:${rawIp}:${deviceId}:${dateString}`;
 
-  const currentCount = await redis.incr(usageKey);
-  if (currentCount === 1) {
-    await redis.expire(usageKey, 86400);
+  let currentCount: number;
+  try {
+    currentCount = await redis.incr(usageKey);
+    if (currentCount === 1) {
+      await redis.expire(usageKey, 86400);
+    }
+  } catch (rateLimitError) {
+    console.error('Rate limit check failed:', rateLimitError);
+    return res.status(500).json({
+      allowed: false,
+      message: 'Server error while checking usage limits. Please try again.'
+    });
   }
 
   if (currentCount > DAILY_LIMIT) {
