@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 import Home from "./pages/Home";
 // Import our individual clean modular component files directly from our folder pool
@@ -219,6 +219,20 @@ useEffect(() => {
 
   const [resetTimeLeft, setResetTimeLeft] = useState<string>("");
   const [route, setRoute] = useState<string>('hub');
+  const [returnRoute, setReturnRoute] = useState<string>('hub');
+  const prevRouteRef = useRef<string>('hub');
+
+  // Remembers which list page (Hub, Daily Tools, or Business Tools) you were
+  // on right before opening a tool, so the back button returns you there
+  // instead of always jumping to the Hub.
+  useEffect(() => {
+    const listRoutes = ['hub', 'my-tools', 'business-tools'];
+    const prev = prevRouteRef.current;
+    if (listRoutes.includes(prev) && !listRoutes.includes(route)) {
+      setReturnRoute(prev);
+    }
+    prevRouteRef.current = route;
+  }, [route]);
   const [processing, setProcessing] = useState<boolean>(false);
   const [msg, setMsg] = useState<string>("");
   const [pendingAction, setPendingAction] = useState<() => void>(() => {});
@@ -409,9 +423,18 @@ useEffect(() => {
         </div>
       )}
 
-      {route !== 'hub' && !authMode && (
-        <button onClick={() => setRoute('hub')} className="btn-back">
-          &larr; Return To Boutique Mall Lobby
+{route !== 'hub' && !authMode && (
+        <button
+          onClick={() => setRoute(route === 'my-tools' || route === 'business-tools' ? 'hub' : returnRoute)}
+          className="btn-back"
+        >
+          &larr; Return To {route === 'my-tools' || route === 'business-tools'
+            ? 'Boutique Mall Lobby'
+            : returnRoute === 'my-tools'
+              ? 'Daily Tools'
+              : returnRoute === 'business-tools'
+                ? 'Business Tools'
+                : 'Boutique Mall Lobby'}
         </button>
       )}
 
