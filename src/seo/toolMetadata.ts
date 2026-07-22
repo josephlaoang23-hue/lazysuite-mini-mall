@@ -32,5 +32,42 @@ export const TOOL_METADATA = {
       description:
         "Convert messy transcripts into clean, readable summaries.",
       canonical: "/transcript",
+    },
+
+    trashcheatsheet: {
+      title: "Free Guest Trash & Recycling Cheat Sheet Maker",
+      description:
+        "Turn a confusing city trash calendar screenshot into a clean, text-friendly guest cheat sheet for your Airbnb or VRBO listing.",
+      canonical: "/trash-cheat-sheet",
+    },
+
+    thriftappraisal: {
+      title: "Free Vintage Item Appraisal & eBay Listing Generator",
+      description:
+        "Snap a photo of a vintage or thrift item to get an estimated resale value range and a ready-to-paste eBay listing draft.",
+      canonical: "/thrift-appraisal-grid",
+    },
+
+    roadsideestimate: {
+      title: "Free Roadside Auto Repair Estimate Generator",
+      description:
+        "Turn a photo and rough shorthand notes into a professional, itemized roadside repair estimate draft.",
+      canonical: "/roadside-estimate-proofer",
+    },
+
+    dotlogauditor: {
+      title: "Free DOT Driving Log Quick-Check",
+      description:
+        "Get a quick, informal first-pass review of your driving log photo for possible Hours of Service issues before you submit it.",
+      canonical: "/dot-log-auditor",
+    },
+
+    amazoninvoiceauditor: {
+      title: "Free Amazon FBA Supplier Invoice Field Checker",
+      description:
+        "Check your overseas supplier invoice against standard commercial invoice fields before submitting to Amazon Seller Central.",
+      canonical: "/amazon-invoice-auditor",
     }
   };
+
+  
