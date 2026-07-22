@@ -8,6 +8,11 @@ import PdfDashboardConverter from "../tools/my-tools/PdfDashboardConverter";
 import PrivacyShield from "../tools/my-tools/PrivacyShield";
 import RepoArchDiagrammer from "../tools/my-tools/RepoArchDiagrammer";
 import UiAccessibilityAuditor from "../tools/my-tools/UiAccessibilityAuditor";
+import TrashCheatSheet from "../tools/business-tools/TrashCheatSheet";
+import ThriftAppraisalGrid from "../tools/business-tools/ThriftAppraisalGrid";
+import RoadsideEstimateProofer from "../tools/business-tools/RoadsideEstimateProofer";
+import DotLogAuditor from "../tools/business-tools/DotLogAuditor";
+import AmazonInvoiceAuditor from "../tools/business-tools/AmazonInvoiceAuditor";
 
 
 export interface ToolMeta {
@@ -108,8 +113,53 @@ export const allTools: ToolMeta[] = [
     desc: "Coming Soon",
     component: UiAccessibilityAuditor,
     creator: "Admin",
-    category: "General Utility Tool",
+    category: "General Utility Tools",
     isLive: false,
+  },
+  {
+    id: "trashcheatsheet",
+    title: "Guest Trash & Checkout Cheat Sheet",
+    desc: "Turn a city trash calendar screenshot into a guest-friendly pickup card.",
+    component: TrashCheatSheet,
+    creator: "Admin",
+    category: "Business Tools",
+    isLive: true,
+  },
+  {
+    id: "thriftappraisal",
+    title: "Visual Thrift Appraisal Grid",
+    desc: "Get an estimated resale value and eBay listing draft from a photo.",
+    component: ThriftAppraisalGrid,
+    creator: "Admin",
+    category: "Business Tools",
+    isLive: true,
+  },
+  {
+    id: "roadsideestimate",
+    title: "Roadside Estimate Proofer",
+    desc: "Turn a photo and rough notes into a professional repair estimate.",
+    component: RoadsideEstimateProofer,
+    creator: "Admin",
+    category: "Business Tools",
+    isLive: true,
+  },
+  {
+    id: "dotlogauditor",
+    title: "DOT Log Quick-Check",
+    desc: "A quick first-pass review of your driving log before you submit it.",
+    component: DotLogAuditor,
+    creator: "Admin",
+    category: "Business Tools",
+    isLive: true,
+  },
+  {
+    id: "amazoninvoiceauditor",
+    title: "Supplier Invoice Field Checker",
+    desc: "Check your supplier invoice against standard commercial invoice fields.",
+    component: AmazonInvoiceAuditor,
+    creator: "Admin",
+    category: "Business Tools",
+    isLive: true,
   },
 ];
 
