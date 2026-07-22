@@ -29,9 +29,8 @@ export default function TrashCheatSheet({
   onRequestUnlock,
   onRequestUnlimited
 }: ToolProps) {
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreviewUrl, setImagePreviewUrl] = useState<string>("");
-  const [isLoading, setIsLoading] = useState(false);
+    const [imageFile, setImageFile] = useState<File | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
   const [card, setCard] = useState<PickupCard | null>(null);
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [copied, setCopied] = useState(false);
@@ -42,7 +41,6 @@ export default function TrashCheatSheet({
     setCard(null);
     setErrorMsg("");
     setImageFile(file);
-    setImagePreviewUrl(URL.createObjectURL(file));
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
