@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { trackDailyRun, trackDailyFailure } from './_utils/dailyTracking';
+import { trackDailyRun, trackDailyFailure } from './utils/dailyTracking.js';
 import { Redis } from '@upstash/redis';
 
 const redis = new Redis({
@@ -9,16 +9,24 @@ const redis = new Redis({
 
 const DAILY_LIMIT = 10;
 const UNLOCK_CAP = 1;
+const TOOL_KEY_MAP: Record<string, string | undefined> = {
+  trashcheatsheet: process.env.GEMINI_KEY_TRASHSHEET,
+  thriftappraisal: process.env.GEMINI_KEY_THRIFTGRID,
+  roadsideestimate: process.env.GEMINI_KEY_ROADPROOFER,
+  dotlogauditor: process.env.GEMINI_KEY_LOGAUDITOR,
+  amazoninvoiceauditor: process.env.GEMINI_KEY_AMZAUDITOR,
+};
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-
   if (req.method !== 'POST') {
     return res.status(405).json({ allowed: false, message: 'Method not allowed.' });
   }
 
+  const { toolId } = req.body || {};
+  const GEMINI_API_KEY = (toolId && TOOL_KEY_MAP[toolId]) || process.env.GEMINI_API_KEY;
+
   if (!GEMINI_API_KEY) {
-    console.error('Missing GEMINI_API_KEY.');
+    console.error(`Missing Gemini API key for toolId: ${toolId || 'unknown'}.`);
     return res.status(500).json({ allowed: false, message: 'Server misconfiguration.' });
   }
 
@@ -61,7 +69,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const { promptInstructions, imageBase64, mimeType, toolId } = req.body;
+    const { promptInstructions, imageBase64, mimeType } = req.body;
     const refundOnFailure = async () => {
       await redis.decr(usageKey);
     };
