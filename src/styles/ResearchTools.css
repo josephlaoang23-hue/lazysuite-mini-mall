@@ -1,0 +1,59 @@
+.research-word-count {
+    font-size: 11px;
+    color: #64748b;
+    font-family: monospace;
+    margin: 8px 0 0 0;
+    text-align: right;
+  }
+  
+  .research-word-count.over-limit {
+    color: #f87171;
+    font-weight: bold;
+  }
+  
+  .research-output {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .research-markdown {
+    background-color: #0f172a;
+    border: 1px solid #1e293b;
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 13px;
+    color: #cbd5e1;
+    overflow-x: auto;
+  }
+  
+  .research-markdown table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    margin-top: 8px;
+  }
+  
+  .research-markdown th {
+    background-color: #1e293b;
+    color: #f8fafc;
+    text-align: left;
+    padding: 8px 10px;
+    border: 1px solid #334155;
+  }
+  
+  .research-markdown td {
+    padding: 8px 10px;
+    border: 1px solid #1e293b;
+    vertical-align: top;
+    color: #cbd5e1;
+  }
+  
+  .research-markdown tr:nth-child(even) td {
+    background-color: rgba(30, 41, 59, 0.3);
+  }
+  
+  .research-export-error {
+    margin-top: 10px;
+    font-size: 11px;
+    color: #fbbf24;
+  }

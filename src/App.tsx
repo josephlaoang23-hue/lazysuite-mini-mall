@@ -16,6 +16,8 @@ import DotLogAuditor from "./tools/business-tools/DotLogAuditor";
 import AmazonInvoiceAuditor from "./tools/business-tools/AmazonInvoiceAuditor";
 import MultiAgentBlueprintGenerator from "./tools/my-tools/MultiAgentBlueprintGenerator";
 import PromptCompressor from "./tools/dev-tools/PromptCompressor";
+import ConflictAuditor from "./tools/research-tools/ConflictAuditor";
+import TranscriptEvidenceMatrix from "./tools/research-tools/TranscriptEvidenceMatrix";
 // Ads temporarily disabled — imports commented out, components untouched in /ads
 // import AdsterraSkyscraper from './ads/AdsterraSkyscraper';
 // import AdsterraNativeBanner from './ads/AdsterraNativeBanner';
@@ -228,7 +230,7 @@ useEffect(() => {
   // on right before opening a tool, so the back button returns you there
   // instead of always jumping to the Hub.
   useEffect(() => {
-    const listRoutes = ['hub', 'my-tools', 'business-tools', 'dev-tools'];
+    const listRoutes = ['hub', 'my-tools', 'business-tools', 'dev-tools', 'research-tools'];
     const prev = prevRouteRef.current;
     if (listRoutes.includes(prev) && !listRoutes.includes(route)) {
       setReturnRoute(prev);
@@ -427,10 +429,10 @@ useEffect(() => {
 
 {route !== 'hub' && !authMode && (
         <button
-          onClick={() => setRoute(['my-tools', 'business-tools', 'dev-tools'].includes(route) ? 'hub' : returnRoute)}
+        onClick={() => setRoute(['my-tools', 'business-tools', 'dev-tools', 'research-tools'].includes(route) ? 'hub' : returnRoute)}
           className="btn-back"
         >
-          &larr; Return To {['my-tools', 'business-tools', 'dev-tools'].includes(route)
+          &larr; Return To {['my-tools', 'business-tools', 'dev-tools', 'research-tools'].includes(route)
             ? 'Boutique Mall Lobby'
             : returnRoute === 'my-tools'
               ? 'Daily Tools'
@@ -438,6 +440,8 @@ useEffect(() => {
                 ? 'Business Tools'
                 : returnRoute === 'dev-tools'
                   ? 'Dev Tools'
+                  : returnRoute === 'research-tools'
+                  ? 'Research & Data'
                   : 'Boutique Mall Lobby'}
         </button>
       )}
@@ -603,6 +607,29 @@ useEffect(() => {
 
   </div>
 )}
+
+{route === "research-tools" && (
+  <div>
+    <h2 className="tool-header-title">Research & Data Tools</h2>
+    <p className="tool-header-seo">
+      Utilities for researchers, journalists, and analysts working with large text sources.
+    </p>
+    <div className="grid-container" style={{ marginTop: "24px" }}>
+      <div onClick={() => setRoute("conflictauditor")} className="tool-card">
+        <span className="tool-badge-creator">Admin</span>
+        <h3 className="tool-card-title">Document Conflict & Gap Auditor</h3>
+        <p className="tool-card-desc">Cross-reference multiple sources to find conflicting facts and gaps.</p>
+        <p className="tool-card-category">Research Tool</p>
+      </div>
+      <div onClick={() => setRoute("transcriptevidence")} className="tool-card">
+        <span className="tool-badge-creator">Admin</span>
+        <h3 className="tool-card-title">Transcript Evidence Matrix</h3>
+        <p className="tool-card-desc">Turn a messy transcript into themed quotes with speakers and takeaways.</p>
+        <p className="tool-card-category">Research Tool</p>
+      </div>
+    </div>
+  </div>
+)}
       {route === 'cleaner' && <ChatGptCleaner triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />}
       {route === 'humanizer' && <TextHumanizer triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />}
       {route === 'renamer' && <BulkFileRenamer triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />}
@@ -635,6 +662,12 @@ useEffect(() => {
       )}  
       {route === 'promptcompressor' && (
           <PromptCompressor triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />
+      )}
+      {route === 'conflictauditor' && (
+        <ConflictAuditor triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />
+      )}
+      {route === 'transcriptevidence' && (
+        <TranscriptEvidenceMatrix triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />
       )}
       {route === 'create-tool' && (
         <div style={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', padding: '24px', borderRadius: '12px' }}>
