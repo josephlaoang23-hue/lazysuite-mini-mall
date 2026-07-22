@@ -86,7 +86,7 @@ export const allTools: ToolMeta[] = [
     desc: "Coming Soon",
     component: PdfDashboardConverter,
     creator: "Admin",
-    category: "Business Tools",
+    category: "General Utility Tool",
     isLive: false,
   },
   {
@@ -104,7 +104,7 @@ export const allTools: ToolMeta[] = [
     desc: "Coming Soon",
     component: RepoArchDiagrammer,
     creator: "Admin",
-    category: "Business Tools",
+    category: "General Utility Tool",
     isLive: false,
   },
   {

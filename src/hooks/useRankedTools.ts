@@ -23,14 +23,18 @@ export function useRankedTools() {
           clickMap[r.id] = r.clicks;
         });
 
+        // Business Tools have their own dedicated section and should never
+        // show up in the ranked Daily Tools / Featured lists.
+        const eligibleTools = allTools.filter((t) => t.category !== "Business Tools");
+
         // Only live tools compete for rank — non-live ones are always "Coming Soon"
         // and never displace a real tool from the Featured slots.
-        const merged = allTools
+        const merged = eligibleTools
           .filter((t) => t.isLive)
           .map((t) => ({ ...t, clicks: clickMap[t.id] ?? 0 }))
           .sort((a, b) => b.clicks - a.clicks);
 
-        const nonLive = allTools
+        const nonLive = eligibleTools
           .filter((t) => !t.isLive)
           .map((t) => ({ ...t, clicks: 0 }));
 
