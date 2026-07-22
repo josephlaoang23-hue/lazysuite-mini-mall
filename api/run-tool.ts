@@ -94,7 +94,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const { promptInstructions, userInput, toolId } = req.body;
+    const { promptInstructions, userInput, toolId, temperature } = req.body;
     const refundOnFailure = async () => {
       await redis.decr(usageKey);
     };
@@ -125,7 +125,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                   }
                 ]
               }
-            ]
+            ],
+            ...(typeof temperature === "number"
+              ? { generationConfig: { temperature } }
+              : {})
           })
         }
       );

@@ -14,6 +14,8 @@ import ThriftAppraisalGrid from "./tools/business-tools/ThriftAppraisalGrid";
 import RoadsideEstimateProofer from "./tools/business-tools/RoadsideEstimateProofer";
 import DotLogAuditor from "./tools/business-tools/DotLogAuditor";
 import AmazonInvoiceAuditor from "./tools/business-tools/AmazonInvoiceAuditor";
+import MultiAgentBlueprintGenerator from "./tools/my-tools/MultiAgentBlueprintGenerator";
+import PromptCompressor from "./tools/dev-tools/PromptCompressor";
 // Ads temporarily disabled — imports commented out, components untouched in /ads
 // import AdsterraSkyscraper from './ads/AdsterraSkyscraper';
 // import AdsterraNativeBanner from './ads/AdsterraNativeBanner';
@@ -226,7 +228,7 @@ useEffect(() => {
   // on right before opening a tool, so the back button returns you there
   // instead of always jumping to the Hub.
   useEffect(() => {
-    const listRoutes = ['hub', 'my-tools', 'business-tools'];
+    const listRoutes = ['hub', 'my-tools', 'business-tools', 'dev-tools'];
     const prev = prevRouteRef.current;
     if (listRoutes.includes(prev) && !listRoutes.includes(route)) {
       setReturnRoute(prev);
@@ -425,16 +427,18 @@ useEffect(() => {
 
 {route !== 'hub' && !authMode && (
         <button
-          onClick={() => setRoute(route === 'my-tools' || route === 'business-tools' ? 'hub' : returnRoute)}
+          onClick={() => setRoute(['my-tools', 'business-tools', 'dev-tools'].includes(route) ? 'hub' : returnRoute)}
           className="btn-back"
         >
-          &larr; Return To {route === 'my-tools' || route === 'business-tools'
+          &larr; Return To {['my-tools', 'business-tools', 'dev-tools'].includes(route)
             ? 'Boutique Mall Lobby'
             : returnRoute === 'my-tools'
               ? 'Daily Tools'
               : returnRoute === 'business-tools'
                 ? 'Business Tools'
-                : 'Boutique Mall Lobby'}
+                : returnRoute === 'dev-tools'
+                  ? 'Dev Tools'
+                  : 'Boutique Mall Lobby'}
         </button>
       )}
 
@@ -564,6 +568,41 @@ useEffect(() => {
 
   </div>
 )}
+
+{route === "dev-tools" && (
+  <div>
+
+    <h2 className="tool-header-title">
+      Dev Tools
+    </h2>
+
+    <p className="tool-header-seo">
+      Utilities built for developers working with AI systems, agents, and prompts.
+    </p>
+
+    <div
+      className="grid-container"
+      style={{ marginTop: "24px" }}
+    >
+
+      <div onClick={() => setRoute("multiagentblueprint")} className="tool-card">
+        <span className="tool-badge-creator">Admin</span>
+        <h3 className="tool-card-title">Multi-Agent Blueprint Generator</h3>
+        <p className="tool-card-desc">Turn a massive project brain dump into a multi-agent architecture with a visual flowchart.</p>
+        <p className="tool-card-category">Dev Tool</p>
+      </div>
+
+      <div onClick={() => setRoute("promptcompressor")} className="tool-card">
+        <span className="tool-badge-creator">Admin</span>
+        <h3 className="tool-card-title">System Prompt Compressor</h3>
+        <p className="tool-card-desc">Compress a wordy system prompt into dense, token-efficient syntax.</p>
+        <p className="tool-card-category">Dev Tool</p>
+      </div>
+
+    </div>
+
+  </div>
+)}
       {route === 'cleaner' && <ChatGptCleaner triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />}
       {route === 'humanizer' && <TextHumanizer triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />}
       {route === 'renamer' && <BulkFileRenamer triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />}
@@ -590,6 +629,12 @@ useEffect(() => {
       )}
       {route === 'amazoninvoiceauditor' && (
         <AmazonInvoiceAuditor triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />
+      )}
+      {route === 'multiagentblueprint' && (
+        <MultiAgentBlueprintGenerator triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />
+      )}  
+      {route === 'promptcompressor' && (
+          <PromptCompressor triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />
       )}
       {route === 'create-tool' && (
         <div style={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', padding: '24px', borderRadius: '12px' }}>

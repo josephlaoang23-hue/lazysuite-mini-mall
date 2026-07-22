@@ -249,6 +249,17 @@ body { margin: 0; background-color: #020617; color: #f8fafc; font-family: sans-s
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3), 0 0 20px rgba(99, 102, 241, 0.35);
 }
 
+.btn-dev-tools {
+  background-color: #1c1917; border: 1px solid #44403c; color: #fb923c; font-size: 12px; font-weight: bold;
+  padding: 8px 16px; border-radius: 6px; cursor: pointer; font-family: monospace; transform: scale(1) translateY(0);
+  transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1), border-color 300ms cubic-bezier(0.22, 1, 0.36, 1),
+              background-color 300ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 300ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.btn-dev-tools:hover {
+  transform: scale(1.03) translateY(-2px); border-color: rgba(251, 146, 60, 0.5); background-color: #292524;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 16px rgba(251, 146, 60, 0.15);
+}
+
 /* Output box — themed dark version (single source of truth, replaces the old generic one) */
 .output-box { padding: 16px; background-color: #0f172a; border: 1px solid #1e293b; border-radius: 8px; font-size: 12px; color: #e2e8f0; white-space: pre-wrap; margin-top: 16px; }
 .output-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }

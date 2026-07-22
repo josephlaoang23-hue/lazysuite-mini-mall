@@ -67,6 +67,20 @@ export const TOOL_METADATA = {
       description:
         "Check your overseas supplier invoice against standard commercial invoice fields before submitting to Amazon Seller Central.",
       canonical: "/amazon-invoice-auditor",
+    },
+
+    multiagentblueprint: {
+      title: "Free AI Multi-Agent Blueprint Generator",
+      description:
+        "Turn a massive project brain dump into an organized multi-agent architecture with system prompts and a visual flowchart.",
+      canonical: "/multi-agent-blueprint",
+    },
+
+    promptcompressor: {
+      title: "Free AI System Prompt Compressor & Token Optimizer",
+      description:
+        "Compress a wordy, conversational system prompt into a dense, token-efficient structure — free, powered by Gemini.",
+      canonical: "/prompt-compressor",
     }
   };
 

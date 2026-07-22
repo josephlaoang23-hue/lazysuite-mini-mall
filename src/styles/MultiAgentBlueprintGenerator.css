@@ -1,0 +1,57 @@
+.agent-blueprint-output {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .agent-blueprint-diagram-block {
+    background-color: #0f172a;
+    border: 1px solid #1e293b;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .agent-blueprint-markdown {
+    background-color: #0f172a;
+    border: 1px solid #1e293b;
+    border-radius: 8px;
+    padding: 20px;
+    font-size: 13px;
+    color: #cbd5e1;
+    line-height: 1.7;
+  }
+  
+  .agent-blueprint-markdown h3 {
+    color: #f8fafc;
+    font-size: 15px;
+    margin: 20px 0 10px 0;
+  }
+  
+  .agent-blueprint-markdown h3:first-child {
+    margin-top: 0;
+  }
+  
+  .agent-blueprint-markdown strong {
+    color: #2dd4bf;
+  }
+  
+  .agent-blueprint-markdown ul {
+    padding-left: 20px;
+    margin: 8px 0;
+  }
+  
+  .agent-blueprint-markdown li {
+    margin-bottom: 6px;
+  }
+  
+  .agent-blueprint-markdown code {
+    background-color: #020617;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #fbbf24;
+  }
+  
+  .agent-blueprint-markdown p {
+    margin: 8px 0;
+  }

@@ -33,6 +33,7 @@ export default function Home({ setRoute }: HomeProps) {
             gap: "12px",
             justifyContent: "center",
             marginTop: "16px",
+            flexWrap: "wrap",
           }}
         >
           <button
@@ -47,6 +48,13 @@ export default function Home({ setRoute }: HomeProps) {
             className="btn-create-earn"
           >
             💼 Business Tools
+          </button>
+
+          <button
+            onClick={() => setRoute("dev-tools")}
+            className="btn-dev-tools"
+          >
+            🛠️ Dev Tools
           </button>
         </div>
       </div>

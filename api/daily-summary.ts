@@ -9,9 +9,10 @@ const redis = new Redis({
 // The full list of toolIds currently in use across the app.
 // Add new tool IDs here as new tools go live so they show up in the summary.
 const KNOWN_TOOL_IDS = [
-    'cleaner', 'humanizer', 'renamer', 'logicmap', 'transcript', 'pirate',
-    'trashcheatsheet', 'thriftappraisal', 'roadsideestimate', 'dotlogauditor', 'amazoninvoiceauditor'
-  ];
+  'cleaner', 'humanizer', 'renamer', 'logicmap', 'transcript', 'pirate',
+  'trashcheatsheet', 'thriftappraisal', 'roadsideestimate', 'dotlogauditor', 'amazoninvoiceauditor',
+  'multiagentblueprint', 'promptcompressor'
+];
 
 function getYesterdayDateString(): string {
   const d = new Date();

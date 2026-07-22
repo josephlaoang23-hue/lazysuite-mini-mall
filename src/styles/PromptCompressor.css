@@ -1,0 +1,77 @@
+.prompt-compressor-output {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .token-savings-tracker {
+    background-color: #0f172a;
+    border: 1px solid #1e293b;
+    border-radius: 8px;
+    padding: 16px;
+  }
+  
+  .token-savings-bar-track {
+    width: 100%;
+    height: 10px;
+    background-color: #1e293b;
+    border-radius: 9999px;
+    overflow: hidden;
+  }
+  
+  .token-savings-bar-fill {
+    height: 100%;
+    background: linear-gradient(to right, #2dd4bf, #34d399);
+    border-radius: 9999px;
+    transition: width 500ms ease;
+  }
+  
+  .token-savings-label {
+    margin-top: 8px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: bold;
+    color: #2dd4bf;
+  }
+  
+  .prompt-compressor-code {
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-family: monospace;
+    font-size: 12px;
+    color: #e2e8f0;
+  }
+  
+  .prompt-compressor-analytics {
+    background-color: #0f172a;
+    border: 1px solid #1e293b;
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 12px;
+    color: #94a3b8;
+    white-space: pre-wrap;
+    line-height: 1.7;
+  }
+  
+  .prompt-compressor-savings-widget {
+    background-color: rgba(52, 211, 153, 0.08);
+    border: 1px solid rgba(52, 211, 153, 0.3);
+    border-radius: 8px;
+    padding: 14px;
+    font-size: 12px;
+    color: #d1fae5;
+    line-height: 1.6;
+  }
+  
+  .prompt-compressor-savings-widget strong {
+    color: #34d399;
+    font-size: 14px;
+  }
+  
+  .prompt-compressor-savings-disclaimer {
+    display: block;
+    margin-top: 6px;
+    font-size: 10px;
+    color: #64748b;
+  }
