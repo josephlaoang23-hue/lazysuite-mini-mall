@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { Redis } from '@upstash/redis';
+import { trackDailyUnlimited, trackDailyRun } from './_utils/dailyTracking';
 
 const redis = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL!,
@@ -85,6 +86,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     console.error("Gemini Error:", aiData);
     return res.status(500).send(raw);
   }
+
+  await trackDailyUnlimited();
 
   return res.status(200).json({
     allowed: true,

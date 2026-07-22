@@ -16,7 +16,7 @@ export interface ToolMeta {
   desc: string;
   component: any;
   creator: "Admin" | "Community";
-  category: "General Utility Tools" | "Business Tools";
+  category: "General Utility Tool" | "Business Tools";
   isLive: boolean;
 }
 
@@ -27,7 +27,7 @@ export const allTools: ToolMeta[] = [
     desc: "Removes ChatGPT formatting artifacts for clean pasting anywhere.",
     component: ChatGptCleaner,
     creator: "Admin",
-    category: "General Utility Tools",
+    category: "General Utility Tool",
     isLive: true,
   },
   {
@@ -36,7 +36,7 @@ export const allTools: ToolMeta[] = [
     desc: "Rewrites robotic AI writing into natural human sounding text.",
     component: TextHumanizer,
     creator: "Admin",
-    category: "General Utility Tools",
+    category: "General Utility Tool",
     isLive: true,
   },
   {
@@ -45,7 +45,7 @@ export const allTools: ToolMeta[] = [
     desc: "Generates smart bulk filename mappings.",
     component: BulkFileRenamer,
     creator: "Admin",
-    category: "General Utility Tools",
+    category: "General Utility Tool",
     isLive: true,
   },
   {
@@ -54,7 +54,7 @@ export const allTools: ToolMeta[] = [
     desc: "Turns pasted code logic into a visual Mermaid flowchart.",
     component: LogicMapStudio,
     creator: "Admin",
-    category: "General Utility Tools",
+    category: "General Utility Tool",
     isLive: true,
   },
   {
@@ -63,7 +63,7 @@ export const allTools: ToolMeta[] = [
     desc: "Cleans messy meeting transcripts or audio into organized summaries.",
     component: TranscriptCleaner,
     creator: "Admin",
-    category: "General Utility Tools",
+    category: "General Utility Tool",
     isLive: true,
   },
   {
@@ -72,7 +72,7 @@ export const allTools: ToolMeta[] = [
     desc: "Converts normal English into classic pirate speech.",
     component: PirateTranslator,
     creator: "Community",
-    category: "General Utility Tools",
+    category: "General Utility Tool",
     isLive: true,
   },
   {
@@ -90,7 +90,7 @@ export const allTools: ToolMeta[] = [
     desc: "Coming Soon",
     component: PrivacyShield,
     creator: "Admin",
-    category: "General Utility Tools",
+    category: "General Utility Tool",
     isLive: false,
   },
   {
@@ -108,7 +108,7 @@ export const allTools: ToolMeta[] = [
     desc: "Coming Soon",
     component: UiAccessibilityAuditor,
     creator: "Admin",
-    category: "General Utility Tools",
+    category: "General Utility Tool",
     isLive: false,
   },
 ];

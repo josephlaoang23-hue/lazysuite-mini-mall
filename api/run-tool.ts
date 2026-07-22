@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { Redis } from '@upstash/redis';
+import { trackDailyRun, trackDailyFailure } from './_utils/dailyTracking';
 
 const redis = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL!,
@@ -124,6 +125,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     if (!aiResponse) {
       await refundOnFailure();
+      await trackDailyFailure(toolId);
       return res.status(500).json({
         allowed: false,
         message: "No model response received."
@@ -138,6 +140,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     console.log("Raw:", raw);
     if (!raw.trim()) {
       await refundOnFailure();
+      await trackDailyFailure(toolId);
       return res.status(500).json({
         allowed: false,
         message: "Gemini returned an empty response."
@@ -156,19 +159,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     ) {
       console.error("Gemini Error:", aiData);
       await refundOnFailure();
+      await trackDailyFailure(toolId);
       return res.status(500).send(raw);
     }
 
     res.setHeader('X-RateLimit-Limit', String(DAILY_LIMIT));
     res.setHeader('X-RateLimit-Remaining', String(Math.max(0, DAILY_LIMIT - currentCount)));
 
-    if (toolId) {
-      try {
-        await redis.zincrby('lazysuite:tool-clicks', 1, toolId);
-      } catch (clickErr) {
-        console.error('Failed to record tool click:', clickErr);
-      }
-    }
+    await trackDailyRun(toolId);
 
     return res.status(200).json({
       allowed: true,
@@ -178,6 +176,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   } catch (error) {
     console.error(error);
     await redis.decr(usageKey);
+    await trackDailyFailure(req.body?.toolId);
 
     return res.status(500).json({
       allowed: false,

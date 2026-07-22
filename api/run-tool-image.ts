@@ -1,4 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { trackDailyRun, trackDailyFailure } from './_utils/dailyTracking';
 import { Redis } from '@upstash/redis';
 
 const redis = new Redis({
@@ -6,7 +7,8 @@ const redis = new Redis({
   token: process.env.UPSTASH_REDIS_REST_TOKEN!,
 });
 
-const DAILY_LIMIT = 5;
+const DAILY_LIMIT = 10;
+const UNLOCK_CAP = 1;
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
@@ -27,8 +29,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const forwarded = req.headers['x-forwarded-for'];
   const rawIp = typeof forwarded === 'string' ? forwarded.split(',')[0].trim() : 'anonymous';
+  const deviceId = typeof req.headers['x-device-id'] === 'string' ? req.headers['x-device-id'] : 'no-device';
   const dateString = new Date().toISOString().split('T')[0];
-  const usageKey = `lazysuite:usage:${rawIp}:${dateString}`;
+  const usageKey = `lazysuite:usage:${rawIp}:${deviceId}:${dateString}`;
 
   const currentCount = await redis.incr(usageKey);
   if (currentCount === 1) {
@@ -36,18 +39,35 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   if (currentCount > DAILY_LIMIT) {
+    const unlocksKey = `lazysuite:unlocks:${rawIp}:${deviceId}:${dateString}`;
+    const unlocksUsed = (await redis.get<number>(unlocksKey)) ?? 0;
+
+    res.setHeader('X-RateLimit-Limit', String(DAILY_LIMIT));
+    res.setHeader('X-RateLimit-Remaining', '0');
+
+    if (unlocksUsed >= UNLOCK_CAP) {
+      return res.status(202).json({
+        unlimitedMode: true,
+        message: "Instant 10-Second Sponsor View Required to process this run."
+      });
+    }
+
     return res.status(429).json({
       error: 'Daily free limit reached',
       limit: DAILY_LIMIT,
       current: currentCount,
-      message: 'You have used your 5 free daily runs. Come back tomorrow or unlock more.'
+      message: 'You have used your 10 free daily runs. Come back tomorrow or unlock more.'
     });
   }
 
   try {
-    const { promptInstructions, imageBase64, mimeType } = req.body;
+    const { promptInstructions, imageBase64, mimeType, toolId } = req.body;
+    const refundOnFailure = async () => {
+      await redis.decr(usageKey);
+    };
 
     if (!imageBase64 || !mimeType) {
+      await refundOnFailure();
       return res.status(400).json({ allowed: false, message: 'No image file received.' });
     }
 
@@ -86,11 +106,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     if (!aiResponse) {
+      await refundOnFailure();
+      await trackDailyFailure(toolId);
       return res.status(500).json({ allowed: false, message: "No model response received." });
     }
 
     const raw = await aiResponse.text();
     if (!raw.trim()) {
+      await refundOnFailure();
+      await trackDailyFailure(toolId);
       return res.status(500).json({ allowed: false, message: "Gemini returned an empty response." });
     }
 
@@ -98,11 +122,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     if (!aiData.candidates?.[0]?.content?.parts?.[0]?.text) {
       console.error("Gemini Error:", aiData);
+      await refundOnFailure();
+      await trackDailyFailure(toolId);
       return res.status(500).send(raw);
     }
 
     res.setHeader('X-RateLimit-Limit', String(DAILY_LIMIT));
     res.setHeader('X-RateLimit-Remaining', String(Math.max(0, DAILY_LIMIT - currentCount)));
+
+    await trackDailyRun(toolId);
 
     return res.status(200).json({
       allowed: true,
@@ -111,6 +139,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   } catch (error) {
     console.error(error);
+    await redis.decr(usageKey);
+    await trackDailyFailure(req.body?.toolId);
     return res.status(500).json({ allowed: false, message: "Internal server error." });
   }
 }

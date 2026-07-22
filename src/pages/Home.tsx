@@ -39,7 +39,7 @@ export default function Home({ setRoute }: HomeProps) {
             onClick={() => setRoute("my-tools")}
             className="btn-other-tools"
           >
-            📁 My Tools
+            📁 Daily Tools
           </button>
 
           <button

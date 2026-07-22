@@ -229,24 +229,24 @@ body { margin: 0; background-color: #020617; color: #f8fafc; font-family: sans-s
 .btn-back:hover { color: #5eead4; text-decoration: underline; }
 
 .btn-other-tools {
-  background-color: #0f172a; border: 1px solid #1e293b; color: #34d399; font-size: 12px; font-weight: bold;
+  background-color: #e2e8f0; border: 1px solid #cbd5e1; color: #334155; font-size: 12px; font-weight: bold;
   padding: 8px 16px; border-radius: 6px; cursor: pointer; font-family: monospace; transform: scale(1) translateY(0);
   transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1), border-color 300ms cubic-bezier(0.22, 1, 0.36, 1),
               background-color 300ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 300ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 .btn-other-tools:hover {
-  transform: scale(1.03) translateY(-2px); border-color: rgba(45, 212, 191, 0.5); background-color: #16223d;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 16px rgba(45, 212, 191, 0.12);
+  transform: scale(1.03) translateY(-2px); border-color: #94a3b8; background-color: #cbd5e1;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 16px rgba(148, 163, 184, 0.3);
 }
 .btn-create-earn {
-  background: linear-gradient(to right, #eab308, #ca8a04); border: none; color: #020617; font-size: 12px;
+  background: linear-gradient(to right, #6366f1, #4338ca); border: none; color: #ffffff; font-size: 12px;
   font-weight: bold; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-family: monospace;
   transform: scale(1) translateY(0); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1), background 300ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 300ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 .btn-create-earn:hover {
-  transform: scale(1.03) translateY(-2px); background: linear-gradient(to right, #facc15, #eab308);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3), 0 0 20px rgba(234, 179, 8, 0.35);
+  transform: scale(1.03) translateY(-2px); background: linear-gradient(to right, #818cf8, #6366f1);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3), 0 0 20px rgba(99, 102, 241, 0.35);
 }
 
 /* Output box — themed dark version (single source of truth, replaces the old generic one) */

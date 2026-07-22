@@ -9,6 +9,11 @@ import BulkFileRenamer from "./tools/featured/BulkFileRenamer";
 import PirateTranslator from "./tools/creator-tools/PirateTranslator";
 import LogicMapStudio from "./tools/my-tools/LogicMapStudio";
 import TranscriptCleaner from "./tools/my-tools/TranscriptCleaner";
+import TrashCheatSheet from "./tools/business-tools/TrashCheatSheet";
+import ThriftAppraisalGrid from "./tools/business-tools/ThriftAppraisalGrid";
+import RoadsideEstimateProofer from "./tools/business-tools/RoadsideEstimateProofer";
+import DotLogAuditor from "./tools/business-tools/DotLogAuditor";
+import AmazonInvoiceAuditor from "./tools/business-tools/AmazonInvoiceAuditor";
 // Ads temporarily disabled — imports commented out, components untouched in /ads
 // import AdsterraSkyscraper from './ads/AdsterraSkyscraper';
 // import AdsterraNativeBanner from './ads/AdsterraNativeBanner';
@@ -443,7 +448,7 @@ useEffect(() => {
   <div>
 
     <h2 className="tool-header-title">
-      My Tools
+      Daily Tools
     </h2>
 
     <p className="tool-header-seo">
@@ -480,6 +485,62 @@ useEffect(() => {
 
   </div>
 )}
+
+{route === "business-tools" && (
+  <div>
+
+    <h2 className="tool-header-title">
+      Business Tools
+    </h2>
+
+    <p className="tool-header-seo">
+      Niche tools built for real small-business workflows — trades, resale, hospitality, and more.
+    </p>
+
+    <div
+      className="grid-container"
+      style={{ marginTop: "24px" }}
+    >
+
+<div onClick={() => setRoute("trashcheatsheet")} className="tool-card">
+        <span className="tool-badge-creator">Admin</span>
+        <h3 className="tool-card-title">Guest Trash & Checkout Cheat Sheet</h3>
+        <p className="tool-card-desc">Turn a city trash calendar screenshot into a guest-friendly pickup card.</p>
+        <p className="tool-card-category">Business Tool</p>
+      </div>
+
+      <div onClick={() => setRoute("thriftappraisal")} className="tool-card">
+        <span className="tool-badge-creator">Admin</span>
+        <h3 className="tool-card-title">Visual Thrift Appraisal Grid</h3>
+        <p className="tool-card-desc">Get an estimated resale value and eBay listing draft from a photo.</p>
+        <p className="tool-card-category">Business Tool</p>
+      </div>
+
+      <div onClick={() => setRoute("roadsideestimate")} className="tool-card">
+        <span className="tool-badge-creator">Admin</span>
+        <h3 className="tool-card-title">Roadside Estimate Proofer</h3>
+        <p className="tool-card-desc">Turn a photo and rough notes into a professional repair estimate.</p>
+        <p className="tool-card-category">Business Tool</p>
+      </div>
+
+      <div onClick={() => setRoute("dotlogauditor")} className="tool-card">
+        <span className="tool-badge-creator">Admin</span>
+        <h3 className="tool-card-title">DOT Log Quick-Check</h3>
+        <p className="tool-card-desc">A quick first-pass review of your driving log before you submit it.</p>
+        <p className="tool-card-category">Business Tool</p>
+      </div>
+
+      <div onClick={() => setRoute("amazoninvoiceauditor")} className="tool-card">
+        <span className="tool-badge-creator">Admin</span>
+        <h3 className="tool-card-title">Supplier Invoice Field Checker</h3>
+        <p className="tool-card-desc">Check your supplier invoice against standard commercial invoice fields.</p>
+        <p className="tool-card-category">Business Tool</p>
+      </div>
+
+    </div>
+
+  </div>
+)}
       {route === 'cleaner' && <ChatGptCleaner triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />}
       {route === 'humanizer' && <TextHumanizer triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />}
       {route === 'renamer' && <BulkFileRenamer triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />}
@@ -491,6 +552,21 @@ useEffect(() => {
       )}
       {route === 'transcript' && (
         <TranscriptCleaner triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />
+      )}
+      {route === 'trashcheatsheet' && (
+        <TrashCheatSheet triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />
+      )}
+      {route === 'thriftappraisal' && (
+        <ThriftAppraisalGrid triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />
+      )}
+      {route === 'roadsideestimate' && (
+        <RoadsideEstimateProofer triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />
+      )}
+      {route === 'dotlogauditor' && (
+        <DotLogAuditor triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />
+      )}
+      {route === 'amazoninvoiceauditor' && (
+        <AmazonInvoiceAuditor triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />
       )}
       {route === 'create-tool' && (
         <div style={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', padding: '24px', borderRadius: '12px' }}>

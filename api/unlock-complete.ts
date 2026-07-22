@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { Redis } from '@upstash/redis';
+import { trackDailyUnlock } from './_utils/dailyTracking';
 
 const redis = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL!,
@@ -51,6 +52,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   await redis.decrby(usageKey, BONUS_RUNS);
   await redis.del(sessionKey);
+  await trackDailyUnlock();
 
   const currentCount = (await redis.get<number>(usageKey)) ?? 0;
   const remaining = Math.max(0, DAILY_LIMIT - currentCount);
