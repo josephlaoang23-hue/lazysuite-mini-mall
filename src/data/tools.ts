@@ -13,7 +13,10 @@ import ThriftAppraisalGrid from "../tools/business-tools/ThriftAppraisalGrid";
 import RoadsideEstimateProofer from "../tools/business-tools/RoadsideEstimateProofer";
 import DotLogAuditor from "../tools/business-tools/DotLogAuditor";
 import AmazonInvoiceAuditor from "../tools/business-tools/AmazonInvoiceAuditor";
-
+import MultiAgentBlueprintGenerator from "../tools/my-tools/MultiAgentBlueprintGenerator";
+import PromptCompressor from "../tools/dev-tools/PromptCompressor";
+import ConflictAuditor from "../tools/research-tools/ConflictAuditor";
+import TranscriptEvidenceMatrix from "../tools/research-tools/TranscriptEvidenceMatrix";
 
 export interface ToolMeta {
   id: string;
@@ -21,7 +24,7 @@ export interface ToolMeta {
   desc: string;
   component: any;
   creator: "Admin" | "Community";
-  category: "General Utility Tool" | "Business Tools";
+  category: "General Utility Tool" | "Business Tools" | "Dev Tool" | "Research Tool";
   isLive: boolean;
 }
 
@@ -159,6 +162,42 @@ export const allTools: ToolMeta[] = [
     component: AmazonInvoiceAuditor,
     creator: "Admin",
     category: "Business Tools",
+    isLive: true,
+  },
+  {
+    id: "multiagentblueprint",
+    title: "AI Context-Shift Multi-Agent Blueprint Generator",
+    desc: "Turns a massive project brain dump into a multi-agent architecture with a visual flowchart.",
+    component: MultiAgentBlueprintGenerator,
+    creator: "Admin",
+    category: "General Utility Tool",
+    isLive: true,
+  },
+  {
+    id: "promptcompressor",
+    title: "Context-Insulated System Prompt Compressor",
+    desc: "Compress a wordy system prompt into dense, token-efficient syntax.",
+    component: PromptCompressor,
+    creator: "Admin",
+    category: "Dev Tool",
+    isLive: true,
+  },
+  {
+    id: "conflictauditor",
+    title: "Multi-Source Document Conflict & Gap Auditor",
+    desc: "Cross-reference multiple sources to find conflicting facts and gaps.",
+    component: ConflictAuditor,
+    creator: "Admin",
+    category: "Research Tool",
+    isLive: true,
+  },
+  {
+    id: "transcriptevidence",
+    title: "Chaotic Transcript-to-Structured Evidence Matrix",
+    desc: "Turn a messy transcript into themed quotes with speakers and takeaways.",
+    component: TranscriptEvidenceMatrix,
+    creator: "Admin",
+    category: "Research Tool",
     isLive: true,
   },
 ];
