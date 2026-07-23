@@ -53,7 +53,7 @@ export const allTools: ToolMeta[] = [
     desc: "Generates smart bulk filename mappings.",
     component: BulkFileRenamer,
     creator: "Admin",
-    category: "General Utility Tool",
+    category: "Research Tool",
     isLive: true,
   },
   {
@@ -62,7 +62,7 @@ export const allTools: ToolMeta[] = [
     desc: "Turns pasted code logic into a visual Mermaid flowchart.",
     component: LogicMapStudio,
     creator: "Admin",
-    category: "General Utility Tool",
+    category: "Dev Tool",
     isLive: true,
   },
   {
@@ -71,7 +71,7 @@ export const allTools: ToolMeta[] = [
     desc: "Cleans messy meeting transcripts or audio into organized summaries.",
     component: TranscriptCleaner,
     creator: "Admin",
-    category: "General Utility Tool",
+    category: "Research Tool",
     isLive: true,
   },
   {
@@ -89,7 +89,7 @@ export const allTools: ToolMeta[] = [
     desc: "Coming Soon",
     component: PdfDashboardConverter,
     creator: "Admin",
-    category: "General Utility Tool",
+    category: "Research Tool",
     isLive: false,
   },
   {
@@ -98,7 +98,7 @@ export const allTools: ToolMeta[] = [
     desc: "Coming Soon",
     component: PrivacyShield,
     creator: "Admin",
-    category: "General Utility Tool",
+    category: "Research Tool",
     isLive: false,
   },
   {
@@ -107,7 +107,7 @@ export const allTools: ToolMeta[] = [
     desc: "Coming Soon",
     component: RepoArchDiagrammer,
     creator: "Admin",
-    category: "General Utility Tool",
+    category: "Dev Tool",
     isLive: false,
   },
   {
@@ -116,7 +116,7 @@ export const allTools: ToolMeta[] = [
     desc: "Coming Soon",
     component: UiAccessibilityAuditor,
     creator: "Admin",
-    category: "General Utility Tool",
+    category: "Dev Tool",
     isLive: false,
   },
   {
