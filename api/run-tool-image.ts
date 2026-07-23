@@ -15,6 +15,8 @@ const TOOL_KEY_MAP: Record<string, string | undefined> = {
   roadsideestimate: process.env.GEMINI_KEY_ROADPROOFER,
   dotlogauditor: process.env.GEMINI_KEY_LOGAUDITOR,
   amazoninvoiceauditor: process.env.GEMINI_KEY_AMZAUDITOR,
+  privacyshield: process.env.GEMINI_KEY_PRIVACYSHIELD,
+  uiaccessibility: process.env.GEMINI_KEY_UIAUDITOR,
 };
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {

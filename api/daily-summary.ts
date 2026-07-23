@@ -11,7 +11,8 @@ const redis = new Redis({
 const KNOWN_TOOL_IDS = [
   'cleaner', 'humanizer', 'renamer', 'logicmap', 'transcript', 'pirate',
   'trashcheatsheet', 'thriftappraisal', 'roadsideestimate', 'dotlogauditor', 'amazoninvoiceauditor',
-  'multiagentblueprint', 'promptcompressor', 'conflictauditor', 'transcriptevidence'
+  'multiagentblueprint', 'promptcompressor', 'conflictauditor', 'transcriptevidence',
+  'pdfdashboard', 'privacyshield', 'repoarch', 'uiaccessibility'
 ];
 
 function getYesterdayDateString(): string {

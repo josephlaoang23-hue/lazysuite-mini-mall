@@ -20,6 +20,8 @@ const TOOL_KEY_MAP: Record<string, string | undefined> = {
   transcriptevidence: process.env.GEMINI_KEY_TRANSCRIPTEVIDENCE,
   multiagentblueprint: process.env.GEMINI_KEY_MULTIAGENT,
   promptcompressor: process.env.GEMINI_KEY_PROMPTCOMPRESSOR,
+  pdfdashboard: process.env.GEMINI_KEY_PDFCONVERTER,
+  repoarch: process.env.GEMINI_KEY_ARCHDIAGRAMMER,
 };
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
