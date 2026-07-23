@@ -71,7 +71,9 @@ function ProcessingOverlay({ message, onComplete }: { message: string; onComplet
 
 export default function App() {
   const { rankedTools } = useRankedTools();
-  const myToolsList = rankedTools.slice(5);
+  const myToolsList = rankedTools
+    .slice(5)
+    .filter((tool) => tool.category === "General Utility Tool");
 
   const [user, setUser] = useState<UserAccount | null>(() => {
     const saved = localStorage.getItem('lazysuite_user');
