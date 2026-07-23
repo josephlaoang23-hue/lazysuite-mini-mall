@@ -170,7 +170,7 @@ export const allTools: ToolMeta[] = [
     desc: "Turns a massive project brain dump into a multi-agent architecture with a visual flowchart.",
     component: MultiAgentBlueprintGenerator,
     creator: "Admin",
-    category: "General Utility Tool",
+    category: "Dev Tool",
     isLive: true,
   },
   {
