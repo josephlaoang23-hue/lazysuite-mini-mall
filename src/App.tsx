@@ -9,6 +9,10 @@ import BulkFileRenamer from "./tools/featured/BulkFileRenamer";
 import PirateTranslator from "./tools/creator-tools/PirateTranslator";
 import LogicMapStudio from "./tools/my-tools/LogicMapStudio";
 import TranscriptCleaner from "./tools/my-tools/TranscriptCleaner";
+import PdfDashboardConverter from "./tools/my-tools/PdfDashboardConverter";
+import PrivacyShield from "./tools/my-tools/PrivacyShield";
+import RepoArchDiagrammer from "./tools/my-tools/RepoArchDiagrammer";
+import UiAccessibilityAuditor from "./tools/my-tools/UiAccessibilityAuditor";
 import TrashCheatSheet from "./tools/business-tools/TrashCheatSheet";
 import ThriftAppraisalGrid from "./tools/business-tools/ThriftAppraisalGrid";
 import RoadsideEstimateProofer from "./tools/business-tools/RoadsideEstimateProofer";
@@ -605,6 +609,20 @@ useEffect(() => {
         <p className="tool-card-category">Dev Tool</p>
       </div>
 
+      <div onClick={() => setRoute("repoarch")} className="tool-card">
+        <span className="tool-badge-creator">Admin</span>
+        <h3 className="tool-card-title">Repo Architecture Diagrammer</h3>
+        <p className="tool-card-desc">Drop in source code files or a zipped project to see how everything connects as a visual architecture diagram.</p>
+        <p className="tool-card-category">Dev Tool</p>
+      </div>
+
+      <div onClick={() => setRoute("uiaccessibility")} className="tool-card">
+        <span className="tool-badge-creator">Admin</span>
+        <h3 className="tool-card-title">UI Accessibility Auditor</h3>
+        <p className="tool-card-desc">Upload a screenshot of your interface for an advisory scan of potential readability and accessibility issues.</p>
+        <p className="tool-card-category">Dev Tool</p>
+      </div>
+
     </div>
 
   </div>
@@ -627,6 +645,18 @@ useEffect(() => {
         <span className="tool-badge-creator">Admin</span>
         <h3 className="tool-card-title">Transcript Evidence Matrix</h3>
         <p className="tool-card-desc">Turn a messy transcript into themed quotes with speakers and takeaways.</p>
+        <p className="tool-card-category">Research Tool</p>
+      </div>
+      <div onClick={() => setRoute("pdfdashboard")} className="tool-card">
+        <span className="tool-badge-creator">Admin</span>
+        <h3 className="tool-card-title">PDF Dashboard Converter</h3>
+        <p className="tool-card-desc">Upload a financial statement, data sheet, or analytics report and get an instant visual dashboard with charts and headline metrics.</p>
+        <p className="tool-card-category">Research Tool</p>
+      </div>
+      <div onClick={() => setRoute("privacyshield")} className="tool-card">
+        <span className="tool-badge-creator">Admin</span>
+        <h3 className="tool-card-title">Metadata Privacy Shield</h3>
+        <p className="tool-card-desc">Scan a photo for hidden GPS coordinates, camera model, and timestamp metadata, then strip it out for free.</p>
         <p className="tool-card-category">Research Tool</p>
       </div>
     </div>
@@ -670,6 +700,18 @@ useEffect(() => {
       )}
       {route === 'transcriptevidence' && (
         <TranscriptEvidenceMatrix triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />
+      )}
+      {route === 'pdfdashboard' && (
+        <PdfDashboardConverter triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />
+      )}
+      {route === 'privacyshield' && (
+        <PrivacyShield triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />
+      )}
+      {route === 'repoarch' && (
+        <RepoArchDiagrammer triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />
+      )}
+      {route === 'uiaccessibility' && (
+        <UiAccessibilityAuditor triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />
       )}
       {route === 'create-tool' && (
         <div style={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', padding: '24px', borderRadius: '12px' }}>
