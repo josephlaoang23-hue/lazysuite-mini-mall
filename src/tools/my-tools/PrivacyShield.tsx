@@ -2,15 +2,21 @@ import { useState, useRef } from "react";
 import { Copy, Check } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import exifr from "exifr";
+import { TOOL_METADATA } from "../../seo/toolMetadata";
 import RunsBadge from "../../components/RunsBadge";
 import ToolLayout from "../../components/ToolLayout";
+import { getDeviceId } from "../../utils/deviceId";
+import AdsterraNativeBanner from "../../ads/AdsterraNativeBanner";
 import "../../styles/PrivacyShield.css";
+
+const seo = TOOL_METADATA.privacyshield;
 
 interface ToolProps {
   triggerProcess: (msg: string, action: () => void) => void;
   remainingRuns: number;
   onUpdateRemaining: (n: number) => void;
   onRequestUnlock: () => void;
+  onRequestUnlimited: (promptInstructions: string, userInput: string, onDone: (output: string) => void) => void;
 }
 
 interface ExtractedMetadata {
@@ -26,7 +32,8 @@ export default function PrivacyShield({
   triggerProcess,
   remainingRuns,
   onUpdateRemaining,
-  onRequestUnlock
+  onRequestUnlock,
+  onRequestUnlimited
 }: ToolProps) {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string>("");
@@ -136,17 +143,28 @@ Rules:
 
         const response = await fetch("/api/run-tool-image", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", "X-Device-Id": getDeviceId() },
           body: JSON.stringify({
             promptInstructions: promptText,
             imageBase64,
-            mimeType: imageFile.type
+            mimeType: imageFile.type,
+            toolId: "privacyshield"
           })
         });
 
         const limitRemaining = response.headers.get("X-RateLimit-Remaining");
         if (limitRemaining !== null) {
           onUpdateRemaining(Number(limitRemaining));
+        }
+
+        if (response.status === 202) {
+          // NOTE: the unlimited-mode backend endpoint does not currently accept
+          // image data — only text. This branch matches the required frontend
+          // pattern, but won't actually re-analyze the image until the backend
+          // gains image support for unlimited-mode runs.
+          onRequestUnlimited(promptText, foundList, (output) => setAiSummary(output));
+          setIsScanning(false);
+          return;
         }
 
         const data = await response.json();
@@ -211,12 +229,9 @@ Rules:
   return (
     <>
       <Helmet>
-        <title>Metadata Privacy Shield | Remove EXIF & GPS Metadata</title>
-        <meta
-          name="description"
-          content="Scan your photos for hidden GPS coordinates, camera info, and timestamps, then remove them for free — right in your browser."
-        />
-        <link rel="canonical" href="https://lazysuite-mini-mall.vercel.app/privacy-shield" />
+        <title>{seo.title}</title>
+        <meta name="description" content={seo.description} />
+        <link rel="canonical" href={seo.canonical} />
       </Helmet>
 
       <ToolLayout
@@ -282,6 +297,13 @@ Rules:
                 </a>
               </div>
             )}
+
+            <AdsterraNativeBanner />
+
+            <section className="tool-seo-section">
+              <h2>See exactly what your photos reveal about you</h2>
+              <p>Photos carry hidden EXIF metadata — GPS coordinates, camera model, timestamps — that most people never see. This tool scans the real metadata in your file, explains it in plain language, and strips it out with one click.</p>
+            </section>
           </>
         }
         canvas={

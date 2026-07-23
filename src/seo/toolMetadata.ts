@@ -95,6 +95,34 @@ export const TOOL_METADATA = {
       description:
         "Turn a messy interview or podcast transcript into a themed matrix of quotes, speakers, and research takeaways.",
       canonical: "/transcript-evidence-matrix",
+    },
+
+    pdfdashboard: {
+      title: "Free PDF-to-Dashboard Converter",
+      description:
+        "Upload a financial statement, data sheet, or analytics report and get an instant visual dashboard with charts and headline metrics.",
+      canonical: "/pdf-dashboard-converter",
+    },
+
+    privacyshield: {
+      title: "Free Metadata Privacy Shield & EXIF Tag Purger",
+      description:
+        "Scan a photo for hidden GPS coordinates, camera model, and timestamp metadata, then strip it out for free — right in your browser.",
+      canonical: "/privacy-shield",
+    },
+
+    repoarch: {
+      title: "Free Repo-to-Architecture Diagram Maker",
+      description:
+        "Drop in source code files or a zipped project to see how everything connects as a visual architecture diagram, ready for your README.",
+      canonical: "/repo-architecture-diagrammer",
+    },
+
+    uiaccessibility: {
+      title: "Free UI Accessibility & Contrast Visual Audit",
+      description:
+        "Upload a screenshot of your interface for an advisory scan of potential readability, contrast, and accessibility issues.",
+      canonical: "/ui-accessibility-auditor",
     }
   };
 
