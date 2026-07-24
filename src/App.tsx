@@ -244,7 +244,7 @@ useEffect(() => {
   // on right before opening a tool, so the back button returns you there
   // instead of always jumping to the Hub.
   useEffect(() => {
-    const listRoutes = ['hub', 'daily-tools', 'business-tools', 'dev-tools', 'research-tools'];
+    const listRoutes = ['hub', 'daily-tools', 'business-tools', 'dev-tools', 'research-tools', 'security-tools', 'education-tools', 'creator-tools'];
     const prev = prevRouteRef.current;
     if (listRoutes.includes(prev) && !listRoutes.includes(route)) {
       setReturnRoute(prev);
@@ -443,10 +443,10 @@ useEffect(() => {
 
 {route !== 'hub' && !authMode && (
         <button
-        onClick={() => setRoute(['daily-tools', 'business-tools', 'dev-tools', 'research-tools'].includes(route) ? 'hub' : returnRoute)}
+        onClick={() => setRoute(['daily-tools', 'business-tools', 'dev-tools', 'research-tools', 'security-tools', 'education-tools', 'creator-tools'].includes(route) ? 'hub' : returnRoute)}
           className="btn-back"
         >
-          &larr; Return To {['daily-tools', 'business-tools', 'dev-tools', 'research-tools'].includes(route)
+          &larr; Return To {['daily-tools', 'business-tools', 'dev-tools', 'research-tools', 'security-tools', 'education-tools', 'creator-tools'].includes(route)
             ? 'Boutique Mall Lobby'
             : returnRoute === 'daily-tools'
               ? 'Daily Tools'
@@ -456,7 +456,13 @@ useEffect(() => {
                   ? 'Dev Tools'
                   : returnRoute === 'research-tools'
                   ? 'Research & Data'
-                  : 'Boutique Mall Lobby'}
+                  : returnRoute === 'security-tools'
+                    ? 'Privacy & Security'
+                    : returnRoute === 'education-tools'
+                      ? 'Education'
+                      : returnRoute === 'creator-tools'
+                        ? 'Content Creator'
+                        : 'Boutique Mall Lobby'}
         </button>
       )}
 
@@ -655,18 +661,78 @@ useEffect(() => {
         <p className="tool-card-desc">Turn a messy transcript into themed quotes with speakers and takeaways.</p>
         <p className="tool-card-category">Research Tool</p>
       </div>
-      <div onClick={() => setRoute("pdfdashboard")} className="tool-card">
+      <div onClick={() => setRoute("abstractsynthesizer")} className="tool-card">
         <span className="tool-badge-creator">Admin</span>
-        <h3 className="tool-card-title">PDF Dashboard Converter</h3>
-        <p className="tool-card-desc">Upload a financial statement, data sheet, or analytics report and get an instant visual dashboard with charts and headline metrics.</p>
+        <h3 className="tool-card-title">Academic Abstract Synthesizer</h3>
+        <p className="tool-card-desc">Turn a dense academic abstract into plain language with limitations and takeaways.</p>
         <p className="tool-card-category">Research Tool</p>
       </div>
+    </div>
+  </div>
+)}
+
+{route === "security-tools" && (
+  <div>
+    <h2 className="tool-header-title">Privacy & Security Tools</h2>
+    <p className="tool-header-seo">
+      Scan for hidden metadata, phishing red flags, and deceptive UX patterns.
+    </p>
+    <div className="grid-container" style={{ marginTop: "24px" }}>
       <div onClick={() => setRoute("privacyshield")} className="tool-card">
         <span className="tool-badge-creator">Admin</span>
         <h3 className="tool-card-title">Metadata Privacy Shield</h3>
         <p className="tool-card-desc">Scan a photo for hidden GPS coordinates, camera model, and timestamp metadata, then strip it out for free.</p>
-        <p className="tool-card-category">Research Tool</p>
+        <p className="tool-card-category">Security Tool</p>
       </div>
+      <div onClick={() => setRoute("phishingdissector")} className="tool-card">
+        <span className="tool-badge-creator">Admin</span>
+        <h3 className="tool-card-title">Phishing / Scam Email Dissector</h3>
+        <p className="tool-card-desc">Paste an email or upload a screenshot to spot phishing red flags with a risk rating.</p>
+        <p className="tool-card-category">Security Tool</p>
+      </div>
+      <div onClick={() => setRoute("darkpatternauditor")} className="tool-card">
+        <span className="tool-badge-creator">Admin</span>
+        <h3 className="tool-card-title">Dark Pattern UX Auditor</h3>
+        <p className="tool-card-desc">Scan a checkout or app screenshot for deceptive UX patterns with a transparency score.</p>
+        <p className="tool-card-category">Security Tool</p>
+      </div>
+    </div>
+  </div>
+)}
+
+{route === "education-tools" && (
+  <div>
+    <h2 className="tool-header-title">Education Tools</h2>
+    <p className="tool-header-seo">
+      Tools for learning, teaching, and understanding complex material.
+    </p>
+    <div className="grid-container" style={{ marginTop: "24px" }}>
+      <div onClick={() => setRoute("transcript")} className="tool-card">
+        <span className="tool-badge-creator">Admin</span>
+        <h3 className="tool-card-title">Intelligent Transcript Structurer</h3>
+        <p className="tool-card-desc">Cleans messy meeting transcripts or audio into organized summaries.</p>
+        <p className="tool-card-category">Education Tool</p>
+      </div>
+      <div onClick={() => setRoute("uiaccessibility")} className="tool-card">
+        <span className="tool-badge-creator">Admin</span>
+        <h3 className="tool-card-title">UI Accessibility Auditor</h3>
+        <p className="tool-card-desc">Upload a screenshot of your interface for an advisory accessibility scan.</p>
+        <p className="tool-card-category">Education Tool</p>
+      </div>
+    </div>
+  </div>
+)}
+
+{route === "creator-tools" && (
+  <div>
+    <h2 className="tool-header-title">Content Creator Tools</h2>
+    <p className="tool-header-seo">
+      Fun and creative tools — more on the way.
+    </p>
+    <div className="grid-container" style={{ marginTop: "24px" }}>
+      <p style={{ color: "#64748b", fontSize: "12px", textAlign: "center", padding: "40px 0" }}>
+        More creator tools coming soon.
+      </p>
     </div>
   </div>
 )}

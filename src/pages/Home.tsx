@@ -63,6 +63,27 @@ export default function Home({ setRoute }: HomeProps) {
           >
             📊 Research & Data
           </button>
+
+          <button
+            onClick={() => setRoute("security-tools")}
+            className="btn-security-tools"
+          >
+            🔒 Privacy & Security
+          </button>
+
+          <button
+            onClick={() => setRoute("education-tools")}
+            className="btn-education-tools"
+          >
+            🎓 Education
+          </button>
+
+          <button
+            onClick={() => setRoute("creator-tools")}
+            className="btn-creator-tools"
+          >
+            🎨 Content Creator
+          </button>
         </div>
       </div>
 
