@@ -25,7 +25,7 @@ export function useRankedTools() {
 
         // Business Tools have their own dedicated section and should never
         // show up in the ranked Daily Tools / Featured lists.
-        const eligibleTools = allTools.filter((t) => t.category !== "Business Tools");
+        const eligibleTools = allTools;
 
         // Only live tools compete for rank — non-live ones are always "Coming Soon"
         // and never displace a real tool from the Featured slots.

@@ -2,26 +2,35 @@ import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 import Home from "./pages/Home";
 // Import our individual clean modular component files directly from our folder pool
-import ChatGptCleaner from "./tools/featured/ChatGptCleaner";
-import TextHumanizer from "./tools/featured/TextHumanizer";
-import BulkFileRenamer from "./tools/featured/BulkFileRenamer";
-
-import PirateTranslator from "./tools/creator-tools/PirateTranslator";
-import LogicMapStudio from "./tools/my-tools/LogicMapStudio";
-import TranscriptCleaner from "./tools/my-tools/TranscriptCleaner";
-import PdfDashboardConverter from "./tools/my-tools/PdfDashboardConverter";
-import PrivacyShield from "./tools/my-tools/PrivacyShield";
-import RepoArchDiagrammer from "./tools/my-tools/RepoArchDiagrammer";
-import UiAccessibilityAuditor from "./tools/my-tools/UiAccessibilityAuditor";
+import ChatGptCleaner from "./tools/daily-tools/ChatGptCleaner";
+import TextHumanizer from "./tools/daily-tools/TextHumanizer";
+import BulkFileRenamer from "./tools/daily-tools/BulkFileRenamer";
+import ChatOptOutGuide from "./tools/daily-tools/ChatOptOutGuide";
+import UtilityBillAnalyzer from "./tools/daily-tools/UtilityBillAnalyzer";
+import PdfDashboardConverter from "./tools/daily-tools/PdfDashboardConverter";
 import TrashCheatSheet from "./tools/business-tools/TrashCheatSheet";
 import ThriftAppraisalGrid from "./tools/business-tools/ThriftAppraisalGrid";
 import RoadsideEstimateProofer from "./tools/business-tools/RoadsideEstimateProofer";
 import DotLogAuditor from "./tools/business-tools/DotLogAuditor";
 import AmazonInvoiceAuditor from "./tools/business-tools/AmazonInvoiceAuditor";
-import MultiAgentBlueprintGenerator from "./tools/my-tools/MultiAgentBlueprintGenerator";
+import ChargebackWriter from "./tools/business-tools/ChargebackWriter";
+
+import LogicMapStudio from "./tools/dev-tools/LogicMapStudio";
+import RepoArchDiagrammer from "./tools/dev-tools/RepoArchDiagrammer";
+import MultiAgentBlueprintGenerator from "./tools/dev-tools/MultiAgentBlueprintGenerator";
 import PromptCompressor from "./tools/dev-tools/PromptCompressor";
+import LegacyCodeModernizer from "./tools/dev-tools/LegacyCodeModernizer";
+
 import ConflictAuditor from "./tools/research-tools/ConflictAuditor";
 import TranscriptEvidenceMatrix from "./tools/research-tools/TranscriptEvidenceMatrix";
+import AbstractSynthesizer from "./tools/research-tools/AbstractSynthesizer";
+
+import PrivacyShield from "./tools/security-tools/PrivacyShield";
+import PhishingDissector from "./tools/security-tools/PhishingDissector";
+import DarkPatternAuditor from "./tools/security-tools/DarkPatternAuditor";
+
+import TranscriptCleaner from "./tools/education-tools/TranscriptCleaner";
+import UiAccessibilityAuditor from "./tools/education-tools/UiAccessibilityAuditor";
 // Ads temporarily disabled — imports commented out, components untouched in /ads
 // import AdsterraSkyscraper from './ads/AdsterraSkyscraper';
 // import AdsterraNativeBanner from './ads/AdsterraNativeBanner';
@@ -76,8 +85,7 @@ function ProcessingOverlay({ message, onComplete }: { message: string; onComplet
 export default function App() {
   const { rankedTools } = useRankedTools();
   const myToolsList = rankedTools
-    .slice(5)
-    .filter((tool) => tool.category === "General Utility Tool");
+    .filter((tool) => tool.category === "Daily Tool");
 
   const [user, setUser] = useState<UserAccount | null>(() => {
     const saved = localStorage.getItem('lazysuite_user');
@@ -236,7 +244,7 @@ useEffect(() => {
   // on right before opening a tool, so the back button returns you there
   // instead of always jumping to the Hub.
   useEffect(() => {
-    const listRoutes = ['hub', 'my-tools', 'business-tools', 'dev-tools', 'research-tools'];
+    const listRoutes = ['hub', 'daily-tools', 'business-tools', 'dev-tools', 'research-tools'];
     const prev = prevRouteRef.current;
     if (listRoutes.includes(prev) && !listRoutes.includes(route)) {
       setReturnRoute(prev);
@@ -435,12 +443,12 @@ useEffect(() => {
 
 {route !== 'hub' && !authMode && (
         <button
-        onClick={() => setRoute(['my-tools', 'business-tools', 'dev-tools', 'research-tools'].includes(route) ? 'hub' : returnRoute)}
+        onClick={() => setRoute(['daily-tools', 'business-tools', 'dev-tools', 'research-tools'].includes(route) ? 'hub' : returnRoute)}
           className="btn-back"
         >
-          &larr; Return To {['my-tools', 'business-tools', 'dev-tools', 'research-tools'].includes(route)
+          &larr; Return To {['daily-tools', 'business-tools', 'dev-tools', 'research-tools'].includes(route)
             ? 'Boutique Mall Lobby'
-            : returnRoute === 'my-tools'
+            : returnRoute === 'daily-tools'
               ? 'Daily Tools'
               : returnRoute === 'business-tools'
                 ? 'Business Tools'
@@ -481,7 +489,7 @@ useEffect(() => {
           */}
         </div>
       )}
-{route === "my-tools" && (
+{route === "daily-tools" && (
   <div>
 
     <h2 className="tool-header-title">
@@ -665,9 +673,6 @@ useEffect(() => {
       {route === 'cleaner' && <ChatGptCleaner triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />}
       {route === 'humanizer' && <TextHumanizer triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />}
       {route === 'renamer' && <BulkFileRenamer triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />}
-      {route === 'pirate' && (
-        <PirateTranslator triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />
-      )}
       {route === 'logicmap' && (
         <LogicMapStudio triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />
       )}
@@ -712,6 +717,27 @@ useEffect(() => {
       )}
       {route === 'uiaccessibility' && (
         <UiAccessibilityAuditor triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />
+      )}
+      {route === 'chatoptout' && (
+        <ChatOptOutGuide triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />
+      )}
+      {route === 'utilitybillanalyzer' && (
+        <UtilityBillAnalyzer triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />
+      )}
+      {route === 'chargebackwriter' && (
+        <ChargebackWriter triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />
+      )}
+      {route === 'legacycodemodernizer' && (
+        <LegacyCodeModernizer triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />
+      )}
+      {route === 'phishingdissector' && (
+        <PhishingDissector triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />
+      )}
+      {route === 'darkpatternauditor' && (
+        <DarkPatternAuditor triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />
+      )}
+      {route === 'abstractsynthesizer' && (
+        <AbstractSynthesizer triggerProcess={triggerProcess} remainingRuns={remainingRuns} onUpdateRemaining={setRemainingRuns} onRequestUnlock={startUnlock} onRequestUnlimited={startUnlimitedGate} />
       )}
       {route === 'create-tool' && (
         <div style={{ backgroundColor: '#0f172a', border: '1px solid #1e293b', padding: '24px', borderRadius: '12px' }}>

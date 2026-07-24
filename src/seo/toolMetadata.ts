@@ -123,7 +123,15 @@ export const TOOL_METADATA = {
       description:
         "Upload a screenshot of your interface for an advisory scan of potential readability, contrast, and accessibility issues.",
       canonical: "/ui-accessibility-auditor",
-    }
+    },
+
+    chatoptout: { title: "Free Customer Service Human Agent Finder", description: "Find the fastest path to a real human rep instead of a support chatbot.", canonical: "/chat-optout-guide" },
+    utilitybillanalyzer: { title: "Free Utility Bill Analyzer", description: "Understand every line item on your bill and get a dispute template for unusual charges.", canonical: "/utility-bill-analyzer" },
+    chargebackwriter: { title: "Free Chargeback Dispute Evidence Writer", description: "Organize evidence into a professional dispute response for Stripe, PayPal, or Square.", canonical: "/chargeback-writer" },
+    legacycodemodernizer: { title: "Free Legacy Code Explainer & Modernizer", description: "Explain old PHP, jQuery, VB, or COBOL code and get a modern equivalent.", canonical: "/legacy-code-modernizer" },
+    phishingdissector: { title: "Free Phishing & Scam Email Dissector", description: "Paste an email or upload a screenshot to spot phishing red flags with a risk rating.", canonical: "/phishing-dissector" },
+    darkpatternauditor: { title: "Free Dark Pattern UX Auditor", description: "Scan a checkout or app screenshot for deceptive UX patterns with a transparency score.", canonical: "/dark-pattern-auditor" },
+    abstractsynthesizer: { title: "Free Academic Abstract Synthesizer", description: "Turn a dense academic abstract into plain language with limitations and takeaways.", canonical: "/abstract-synthesizer" }
   };
 
   

@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { Redis } from '@upstash/redis';
-import { trackDailyUnlock } from './_utils/dailyTracking';
+import { trackDailyUnlock } from './utils/dailyTracking.js';
 
 const redis = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL!,

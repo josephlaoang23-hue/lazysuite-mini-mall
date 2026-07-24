@@ -17,6 +17,9 @@ const TOOL_KEY_MAP: Record<string, string | undefined> = {
   amazoninvoiceauditor: process.env.GEMINI_KEY_AMZAUDITOR,
   privacyshield: process.env.GEMINI_KEY_PRIVACYSHIELD,
   uiaccessibility: process.env.GEMINI_KEY_UIAUDITOR,
+  utilitybillanalyzer: process.env.GEMINI_KEY_UTILITYBILL,
+  darkpatternauditor: process.env.GEMINI_KEY_DARKPATTERN,
+  phishingdissector: process.env.GEMINI_KEY_PHISHING,
 };
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {

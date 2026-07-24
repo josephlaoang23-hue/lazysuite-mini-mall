@@ -22,6 +22,11 @@ const TOOL_KEY_MAP: Record<string, string | undefined> = {
   promptcompressor: process.env.GEMINI_KEY_PROMPTCOMPRESSOR,
   pdfdashboard: process.env.GEMINI_KEY_PDFCONVERTER,
   repoarch: process.env.GEMINI_KEY_ARCHDIAGRAMMER,
+  chatoptout: process.env.GEMINI_KEY_CHATOPTOUT,
+  chargebackwriter: process.env.GEMINI_KEY_CHARGEBACK,
+  legacycodemodernizer: process.env.GEMINI_KEY_LEGACYCODE,
+  abstractsynthesizer: process.env.GEMINI_KEY_ABSTRACTSYNTH,
+  phishingdissector: process.env.GEMINI_KEY_PHISHING,
 };
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {

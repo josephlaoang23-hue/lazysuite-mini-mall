@@ -12,9 +12,10 @@ const KNOWN_TOOL_IDS = [
   'cleaner', 'humanizer', 'renamer', 'logicmap', 'transcript', 'pirate',
   'trashcheatsheet', 'thriftappraisal', 'roadsideestimate', 'dotlogauditor', 'amazoninvoiceauditor',
   'multiagentblueprint', 'promptcompressor', 'conflictauditor', 'transcriptevidence',
-  'pdfdashboard', 'privacyshield', 'repoarch', 'uiaccessibility'
+  'pdfdashboard', 'privacyshield', 'repoarch', 'uiaccessibility',
+  'chatoptout', 'utilitybillanalyzer', 'chargebackwriter', 'legacycodemodernizer',
+  'phishingdissector', 'darkpatternauditor', 'abstractsynthesizer'
 ];
-
 function getYesterdayDateString(): string {
   const d = new Date();
   d.setUTCDate(d.getUTCDate() - 1);
