@@ -3,6 +3,7 @@ import mermaid from "mermaid";
 import RunsBadge from "../../components/RunsBadge";
 import ToolLayout from "../../components/ToolLayout";
 import DiagramFullscreen from "../../components/DiagramFullscreen";
+import ToolReactions from "../../components/ToolReactions";
 import { getDeviceId } from "../../utils/deviceId";
 import "../../styles/LogicMapStudio.css";
 import AdsterraNativeBanner from "../../ads/AdsterraNativeBanner";
@@ -185,6 +186,8 @@ Rules:
               {errorMsg}
             </div>
           )}
+
+          <ToolReactions toolId="logicmap" />
 
           <AdsterraNativeBanner />
 

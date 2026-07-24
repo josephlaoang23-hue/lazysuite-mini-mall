@@ -1,0 +1,32 @@
+.tool-reactions {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .reaction-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background-color: #0f172a;
+    border: 1px solid #1e293b;
+    border-radius: 9999px;
+    color: #94a3b8;
+    font-size: 12px;
+    font-family: monospace;
+    cursor: pointer;
+    transition: all 150ms ease;
+  }
+  .reaction-btn:hover {
+    border-color: #334155;
+    background-color: #16223d;
+  }
+  .reaction-btn:disabled {
+    cursor: default;
+    opacity: 0.7;
+  }
+  .reaction-btn.reaction-active {
+    border-color: #2dd4bf;
+    background-color: rgba(45, 212, 191, 0.1);
+    color: #2dd4bf;
+  }
