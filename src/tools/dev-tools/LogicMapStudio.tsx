@@ -2,9 +2,10 @@ import { useState, useRef } from "react";
 import mermaid from "mermaid";
 import RunsBadge from "../../components/RunsBadge";
 import ToolLayout from "../../components/ToolLayout";
+import DiagramFullscreen from "../../components/DiagramFullscreen";
 import { getDeviceId } from "../../utils/deviceId";
-import AdsterraNativeBanner from "../../ads/AdsterraNativeBanner";
 import "../../styles/LogicMapStudio.css";
+import AdsterraNativeBanner from "../../ads/AdsterraNativeBanner";
 interface ToolProps {
   triggerProcess: (msg: string, action: () => void) => void;
   remainingRuns: number;
@@ -42,6 +43,7 @@ export default function LogicMapStudio({
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [showRawCode, setShowRawCode] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [showFullscreen, setShowFullscreen] = useState<boolean>(false);
 
   // Each render needs a fresh, unique ID or Mermaid gets confused
   // if you generate more than one diagram per page visit.
@@ -201,6 +203,9 @@ Rules:
             <div className="output-header">
               <span>Logic Flowchart</span>
               <div style={{ display: "flex", gap: "8px" }}>
+                <button className="copy-button" onClick={() => setShowFullscreen(true)} title="Maximize diagram">
+                  ⛶ Maximize
+                </button>
                 <button className="copy-button" onClick={copyMermaidCode} title="Copy Mermaid code">
                   Copy Code
                 </button>
@@ -219,8 +224,16 @@ Rules:
               dangerouslySetInnerHTML={{ __html: svgOutput }}
             />
 
-            {showRawCode && (
+{showRawCode && (
               <pre className="logic-map-raw">{mermaidCode}</pre>
+            )}
+
+            {showFullscreen && (
+              <DiagramFullscreen
+                svg={svgOutput}
+                title="Logic Flowchart"
+                onClose={() => setShowFullscreen(false)}
+              />
             )}
           </div>
         ) : (

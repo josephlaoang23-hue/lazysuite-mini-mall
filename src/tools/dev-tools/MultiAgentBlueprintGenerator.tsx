@@ -5,6 +5,7 @@ import mermaid from "mermaid";
 import { TOOL_METADATA } from "../../seo/toolMetadata";
 import RunsBadge from "../../components/RunsBadge";
 import ToolLayout from "../../components/ToolLayout";
+import DiagramFullscreen from "../../components/DiagramFullscreen";
 import { getDeviceId } from "../../utils/deviceId";
 import AdsterraNativeBanner from "../../ads/AdsterraNativeBanner";
 import "../../styles/MultiAgentBlueprintGenerator.css";
@@ -65,6 +66,7 @@ export default function MultiAgentBlueprintGenerator({
   const [remainingMarkdown, setRemainingMarkdown] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showFullscreen, setShowFullscreen] = useState(false);
 
   const renderCounter = useRef(0);
 
@@ -203,9 +205,20 @@ export default function MultiAgentBlueprintGenerator({
                 <div className="agent-blueprint-diagram-block">
                   <div className="output-header">
                     <span>System Interaction Map</span>
+                    <button className="copy-button" onClick={() => setShowFullscreen(true)} title="Maximize diagram">
+                      ⛶ Maximize
+                    </button>
                   </div>
                   <div className="logic-map-diagram" dangerouslySetInnerHTML={{ __html: diagramSvg }} />
                 </div>
+              )}
+
+              {showFullscreen && (
+                <DiagramFullscreen
+                  svg={diagramSvg}
+                  title="System Interaction Map"
+                  onClose={() => setShowFullscreen(false)}
+                />
               )}
 
               <div className="agent-blueprint-markdown">

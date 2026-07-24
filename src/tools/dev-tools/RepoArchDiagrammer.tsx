@@ -6,6 +6,7 @@ import { Helmet } from "react-helmet-async";
 import { TOOL_METADATA } from "../../seo/toolMetadata";
 import RunsBadge from "../../components/RunsBadge";
 import ToolLayout from "../../components/ToolLayout";
+import DiagramFullscreen from "../../components/DiagramFullscreen";
 import { getDeviceId } from "../../utils/deviceId";
 import AdsterraNativeBanner from "../../ads/AdsterraNativeBanner";
 import "../../styles/RepoArchDiagrammer.css";
@@ -88,6 +89,7 @@ export default function RepoArchDiagrammer({
   const [errorMsg, setErrorMsg] = useState<string>("");
   const [showRawCode, setShowRawCode] = useState(false);
   const [copiedReadme, setCopiedReadme] = useState(false);
+  const [showFullscreen, setShowFullscreen] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const renderCounter = useRef(0);
@@ -376,6 +378,9 @@ export default function RepoArchDiagrammer({
               <div className="output-header">
                 <span>Architecture Diagram</span>
                 <div style={{ display: "flex", gap: "8px" }}>
+                  <button className="copy-button" onClick={() => setShowFullscreen(true)} title="Maximize diagram">
+                    ⛶ Maximize
+                  </button>
                   <button className="copy-button" onClick={copyForReadme} title="Copy for GitHub README">
                     {copiedReadme ? <Check size={16} /> : <Copy size={16} />} Copy for README
                   </button>
@@ -388,6 +393,14 @@ export default function RepoArchDiagrammer({
               <div className="repo-arch-diagram" dangerouslySetInnerHTML={{ __html: svgOutput }} />
 
               {showRawCode && <pre className="logic-map-raw">{mermaidCode}</pre>}
+
+              {showFullscreen && (
+                <DiagramFullscreen
+                  svg={svgOutput}
+                  title="Architecture Diagram"
+                  onClose={() => setShowFullscreen(false)}
+                />
+              )}
             </div>
           ) : (
             <p style={{ color: "#64748b", fontSize: "12px", textAlign: "center", padding: "40px 0" }}>
