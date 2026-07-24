@@ -9,7 +9,7 @@ const redis = new Redis({
 // The full list of toolIds currently in use across the app.
 // Add new tool IDs here as new tools go live so they show up in the summary.
 const KNOWN_TOOL_IDS = [
-  'cleaner', 'humanizer', 'renamer', 'logicmap', 'transcript', 'pirate',
+  'cleaner', 'humanizer', 'renamer', 'logicmap', 'transcript',
   'trashcheatsheet', 'thriftappraisal', 'roadsideestimate', 'dotlogauditor', 'amazoninvoiceauditor',
   'multiagentblueprint', 'promptcompressor', 'conflictauditor', 'transcriptevidence',
   'pdfdashboard', 'privacyshield', 'repoarch', 'uiaccessibility',

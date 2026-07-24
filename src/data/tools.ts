@@ -29,7 +29,6 @@ import DarkPatternAuditor from "../tools/security-tools/DarkPatternAuditor";
 import TranscriptCleaner from "../tools/education-tools/TranscriptCleaner";
 import UiAccessibilityAuditor from "../tools/education-tools/UiAccessibilityAuditor";
 
-
 export interface ToolMeta {
   id: string;
   title: string;

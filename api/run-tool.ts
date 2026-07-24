@@ -15,7 +15,6 @@ const TOOL_KEY_MAP: Record<string, string | undefined> = {
   renamer: process.env.GEMINI_KEY_RENAMER,
   logicmap: process.env.GEMINI_KEY_LOGICMAP,
   transcript: process.env.GEMINI_KEY_TRANSCRIPT,
-  pirate: process.env.GEMINI_KEY_PIRATE,
   conflictauditor: process.env.GEMINI_KEY_CONFLICTAUDITOR,
   transcriptevidence: process.env.GEMINI_KEY_TRANSCRIPTEVIDENCE,
   multiagentblueprint: process.env.GEMINI_KEY_MULTIAGENT,
