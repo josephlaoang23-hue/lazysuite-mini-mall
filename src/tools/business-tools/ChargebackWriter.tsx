@@ -65,14 +65,18 @@ export default function ChargebackWriter({ triggerProcess, remainingRuns, onUpda
             {remainingRuns === 0 ? "Limit Exhausted – Click to Unlock" : isLoading ? "⏳ Drafting..." : "Generate Dispute Response"}
           </button>
           <AdsterraNativeBanner />
+
+          <section className="tool-seo-section">
+            <h2>Respond to chargebacks with organized evidence</h2>
+            <p>Fighting a chargeback means presenting your invoices, shipping confirmations, and customer messages in a clear, chronological format the payment processor can quickly review. This tool organizes your evidence into a timeline and drafts a professional response for Stripe, PayPal, or Square — presenting facts, not legal claims.</p>
+          </section>
         </>}
         canvas={output ? (
           <div className="output-box" style={{ position: "relative", whiteSpace: "pre-wrap" }}>
             <button className="copy-button" onClick={copyOutput} style={{ position: "absolute", top: "12px", right: "12px" }}>{copied ? <Check size={16} /> : <Copy size={16} />}</button>
             {output}
           </div>
-        ) : <p style={{ color: "#64748b", fontSize: "12px", textAlign: "center", padding: "40px 0" }}>Your dispute response will appear here.</p>}
-      />
+        ) : <p style={{ color: "#64748b", fontSize: "12px", textAlign: "center", padding: "40px 0" }}>Your dispute response will appear here.</p>}      />
     </>
   );
 }

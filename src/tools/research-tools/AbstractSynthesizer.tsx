@@ -54,9 +54,13 @@ export default function AbstractSynthesizer({ triggerProcess, remainingRuns, onU
             {remainingRuns === 0 ? "Limit Exhausted – Click to Unlock" : isLoading ? "⏳ Synthesizing..." : "Synthesize Abstract"}
           </button>
           <AdsterraNativeBanner />
+
+          <section className="tool-seo-section">
+            <h2>Turn dense academic writing into plain language</h2>
+            <p>Academic abstracts are written for other researchers, not general readers. This tool translates the jargon into everyday language, surfaces the main findings and limitations, and explains what the research actually means in practice — without inventing details the original abstract doesn't mention.</p>
+          </section>
         </>}
-        canvas={output ? <div className="output-box" style={{ whiteSpace: "pre-wrap" }}>{output}</div> : <p style={{ color: "#64748b", fontSize: "12px", textAlign: "center", padding: "40px 0" }}>Your plain-language summary will appear here.</p>}
-      />
+        canvas={output ? <div className="output-box" style={{ whiteSpace: "pre-wrap" }}>{output}</div> : <p style={{ color: "#64748b", fontSize: "12px", textAlign: "center", padding: "40px 0" }}>Your plain-language summary will appear here.</p>}      />
     </>
   );
 }

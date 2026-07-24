@@ -65,9 +65,13 @@ export default function DarkPatternAuditor({ triggerProcess, remainingRuns, onUp
             {remainingRuns === 0 ? "Limit Exhausted – Click to Unlock" : isLoading ? "⏳ Auditing..." : "Audit for Dark Patterns"}
           </button>
           <AdsterraNativeBanner />
+
+          <section className="tool-seo-section">
+            <h2>Spot deceptive checkout and app design patterns</h2>
+            <p>Hidden subscription checkboxes, fake urgency timers, and confusing button hierarchies are common enough to have a name: dark patterns. Upload a screenshot of a checkout flow or app screen, and this tool flags manipulative UX choices with a transparency score — a UX ethics review, not a legal determination.</p>
+          </section>
         </>}
-        canvas={output ? <div className="output-box" style={{ whiteSpace: "pre-wrap" }}>{output}</div> : <p style={{ color: "#64748b", fontSize: "12px", textAlign: "center", padding: "40px 0" }}>Your audit will appear here.</p>}
-      />
+        canvas={output ? <div className="output-box" style={{ whiteSpace: "pre-wrap" }}>{output}</div> : <p style={{ color: "#64748b", fontSize: "12px", textAlign: "center", padding: "40px 0" }}>Your audit will appear here.</p>}      />
     </>
   );
 }

@@ -65,9 +65,13 @@ export default function UtilityBillAnalyzer({ triggerProcess, remainingRuns, onU
             {remainingRuns === 0 ? "Limit Exhausted – Click to Unlock" : isLoading ? "⏳ Analyzing..." : "Analyze Bill"}
           </button>
           <AdsterraNativeBanner />
+
+          <section className="tool-seo-section">
+            <h2>Understand every line item on your bill</h2>
+            <p>Utility bills bury fees, surcharges, and rate changes in dense line-item lists most people never fully read. This tool breaks down each charge in plain language, flags anything unusual, and drafts a polite message you can send your provider if something looks off.</p>
+          </section>
         </>}
-        canvas={output ? <div className="output-box" style={{ whiteSpace: "pre-wrap" }}>{output}</div> : <p style={{ color: "#64748b", fontSize: "12px", textAlign: "center", padding: "40px 0" }}>Your bill breakdown will appear here.</p>}
-      />
+        canvas={output ? <div className="output-box" style={{ whiteSpace: "pre-wrap" }}>{output}</div> : <p style={{ color: "#64748b", fontSize: "12px", textAlign: "center", padding: "40px 0" }}>Your bill breakdown will appear here.</p>}      />
     </>
   );
 }

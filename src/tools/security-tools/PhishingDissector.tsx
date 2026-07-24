@@ -96,9 +96,13 @@ export default function PhishingDissector({ triggerProcess, remainingRuns, onUpd
             {remainingRuns === 0 ? "Limit Exhausted – Click to Unlock" : isLoading ? "⏳ Analyzing..." : "Analyze for Phishing Signs"}
           </button>
           <AdsterraNativeBanner />
+
+          <section className="tool-seo-section">
+            <h2>Spot phishing red flags before you click</h2>
+            <p>Suspicious emails often share common tells — spoofed senders, urgent language, mismatched links, fake login prompts. This tool scans the text or a screenshot you provide and flags these patterns, giving you a risk rating and next steps. It analyzes what's visible in the content you share — it can't verify where a link actually leads.</p>
+          </section>
         </>}
-        canvas={output ? <div className="output-box" style={{ whiteSpace: "pre-wrap" }}>{output}</div> : <p style={{ color: "#64748b", fontSize: "12px", textAlign: "center", padding: "40px 0" }}>Your analysis will appear here.</p>}
-      />
+        canvas={output ? <div className="output-box" style={{ whiteSpace: "pre-wrap" }}>{output}</div> : <p style={{ color: "#64748b", fontSize: "12px", textAlign: "center", padding: "40px 0" }}>Your analysis will appear here.</p>}      />
     </>
   );
 }

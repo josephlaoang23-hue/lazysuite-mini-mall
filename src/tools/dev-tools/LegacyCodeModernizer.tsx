@@ -69,6 +69,11 @@ export default function LegacyCodeModernizer({ triggerProcess, remainingRuns, on
             {remainingRuns === 0 ? "Limit Exhausted – Click to Unlock" : isLoading ? "⏳ Modernizing..." : "Explain & Modernize"}
           </button>
           <AdsterraNativeBanner />
+
+          <section className="tool-seo-section">
+            <h2>Understand and modernize legacy code fast</h2>
+            <p>Old PHP, jQuery, classic ASP, or COBOL codebases often outlive the developers who wrote them. This tool explains what the code actually does, flags outdated patterns and dependencies, and generates a modern equivalent — useful for onboarding, documentation, or planning a migration.</p>
+          </section>
         </>}
         canvas={markdown ? (
           <div>

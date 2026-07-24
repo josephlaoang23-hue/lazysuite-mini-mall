@@ -56,6 +56,11 @@ export default function ChatOptOutGuide({ triggerProcess, remainingRuns, onUpdat
             {remainingRuns === 0 ? "Limit Exhausted – Click to Unlock" : isLoading ? "⏳ Finding Path..." : "Find Human Agent Path"}
           </button>
           <AdsterraNativeBanner />
+
+          <section className="tool-seo-section">
+            <h2>Skip the chatbot loop and reach a real person</h2>
+            <p>Support chatbots are often designed to deflect rather than resolve. This tool draws on common industry escalation patterns — the right phrases to type, the menu paths that actually work — to get you to a human representative faster, whether you're stuck at a specific company's chatbot or just want a general strategy.</p>
+          </section>
         </>}
         canvas={output ? <div className="output-box" style={{ whiteSpace: "pre-wrap" }}>{output}</div> : <p style={{ color: "#64748b", fontSize: "12px", textAlign: "center", padding: "40px 0" }}>Your step-by-step guide will appear here.</p>}
       />
