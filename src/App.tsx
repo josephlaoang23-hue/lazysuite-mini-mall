@@ -84,8 +84,36 @@ function ProcessingOverlay({ message, onComplete }: { message: string; onComplet
 
 export default function App() {
   const { rankedTools } = useRankedTools();
-  const myToolsList = rankedTools
-    .filter((tool) => tool.category === "Daily Tool");
+
+  const topFiveIds = new Set(rankedTools.slice(0, 5).map((t) => t.id));
+
+  const CATEGORY_COLOR_CLASS: Record<string, string> = {
+    "Daily Tool": "clr-daily",
+    "Business Tool": "clr-business",
+    "Dev Tool": "clr-dev",
+    "Research Tool": "clr-research",
+    "Security Tool": "clr-security",
+    "Education Tool": "clr-education",
+    "Creator Tool": "clr-creator",
+  };
+
+  const renderToolCard = (tool: (typeof rankedTools)[number]) => (
+    <div
+      key={tool.id}
+      onClick={() => tool.isLive && setRoute(tool.id)}
+      className="tool-card"
+      style={!tool.isLive ? { opacity: 0.45, cursor: "default" } : undefined}
+    >
+      {topFiveIds.has(tool.id) && (
+        <span className={`tool-featured-tag ${CATEGORY_COLOR_CLASS[tool.category]}`}>
+          ★ Featured
+        </span>
+      )}
+      <span className="tool-badge-creator">{tool.creator}</span>
+      <h3 className="tool-card-title">{tool.title}</h3>
+      <p className="tool-card-desc">{tool.isLive ? tool.desc : "Coming Soon"}</p>
+    </div>
+  );
 
   const [user, setUser] = useState<UserAccount | null>(() => {
     const saved = localStorage.getItem('lazysuite_user');
@@ -497,176 +525,40 @@ useEffect(() => {
       )}
 {route === "daily-tools" && (
   <div>
-
-    <h2 className="tool-header-title">
-      Daily Tools
-    </h2>
-
-    <p className="tool-header-seo">
-      More tools — ranked by usage, plus what's coming next.
-    </p>
-
-    <div
-      className="grid-container"
-      style={{ marginTop: "24px" }}
-    >
-
-      {myToolsList.map((tool) => (
-        <div
-          key={tool.id}
-          onClick={() => tool.isLive && setRoute(tool.id)}
-          className="tool-card"
-          style={!tool.isLive ? { opacity: 0.45, cursor: "default" } : undefined}
-        >
-          <span className="tool-badge-creator">
-            {tool.creator}
-          </span>
-
-          <h3 className="tool-card-title">
-            {tool.title}
-          </h3>
-
-          <p className="tool-card-desc">
-            {tool.isLive ? tool.desc : "Coming Soon"}
-          </p>
-        </div>
-      ))}
-
+    <h2 className="tool-header-title">Daily Tools</h2>
+    <p className="tool-header-seo">More tools — ranked by usage, plus what's coming next.</p>
+    <div className="grid-container" style={{ marginTop: "24px" }}>
+      {rankedTools.filter((t) => t.category === "Daily Tool").map(renderToolCard)}
     </div>
-
   </div>
 )}
 
 {route === "business-tools" && (
   <div>
-
-    <h2 className="tool-header-title">
-      Business Tools
-    </h2>
-
-    <p className="tool-header-seo">
-      Niche tools built for real small-business workflows — trades, resale, hospitality, and more.
-    </p>
-
-    <div
-      className="grid-container"
-      style={{ marginTop: "24px" }}
-    >
-
-<div onClick={() => setRoute("trashcheatsheet")} className="tool-card">
-        <span className="tool-badge-creator">Admin</span>
-        <h3 className="tool-card-title">Guest Trash & Checkout Cheat Sheet</h3>
-        <p className="tool-card-desc">Turn a city trash calendar screenshot into a guest-friendly pickup card.</p>
-        <p className="tool-card-category">Business Tool</p>
-      </div>
-
-      <div onClick={() => setRoute("thriftappraisal")} className="tool-card">
-        <span className="tool-badge-creator">Admin</span>
-        <h3 className="tool-card-title">Visual Thrift Appraisal Grid</h3>
-        <p className="tool-card-desc">Get an estimated resale value and eBay listing draft from a photo.</p>
-        <p className="tool-card-category">Business Tool</p>
-      </div>
-
-      <div onClick={() => setRoute("roadsideestimate")} className="tool-card">
-        <span className="tool-badge-creator">Admin</span>
-        <h3 className="tool-card-title">Roadside Estimate Proofer</h3>
-        <p className="tool-card-desc">Turn a photo and rough notes into a professional repair estimate.</p>
-        <p className="tool-card-category">Business Tool</p>
-      </div>
-
-      <div onClick={() => setRoute("dotlogauditor")} className="tool-card">
-        <span className="tool-badge-creator">Admin</span>
-        <h3 className="tool-card-title">DOT Log Quick-Check</h3>
-        <p className="tool-card-desc">A quick first-pass review of your driving log before you submit it.</p>
-        <p className="tool-card-category">Business Tool</p>
-      </div>
-
-      <div onClick={() => setRoute("amazoninvoiceauditor")} className="tool-card">
-        <span className="tool-badge-creator">Admin</span>
-        <h3 className="tool-card-title">Supplier Invoice Field Checker</h3>
-        <p className="tool-card-desc">Check your supplier invoice against standard commercial invoice fields.</p>
-        <p className="tool-card-category">Business Tool</p>
-      </div>
-
+    <h2 className="tool-header-title">Business Tools</h2>
+    <p className="tool-header-seo">Niche tools built for real small-business workflows — trades, resale, hospitality, and more.</p>
+    <div className="grid-container" style={{ marginTop: "24px" }}>
+      {rankedTools.filter((t) => t.category === "Business Tool").map(renderToolCard)}
     </div>
-
   </div>
 )}
 
 {route === "dev-tools" && (
   <div>
-
-    <h2 className="tool-header-title">
-      Dev Tools
-    </h2>
-
-    <p className="tool-header-seo">
-      Utilities built for developers working with AI systems, agents, and prompts.
-    </p>
-
-    <div
-      className="grid-container"
-      style={{ marginTop: "24px" }}
-    >
-
-      <div onClick={() => setRoute("multiagentblueprint")} className="tool-card">
-        <span className="tool-badge-creator">Admin</span>
-        <h3 className="tool-card-title">Multi-Agent Blueprint Generator</h3>
-        <p className="tool-card-desc">Turn a massive project brain dump into a multi-agent architecture with a visual flowchart.</p>
-        <p className="tool-card-category">Dev Tool</p>
-      </div>
-
-      <div onClick={() => setRoute("promptcompressor")} className="tool-card">
-        <span className="tool-badge-creator">Admin</span>
-        <h3 className="tool-card-title">System Prompt Compressor</h3>
-        <p className="tool-card-desc">Compress a wordy system prompt into dense, token-efficient syntax.</p>
-        <p className="tool-card-category">Dev Tool</p>
-      </div>
-
-      <div onClick={() => setRoute("repoarch")} className="tool-card">
-        <span className="tool-badge-creator">Admin</span>
-        <h3 className="tool-card-title">Repo Architecture Diagrammer</h3>
-        <p className="tool-card-desc">Drop in source code files or a zipped project to see how everything connects as a visual architecture diagram.</p>
-        <p className="tool-card-category">Dev Tool</p>
-      </div>
-
-      <div onClick={() => setRoute("uiaccessibility")} className="tool-card">
-        <span className="tool-badge-creator">Admin</span>
-        <h3 className="tool-card-title">UI Accessibility Auditor</h3>
-        <p className="tool-card-desc">Upload a screenshot of your interface for an advisory scan of potential readability and accessibility issues.</p>
-        <p className="tool-card-category">Dev Tool</p>
-      </div>
-
+    <h2 className="tool-header-title">Dev Tools</h2>
+    <p className="tool-header-seo">Utilities built for developers working with AI systems, agents, and prompts.</p>
+    <div className="grid-container" style={{ marginTop: "24px" }}>
+      {rankedTools.filter((t) => t.category === "Dev Tool").map(renderToolCard)}
     </div>
-
   </div>
 )}
 
 {route === "research-tools" && (
   <div>
     <h2 className="tool-header-title">Research & Data Tools</h2>
-    <p className="tool-header-seo">
-      Utilities for researchers, journalists, and analysts working with large text sources.
-    </p>
+    <p className="tool-header-seo">Utilities for researchers, journalists, and analysts working with large text sources.</p>
     <div className="grid-container" style={{ marginTop: "24px" }}>
-      <div onClick={() => setRoute("conflictauditor")} className="tool-card">
-        <span className="tool-badge-creator">Admin</span>
-        <h3 className="tool-card-title">Document Conflict & Gap Auditor</h3>
-        <p className="tool-card-desc">Cross-reference multiple sources to find conflicting facts and gaps.</p>
-        <p className="tool-card-category">Research Tool</p>
-      </div>
-      <div onClick={() => setRoute("transcriptevidence")} className="tool-card">
-        <span className="tool-badge-creator">Admin</span>
-        <h3 className="tool-card-title">Transcript Evidence Matrix</h3>
-        <p className="tool-card-desc">Turn a messy transcript into themed quotes with speakers and takeaways.</p>
-        <p className="tool-card-category">Research Tool</p>
-      </div>
-      <div onClick={() => setRoute("abstractsynthesizer")} className="tool-card">
-        <span className="tool-badge-creator">Admin</span>
-        <h3 className="tool-card-title">Academic Abstract Synthesizer</h3>
-        <p className="tool-card-desc">Turn a dense academic abstract into plain language with limitations and takeaways.</p>
-        <p className="tool-card-category">Research Tool</p>
-      </div>
+      {rankedTools.filter((t) => t.category === "Research Tool").map(renderToolCard)}
     </div>
   </div>
 )}
@@ -674,28 +566,9 @@ useEffect(() => {
 {route === "security-tools" && (
   <div>
     <h2 className="tool-header-title">Privacy & Security Tools</h2>
-    <p className="tool-header-seo">
-      Scan for hidden metadata, phishing red flags, and deceptive UX patterns.
-    </p>
+    <p className="tool-header-seo">Scan for hidden metadata, phishing red flags, and deceptive UX patterns.</p>
     <div className="grid-container" style={{ marginTop: "24px" }}>
-      <div onClick={() => setRoute("privacyshield")} className="tool-card">
-        <span className="tool-badge-creator">Admin</span>
-        <h3 className="tool-card-title">Metadata Privacy Shield</h3>
-        <p className="tool-card-desc">Scan a photo for hidden GPS coordinates, camera model, and timestamp metadata, then strip it out for free.</p>
-        <p className="tool-card-category">Security Tool</p>
-      </div>
-      <div onClick={() => setRoute("phishingdissector")} className="tool-card">
-        <span className="tool-badge-creator">Admin</span>
-        <h3 className="tool-card-title">Phishing / Scam Email Dissector</h3>
-        <p className="tool-card-desc">Paste an email or upload a screenshot to spot phishing red flags with a risk rating.</p>
-        <p className="tool-card-category">Security Tool</p>
-      </div>
-      <div onClick={() => setRoute("darkpatternauditor")} className="tool-card">
-        <span className="tool-badge-creator">Admin</span>
-        <h3 className="tool-card-title">Dark Pattern UX Auditor</h3>
-        <p className="tool-card-desc">Scan a checkout or app screenshot for deceptive UX patterns with a transparency score.</p>
-        <p className="tool-card-category">Security Tool</p>
-      </div>
+      {rankedTools.filter((t) => t.category === "Security Tool").map(renderToolCard)}
     </div>
   </div>
 )}
@@ -703,22 +576,9 @@ useEffect(() => {
 {route === "education-tools" && (
   <div>
     <h2 className="tool-header-title">Education Tools</h2>
-    <p className="tool-header-seo">
-      Tools for learning, teaching, and understanding complex material.
-    </p>
+    <p className="tool-header-seo">Tools for learning, teaching, and understanding complex material.</p>
     <div className="grid-container" style={{ marginTop: "24px" }}>
-      <div onClick={() => setRoute("transcript")} className="tool-card">
-        <span className="tool-badge-creator">Admin</span>
-        <h3 className="tool-card-title">Intelligent Transcript Structurer</h3>
-        <p className="tool-card-desc">Cleans messy meeting transcripts or audio into organized summaries.</p>
-        <p className="tool-card-category">Education Tool</p>
-      </div>
-      <div onClick={() => setRoute("uiaccessibility")} className="tool-card">
-        <span className="tool-badge-creator">Admin</span>
-        <h3 className="tool-card-title">UI Accessibility Auditor</h3>
-        <p className="tool-card-desc">Upload a screenshot of your interface for an advisory accessibility scan.</p>
-        <p className="tool-card-category">Education Tool</p>
-      </div>
+      {rankedTools.filter((t) => t.category === "Education Tool").map(renderToolCard)}
     </div>
   </div>
 )}
@@ -726,13 +586,15 @@ useEffect(() => {
 {route === "creator-tools" && (
   <div>
     <h2 className="tool-header-title">Content Creator Tools</h2>
-    <p className="tool-header-seo">
-      Fun and creative tools — more on the way.
-    </p>
+    <p className="tool-header-seo">Fun and creative tools — more on the way.</p>
     <div className="grid-container" style={{ marginTop: "24px" }}>
-      <p style={{ color: "#64748b", fontSize: "12px", textAlign: "center", padding: "40px 0" }}>
-        More creator tools coming soon.
-      </p>
+      {rankedTools.filter((t) => t.category === "Creator Tool").length === 0 ? (
+        <p style={{ color: "#64748b", fontSize: "12px", textAlign: "center", padding: "40px 0" }}>
+          More creator tools coming soon.
+        </p>
+      ) : (
+        rankedTools.filter((t) => t.category === "Creator Tool").map(renderToolCard)
+      )}
     </div>
   </div>
 )}

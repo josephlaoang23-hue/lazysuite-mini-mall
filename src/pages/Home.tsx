@@ -5,6 +5,16 @@ interface HomeProps {
   setRoute: (route: string) => void;
 }
 
+const CATEGORY_COLOR_CLASS: Record<string, string> = {
+  "Daily Tool": "clr-daily",
+  "Business Tool": "clr-business",
+  "Dev Tool": "clr-dev",
+  "Research Tool": "clr-research",
+  "Security Tool": "clr-security",
+  "Education Tool": "clr-education",
+  "Creator Tool": "clr-creator",
+};
+
 export default function Home({ setRoute }: HomeProps) {
   const { rankedTools, loaded } = useRankedTools();
   const topFive = rankedTools.slice(0, 5);
@@ -107,7 +117,9 @@ export default function Home({ setRoute }: HomeProps) {
 
             <p className="tool-card-desc">{tool.desc}</p>
 
-            <p className="tool-card-category">{tool.category}</p>
+            <span className={`tool-category-pill ${CATEGORY_COLOR_CLASS[tool.category]}`}>
+              {tool.category}
+            </span>
           </div>
         ))}
       </div>
