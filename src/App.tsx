@@ -97,23 +97,28 @@ export default function App() {
     "Creator Tool": "clr-creator",
   };
 
-  const renderToolCard = (tool: (typeof rankedTools)[number]) => (
-    <div
-      key={tool.id}
-      onClick={() => tool.isLive && setRoute(tool.id)}
-      className="tool-card"
-      style={!tool.isLive ? { opacity: 0.45, cursor: "default" } : undefined}
-    >
-      {topFiveIds.has(tool.id) && (
-        <span className={`tool-featured-tag ${CATEGORY_COLOR_CLASS[tool.category]}`}>
-          ★ Featured
-        </span>
-      )}
-      <span className="tool-badge-creator">{tool.creator}</span>
-      <h3 className="tool-card-title">{tool.title}</h3>
-      <p className="tool-card-desc">{tool.isLive ? tool.desc : "Coming Soon"}</p>
-    </div>
-  );
+  const renderToolCard = (tool: (typeof rankedTools)[number]) => {
+    const isFeatured = topFiveIds.has(tool.id);
+    return (
+      <div
+        key={tool.id}
+        onClick={() => tool.isLive && setRoute(tool.id)}
+        className="tool-card"
+        style={!tool.isLive ? { opacity: 0.45, cursor: "default" } : undefined}
+      >
+        {isFeatured && (
+          <span className={`tool-featured-tag ${CATEGORY_COLOR_CLASS[tool.category]}`}>
+            ★ Featured
+          </span>
+        )}
+        <span className="tool-badge-creator">{tool.creator}</span>
+        <h3 className="tool-card-title" style={isFeatured ? { marginTop: "18px" } : undefined}>
+          {tool.title}
+        </h3>
+        <p className="tool-card-desc">{tool.isLive ? tool.desc : "Coming Soon"}</p>
+      </div>
+    );
+  };
 
   const [user, setUser] = useState<UserAccount | null>(() => {
     const saved = localStorage.getItem('lazysuite_user');
