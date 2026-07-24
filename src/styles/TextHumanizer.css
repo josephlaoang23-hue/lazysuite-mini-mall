@@ -1,0 +1,4 @@
+/* No tool-specific styles yet — this tool currently only uses shared
+   classes from App.css (tool-header-title, textarea-input, btn-generate,
+   output-box, runs-badge, tool-seo-section). Add overrides here as this
+   tool's UI grows its own identity. */
