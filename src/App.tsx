@@ -36,6 +36,7 @@ import UiAccessibilityAuditor from "./tools/education-tools/UiAccessibilityAudit
 // import AdsterraNativeBanner from './ads/AdsterraNativeBanner';
 import { getDeviceId } from './utils/deviceId';
 import { useRankedTools } from './hooks/useRankedTools';
+import GlobalSeo from './seo/GlobalSeo';
 
 
 interface UserAccount {
@@ -415,6 +416,7 @@ useEffect(() => {
 
   return (
     <AdLayoutWrapper>
+      <GlobalSeo />
       <div className="marketplace-nav">
         <div className="nav-brand" onClick={() => setRoute('hub')}>LazySuite Builder Hub</div>
         <div className="nav-user-badge">
