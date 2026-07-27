@@ -4,7 +4,6 @@ import type { ToolSeoMeta } from "./types";
 
 interface SeoToolProps {
   metadata: ToolSeoMeta;
-  /** Cross-referenced from src/data/tools.ts by id — never duplicated in TOOL_METADATA itself. */
   category?: string;
 }
 
@@ -17,31 +16,87 @@ export default function SeoTool({ metadata, category }: SeoToolProps) {
     ogImage,
     twitterImage,
     robots = "index, follow",
+    faq,
+    breadcrumbs,
+    steps,
   } = metadata;
 
   const fullUrl = canonical.startsWith("http") ? canonical : `${SITE_URL}${canonical}`;
   const image = ogImage || DEFAULT_OG_IMAGE;
   const twitterImg = twitterImage || image;
 
-  const jsonLd: Record<string, unknown> = {
+  // 1. SoftwareApplication Schema
+  const softwareAppSchema: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     name: title,
     description,
     url: fullUrl,
-    applicationCategory: category || "UtilityApplication",
+    applicationCategory: category || metadata.category || "UtilityApplication",
     operatingSystem: "Web",
     offers: {
       "@type": "Offer",
       price: "0",
       priceCurrency: "USD",
     },
-    creator: { "@type": "Organization", name: SITE_NAME },
-    publisher: { "@type": "Organization", name: SITE_NAME },
+    creator: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
+    publisher: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
   };
 
   if (keywords && keywords.length > 0) {
-    jsonLd.keywords = keywords.join(", ");
+    softwareAppSchema.keywords = keywords.join(", ");
+  }
+
+  // 2. Optional FAQPage Schema
+  let faqSchema: Record<string, unknown> | null = null;
+  if (faq && faq.length > 0) {
+    faqSchema = {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faq.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: item.answer,
+        },
+      })),
+    };
+  }
+
+  // 3. Optional BreadcrumbList Schema
+  let breadcrumbSchema: Record<string, unknown> | null = null;
+  const crumbs = breadcrumbs || [
+    { name: "Home", url: "/" },
+    { name: category || "Tools", url: `/${(category || "tools").toLowerCase().replace(/\s+/g, "-")}` },
+    { name: title, url: canonical },
+  ];
+  if (crumbs && crumbs.length > 0) {
+    breadcrumbSchema = {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: crumbs.map((crumb, idx) => ({
+        "@type": "ListItem",
+        position: idx + 1,
+        name: crumb.name,
+        item: crumb.url.startsWith("http") ? crumb.url : `${SITE_URL}${crumb.url}`,
+      })),
+    };
+  }
+
+  // 4. Optional HowTo Schema
+  let howToSchema: Record<string, unknown> | null = null;
+  if (steps && steps.length > 0) {
+    howToSchema = {
+      "@context": "https://schema.org",
+      "@type": "HowTo",
+      name: `How to use ${title}`,
+      step: steps.map((stepText, idx) => ({
+        "@type": "HowToStep",
+        position: idx + 1,
+        text: stepText,
+      })),
+    };
   }
 
   return (
@@ -70,7 +125,11 @@ export default function SeoTool({ metadata, category }: SeoToolProps) {
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={twitterImg} />
 
-      <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+      {/* Structured Data */}
+      <script type="application/ld+json">{JSON.stringify(softwareAppSchema)}</script>
+      {faqSchema && <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>}
+      {breadcrumbSchema && <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>}
+      {howToSchema && <script type="application/ld+json">{JSON.stringify(howToSchema)}</script>}
     </Helmet>
   );
 }

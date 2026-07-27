@@ -1,8 +1,8 @@
 import { Helmet } from "react-helmet-async";
-import { SITE_URL, SITE_NAME } from "./siteConfig";
+import { SITE_URL, SITE_NAME, DEFAULT_OG_IMAGE } from "./siteConfig";
 
 export default function GlobalSeo() {
-  const jsonLd = {
+  const globalSchema = {
     "@context": "https://schema.org",
     "@graph": [
       {
@@ -10,7 +10,10 @@ export default function GlobalSeo() {
         "@id": `${SITE_URL}/#organization`,
         name: SITE_NAME,
         url: SITE_URL,
-        logo: `${SITE_URL}/favicon.svg`,
+        logo: {
+          "@type": "ImageObject",
+          url: DEFAULT_OG_IMAGE,
+        },
       },
       {
         "@type": "WebSite",
@@ -20,7 +23,10 @@ export default function GlobalSeo() {
         publisher: { "@id": `${SITE_URL}/#organization` },
         potentialAction: {
           "@type": "SearchAction",
-          target: `${SITE_URL}/?q={search_term_string}`,
+          target: {
+            "@type": "EntryPoint",
+            urlTemplate: `${SITE_URL}/?search={search_term_string}`,
+          },
           "query-input": "required name=search_term_string",
         },
       },
@@ -29,7 +35,7 @@ export default function GlobalSeo() {
 
   return (
     <Helmet>
-      <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+      <script type="application/ld+json">{JSON.stringify(globalSchema)}</script>
     </Helmet>
   );
 }
