@@ -1,4 +1,3 @@
-import React from "react";
 import { normalizeCategorySlug, CATEGORY_MAP } from "../data/toolRegistry";
 
 interface BreadcrumbsProps {

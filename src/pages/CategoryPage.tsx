@@ -1,4 +1,3 @@
-import React from "react";
 import { Helmet } from "react-helmet-async";
 import { CATEGORY_MAP, getToolsByCategory } from "../data/toolRegistry";
 import { SITE_NAME, SITE_URL } from "../seo/siteConfig";

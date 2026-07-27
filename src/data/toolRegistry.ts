@@ -1,4 +1,5 @@
-import { allTools, ToolMeta } from "./tools";
+import { allTools } from "./tools";
+import type { ToolMeta } from "./tools";
 import { TOOL_METADATA } from "../seo/toolMetadata";
 import type { ToolSeoMeta } from "../seo/types";
 
@@ -65,7 +66,6 @@ export const TOOL_REGISTRY: UnifiedTool[] = allTools.map((tool) => {
     canonical: `/${tool.id}`,
   };
 
-  const categorySlug = normalizeCategorySlug(tool.category);
 
   return {
     ...tool,

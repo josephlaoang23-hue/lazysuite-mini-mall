@@ -1,4 +1,3 @@
-import React from "react";
 
 interface FaqSectionProps {
   faq?: { question: string; answer: string }[];

@@ -1,4 +1,5 @@
-import { TOOL_REGISTRY, UnifiedTool } from "../data/toolRegistry";
+import { TOOL_REGISTRY } from "../data/toolRegistry";
+import type { UnifiedTool } from "../data/toolRegistry";
 
 export interface SearchResult {
   tool: UnifiedTool;

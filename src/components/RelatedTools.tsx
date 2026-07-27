@@ -1,5 +1,5 @@
-import React from "react";
-import { getRelatedTools, UnifiedTool } from "../data/toolRegistry";
+import { getRelatedTools } from "../data/toolRegistry";
+import type { UnifiedTool } from "../data/toolRegistry";
 
 interface RelatedToolsProps {
   toolId: string;
