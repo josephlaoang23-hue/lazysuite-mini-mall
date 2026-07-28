@@ -1,0 +1,36 @@
+.receptionist-card {
+    background-color: #0f172a;
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+  .receptionist-title {
+    font-size: 16px;
+    font-weight: 900;
+    color: #f8fafc;
+    margin: 0 0 4px 0;
+  }
+  .receptionist-subtitle {
+    font-size: 12px;
+    color: #94a3b8;
+    margin: 0;
+  }
+  .receptionist-error {
+    margin-top: 10px;
+    font-size: 12px;
+    color: #f87171;
+  }
+  .receptionist-reply {
+    margin-top: 16px;
+    padding: 14px;
+    background-color: #16223d;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #e2e8f0;
+    line-height: 1.6;
+  }
+  .receptionist-reply p {
+    margin: 0 0 12px 0;
+  }

@@ -142,23 +142,9 @@ const [pendingUnlimitedPayload, setPendingUnlimitedPayload] = useState<{
   onDone: (output: string) => void;
 } | null>(null);
 const startUnlock = async () => {
-  try {
-    const res = await fetch('/api/unlock-start', {
-      method: 'POST',
-      headers: { 'X-Device-Id': getDeviceId() }
-    });
-    const data = await res.json();
-    if (!res.ok) {
-      alert(data.message || "Could not start unlock.");
-      return;
-    }
-    setUnlockSessionId(data.sessionId);
-    setUnlockSecondsLeft(10);
-    setUnlockOverlayOpen(true);
-  } catch (err) {
-    console.error(err);
-    alert("Something went wrong starting the unlock.");
-  }
+  // Ad-unlock bonus (+5 runs) has been intentionally disabled — 10/day is a
+  // hard daily cap now, with no way to extend it via ads.
+  alert("You've used all 10 free runs for today. Come back tomorrow for 10 more!");
 };
 
 const completeUnlock = async () => {

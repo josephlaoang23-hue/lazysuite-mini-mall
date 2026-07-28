@@ -1,5 +1,6 @@
 import { useRankedTools } from "../hooks/useRankedTools";
 import AdsterraNativeBanner from "../ads/AdsterraNativeBanner";
+import AiReceptionist from "../components/AiReceptionist";
 
 interface HomeProps {
   setRoute: (route: string) => void;
@@ -18,6 +19,12 @@ const CATEGORY_COLOR_CLASS: Record<string, string> = {
 export default function Home({ setRoute }: HomeProps) {
   const { rankedTools, loaded } = useRankedTools();
   const topFive = rankedTools.slice(0, 5);
+
+  // Only live tools are valid recommendations — "Coming Soon" tools should
+  // never be suggested to a visitor since they can't actually be used yet.
+  const receptionistTools = rankedTools
+    .filter((t) => t.isLive)
+    .map((t) => ({ id: t.id, title: t.title, desc: t.desc, category: t.category }));
 
   if (!loaded) {
     return (
@@ -94,8 +101,10 @@ export default function Home({ setRoute }: HomeProps) {
           >
             🎨 Content Creator
           </button>
-        </div>
+          </div>
       </div>
+
+      <AiReceptionist tools={receptionistTools} onNavigate={setRoute} />
 
       <div className="section-label">Featured Core Boutiques</div>
 

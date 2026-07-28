@@ -84,8 +84,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ allowed: false, message: 'No image file received.' });
     }
 
-    const models = ["gemini-3.5-flash", "gemini-3.1-flash-lite", "gemini-3-flash"];
-    let aiResponse: Response | null = null;
+    // Your final custom-selected Gemini 3.x performance loop
+    const models = [
+      "gemini-3.6-flash",
+      "gemini-3.5-flash",
+      "gemini-3.5-flash-lite",
+      "gemini-3-flash",
+      "gemini-3.1-flash-lite"
+    ];    let aiResponse: Response | null = null;
 
     for (const model of models) {
       aiResponse = await fetch(
