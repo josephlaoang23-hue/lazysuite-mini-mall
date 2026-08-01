@@ -585,36 +585,13 @@ useEffect(() => {
     <h2 className="tool-header-title">Content Creator Tools</h2>
     <p className="tool-header-seo">Repurpose, extract, and optimize content across every platform.</p>
     <div className="grid-container" style={{ marginTop: "24px" }}>
-      <div onClick={() => setRoute("contentrepurposer")} className="tool-card">
-        <span className="tool-badge-creator">Admin</span>
-        <h3 className="tool-card-title">Content Repurposing Format Transformer</h3>
-        <p className="tool-card-desc">Turn one piece of content into platform-ready versions for every channel.</p>
-        <p className="tool-card-category">Creator Tool</p>
-      </div>
-      <div onClick={() => setRoute("shortsextractor")} className="tool-card">
-        <span className="tool-badge-creator">Admin</span>
-        <h3 className="tool-card-title">Long-Form Video Shorts Extractor</h3>
-        <p className="tool-card-desc">Find viral-ready short-form clips inside a long transcript.</p>
-        <p className="tool-card-category">Creator Tool</p>
-      </div>
-      <div onClick={() => setRoute("chaptergenerator")} className="tool-card">
-        <span className="tool-badge-creator">Admin</span>
-        <h3 className="tool-card-title">YouTube Timestamp & Chapter Generator</h3>
-        <p className="tool-card-desc">Turn a transcript into clean, ready-to-paste YouTube chapters.</p>
-        <p className="tool-card-category">Creator Tool</p>
-      </div>
-      <div onClick={() => setRoute("hookgenerator")} className="tool-card">
-        <span className="tool-badge-creator">Admin</span>
-        <h3 className="tool-card-title">Psychological Hook Generator</h3>
-        <p className="tool-card-desc">Generate multiple opening hooks using proven retention triggers.</p>
-        <p className="tool-card-category">Creator Tool</p>
-      </div>
-      <div onClick={() => setRoute("thumbnailauditor")} className="tool-card">
-        <span className="tool-badge-creator">Admin</span>
-        <h3 className="tool-card-title">Thumbnail Readability & CTR Auditor</h3>
-        <p className="tool-card-desc">Get an advisory review of your thumbnail's readability before publishing.</p>
-        <p className="tool-card-category">Creator Tool</p>
-      </div>
+      {rankedTools.filter((t) => t.category === "Creator Tool").length === 0 ? (
+        <p style={{ color: "#64748b", fontSize: "12px", textAlign: "center", padding: "40px 0" }}>
+          More creator tools coming soon.
+        </p>
+      ) : (
+        rankedTools.filter((t) => t.category === "Creator Tool").map(renderToolCard)
+      )}
     </div>
   </div>
 )}
