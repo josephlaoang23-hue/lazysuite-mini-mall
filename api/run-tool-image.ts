@@ -20,6 +20,7 @@ const TOOL_KEY_MAP: Record<string, string | undefined> = {
   utilitybillanalyzer: process.env.GEMINI_KEY_UTILITYBILL,
   darkpatternauditor: process.env.GEMINI_KEY_DARKPATTERN,
   phishingdissector: process.env.GEMINI_KEY_PHISHING,
+  thumbnailauditor: process.env.GEMINI_KEY_THUMBNAILAUDITOR,
 };
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {

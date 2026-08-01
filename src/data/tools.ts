@@ -29,6 +29,12 @@ import DarkPatternAuditor from "../tools/security-tools/DarkPatternAuditor";
 import TranscriptCleaner from "../tools/education-tools/TranscriptCleaner";
 import UiAccessibilityAuditor from "../tools/education-tools/UiAccessibilityAuditor";
 
+import ContentRepurposer from "../tools/creator-tools/ContentRepurposer";
+import ShortsExtractor from "../tools/creator-tools/ShortsExtractor";
+import ChapterGenerator from "../tools/creator-tools/ChapterGenerator";
+import HookGenerator from "../tools/creator-tools/HookGenerator";
+import ThumbnailAuditor from "../tools/creator-tools/ThumbnailAuditor";
+
 export interface ToolMeta {
   id: string;
   title: string;
@@ -84,6 +90,12 @@ export const allTools: ToolMeta[] = [
   { id: "transcript", title: "Intelligent Transcript Structurer", desc: "Cleans messy meeting transcripts or audio into organized summaries.", component: TranscriptCleaner, creator: "Admin", category: "Education Tool", isLive: true },
   { id: "uiaccessibility", title: "UI Accessibility Auditor", desc: "Upload a screenshot of your interface for an advisory accessibility scan.", component: UiAccessibilityAuditor, creator: "Admin", category: "Education Tool", isLive: true },
 
+  // --- Content Creator ---
+  { id: "contentrepurposer", title: "Content Repurposing Format Transformer", desc: "Turn one piece of content into platform-ready versions for every channel.", component: ContentRepurposer, creator: "Admin", category: "Creator Tool", isLive: true },
+  { id: "shortsextractor", title: "Long-Form Video Shorts Extractor", desc: "Find viral-ready short-form clips inside a long transcript.", component: ShortsExtractor, creator: "Admin", category: "Creator Tool", isLive: true },
+  { id: "chaptergenerator", title: "YouTube Timestamp & Chapter Generator", desc: "Turn a transcript into clean, ready-to-paste YouTube chapters.", component: ChapterGenerator, creator: "Admin", category: "Creator Tool", isLive: true },
+  { id: "hookgenerator", title: "Psychological Hook Generator", desc: "Generate multiple opening hooks using proven retention triggers.", component: HookGenerator, creator: "Admin", category: "Creator Tool", isLive: true },
+  { id: "thumbnailauditor", title: "Thumbnail Readability & CTR Auditor", desc: "Get an advisory review of your thumbnail's readability before publishing.", component: ThumbnailAuditor, creator: "Admin", category: "Creator Tool", isLive: true },
 ];
 
 // Kept in case anything else still imports the old name

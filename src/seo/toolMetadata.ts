@@ -131,7 +131,13 @@ export const TOOL_METADATA = {
     legacycodemodernizer: { title: "Free Legacy Code Explainer & Modernizer", description: "Explain old PHP, jQuery, VB, or COBOL code and get a modern equivalent.", canonical: "/legacy-code-modernizer" },
     phishingdissector: { title: "Free Phishing & Scam Email Dissector", description: "Paste an email or upload a screenshot to spot phishing red flags with a risk rating.", canonical: "/phishing-dissector" },
     darkpatternauditor: { title: "Free Dark Pattern UX Auditor", description: "Scan a checkout or app screenshot for deceptive UX patterns with a transparency score.", canonical: "/dark-pattern-auditor" },
-    abstractsynthesizer: { title: "Free Academic Abstract Synthesizer", description: "Turn a dense academic abstract into plain language with limitations and takeaways.", canonical: "/abstract-synthesizer" }
+    abstractsynthesizer: { title: "Free Academic Abstract Synthesizer", description: "Turn a dense academic abstract into plain language with limitations and takeaways.", canonical: "/abstract-synthesizer" },
+
+    contentrepurposer: { title: "Free Content Repurposing Format Transformer", description: "Turn one piece of content into platform-ready versions for X, LinkedIn, Instagram, and more.", canonical: "/content-repurposer" },
+    shortsextractor: { title: "Free Long-Form Video Shorts Extractor", description: "Find viral-ready short-form clips inside a long video or podcast transcript.", canonical: "/shorts-extractor" },
+    chaptergenerator: { title: "Free YouTube Timestamp & Chapter Generator", description: "Turn a video transcript into clean, properly formatted YouTube chapters.", canonical: "/chapter-generator" },
+    hookgenerator: { title: "Free Psychological Hook Generator", description: "Generate multiple opening hooks for your topic using proven psychological triggers.", canonical: "/hook-generator" },
+    thumbnailauditor: { title: "Free Thumbnail Readability & CTR Auditor", description: "Get an advisory review of your thumbnail's readability and mobile visibility before publishing.", canonical: "/thumbnail-auditor" }
   };
 
   

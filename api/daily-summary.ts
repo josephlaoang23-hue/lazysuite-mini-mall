@@ -14,7 +14,8 @@ const KNOWN_TOOL_IDS = [
   'multiagentblueprint', 'promptcompressor', 'conflictauditor', 'transcriptevidence',
   'pdfdashboard', 'privacyshield', 'repoarch', 'uiaccessibility',
   'chatoptout', 'utilitybillanalyzer', 'chargebackwriter', 'legacycodemodernizer',
-  'phishingdissector', 'darkpatternauditor', 'abstractsynthesizer'
+  'phishingdissector', 'darkpatternauditor', 'abstractsynthesizer',
+  'contentrepurposer', 'shortsextractor', 'chaptergenerator', 'hookgenerator', 'thumbnailauditor',
 ];
 function getYesterdayDateString(): string {
   const d = new Date();

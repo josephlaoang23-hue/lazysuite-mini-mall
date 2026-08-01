@@ -26,6 +26,10 @@ const TOOL_KEY_MAP: Record<string, string | undefined> = {
   legacycodemodernizer: process.env.GEMINI_KEY_LEGACYCODE,
   abstractsynthesizer: process.env.GEMINI_KEY_ABSTRACTSYNTH,
   phishingdissector: process.env.GEMINI_KEY_PHISHING,
+  contentrepurposer: process.env.GEMINI_KEY_CONTENTREPURPOSER,
+  shortsextractor: process.env.GEMINI_KEY_SHORTSEXTRACTOR,
+  chaptergenerator: process.env.GEMINI_KEY_CHAPTERGEN,
+  hookgenerator: process.env.GEMINI_KEY_HOOKGEN,
 };
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
