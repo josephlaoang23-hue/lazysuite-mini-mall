@@ -315,6 +315,22 @@ body { margin: 0; background-color: #020617; color: #f8fafc; font-family: sans-s
 .copy-button:hover { background: #233554; border-color: #2dd4bf; color: #2dd4bf; }
 .copy-button:active { transform: scale(.95); }
 
+/* Hover-reveal copy button for plain-text output boxes.
+   Scoped to real hover-capable devices only — touch devices always show it,
+   since there's no hover gesture to reveal it with. */
+@media (hover: hover) and (pointer: fine) {
+  .output-box .copy-button {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 150ms ease;
+  }
+  .output-box:hover .copy-button,
+  .output-box:focus-within .copy-button {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
 /* Runs badge */
 .runs-badge {
   display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 500; padding: 2px 8px;

@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { Copy, Check } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { TOOL_METADATA } from "../../seo/toolMetadata";
 import RunsBadge from "../../components/RunsBadge";
@@ -19,7 +20,14 @@ export default function ThumbnailAuditor({ triggerProcess, remainingRuns, onUpda
   const [output, setOutput] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const copyOutput = async () => {
+    await navigator.clipboard.writeText(output);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const fileToBase64 = (file: File): Promise<string> => new Promise((res, rej) => {
     const r = new FileReader(); r.onload = () => res((r.result as string).split(",")[1]); r.onerror = rej; r.readAsDataURL(file);
@@ -90,7 +98,12 @@ export default function ThumbnailAuditor({ triggerProcess, remainingRuns, onUpda
               </div>
             )}
             {output ? (
-              <div className="output-box" style={{ whiteSpace: "pre-wrap" }}>{output}</div>
+              <div className="output-box" style={{ position: "relative", whiteSpace: "pre-wrap" }}>
+                <button className="copy-button" onClick={copyOutput} style={{ position: "absolute", top: "12px", right: "12px" }}>
+                  {copied ? <Check size={16} /> : <Copy size={16} />}
+                </button>
+                {output}
+              </div>
             ) : (
               <p style={{ color: "#64748b", fontSize: "12px", textAlign: "center", padding: "40px 0" }}>Your thumbnail audit will appear here.</p>
             )}
