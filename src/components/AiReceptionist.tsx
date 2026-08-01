@@ -19,6 +19,7 @@ export default function AiReceptionist({ tools, onNavigate }: AiReceptionistProp
   const [isLoading, setIsLoading] = useState(false);
   const [reply, setReply] = useState<string | null>(null);
   const [matchedToolId, setMatchedToolId] = useState<string | null>(null);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
   const [errorMsg, setErrorMsg] = useState("");
 
   const handleAsk = async () => {
@@ -27,6 +28,7 @@ export default function AiReceptionist({ tools, onNavigate }: AiReceptionistProp
     setIsLoading(true);
     setReply(null);
     setMatchedToolId(null);
+    setSuggestions([]);
     setErrorMsg("");
 
     try {
@@ -45,6 +47,7 @@ export default function AiReceptionist({ tools, onNavigate }: AiReceptionistProp
 
       setReply(data.reply);
       setMatchedToolId(data.toolId);
+      setSuggestions(data.suggestions || []);
     } catch (error) {
       console.error("Receptionist request failed:", error);
       setErrorMsg("Something went wrong. Please try again.");
@@ -79,10 +82,32 @@ export default function AiReceptionist({ tools, onNavigate }: AiReceptionistProp
       {reply && (
         <div className="receptionist-reply">
           <p>{reply}</p>
+
           {matchedToolId && (
             <button className="btn-generate" onClick={() => onNavigate(matchedToolId)}>
               Take Me There →
             </button>
+          )}
+
+          {!matchedToolId && suggestions.length > 0 && (
+            <div className="receptionist-suggestions">
+              <p className="receptionist-suggestions-label">You might find these useful instead:</p>
+              <div className="receptionist-suggestions-list">
+                {suggestions.map((id) => {
+                  const tool = tools.find((t) => t.id === id);
+                  if (!tool) return null;
+                  return (
+                    <button
+                      key={id}
+                      className="receptionist-suggestion-chip"
+                      onClick={() => onNavigate(id)}
+                    >
+                      {tool.title} →
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           )}
         </div>
       )}
