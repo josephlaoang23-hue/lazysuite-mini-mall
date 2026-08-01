@@ -73,6 +73,14 @@ export default function ThumbnailAuditor({ triggerProcess, remainingRuns, onUpda
             {remainingRuns === 0 ? "Limit Exhausted – Click to Unlock" : isLoading ? "⏳ Auditing..." : "Audit Thumbnail"}
           </button>
           <AdsterraNativeBanner />
+
+          <section className="tool-seo-section">
+            <h2>A weak thumbnail can sink a great video before anyone clicks</h2>
+            <p>Most viewers decide whether to click based on the thumbnail alone, often on a small mobile screen. This tool reviews your thumbnail for text size, contrast, visual hierarchy, clutter, and safe-zone placement — the same things a human editor would check before you publish.</p>
+
+            <h2>Advisory feedback, not a guaranteed CTR prediction</h2>
+            <p>Readability and mobile-visibility scores here are visual estimates meant to catch obvious problems — cramped text, low contrast, cluttered composition — not a promise of how many clicks you'll get. Use it as a second pair of eyes before you hit publish.</p>
+          </section>
         </>}
         canvas={
           <>

@@ -60,14 +60,21 @@ export default function ContentRepurposer({ triggerProcess, remainingRuns, onUpd
             {remainingRuns === 0 ? "Limit Exhausted – Click to Unlock" : isLoading ? "⏳ Repurposing..." : "Repurpose Content"}
           </button>
           <AdsterraNativeBanner />
+
+          <section className="tool-seo-section">
+            <h2>Turn one piece of content into a week's worth of posts</h2>
+            <p>Writing separate posts for X, LinkedIn, Instagram, and your newsletter takes forever. This tool reads your original script, blog post, or transcript and restructures it — not just copy-pastes it — into a version tailored to each platform's format, tone, and length constraints.</p>
+
+            <h2>Stop starting from a blank page for every channel</h2>
+            <p>Whether you're a solo creator or managing content for a small team, repurposing is one of the highest-leverage habits in content marketing. Paste your source content once and get ready-to-post drafts for six formats in a single pass.</p>
+          </section>
         </>}
         canvas={output ? (
           <div className="output-box" style={{ position: "relative", whiteSpace: "pre-wrap" }}>
             <button className="copy-button" onClick={copyOutput} style={{ position: "absolute", top: "12px", right: "12px" }}>{copied ? <Check size={16} /> : <Copy size={16} />}</button>
             {output}
           </div>
-        ) : <p style={{ color: "#64748b", fontSize: "12px", textAlign: "center", padding: "40px 0" }}>Your platform-ready versions will appear here.</p>}
-      />
+        ) : <p style={{ color: "#64748b", fontSize: "12px", textAlign: "center", padding: "40px 0" }}>Your platform-ready versions will appear here.</p>}      />
     </>
   );
 }

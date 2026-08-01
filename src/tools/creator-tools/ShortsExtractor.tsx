@@ -59,14 +59,21 @@ export default function ShortsExtractor({ triggerProcess, remainingRuns, onUpdat
             {remainingRuns === 0 ? "Limit Exhausted – Click to Unlock" : isLoading ? "⏳ Extracting Clips..." : "Extract Short Clips"}
           </button>
           <AdsterraNativeBanner />
+
+          <section className="tool-seo-section">
+            <h2>Find the viral moments buried in your long-form content</h2>
+            <p>Scrubbing through a 45-minute podcast or video to find the 3 clips worth cutting into Shorts is tedious. This tool reads your transcript and identifies standalone storytelling beats, insights, and emotional peaks — each returned as a ready-to-shoot script with a suggested hook and ending.</p>
+
+            <h2>Turn one long recording into a week of short-form content</h2>
+            <p>Instead of guessing which moment will resonate, get 3-6 candidate clips pulled directly from what you already recorded, each with an estimated timestamp so you know exactly where to cut.</p>
+          </section>
         </>}
         canvas={output ? (
           <div className="output-box" style={{ position: "relative", whiteSpace: "pre-wrap" }}>
             <button className="copy-button" onClick={copyOutput} style={{ position: "absolute", top: "12px", right: "12px" }}>{copied ? <Check size={16} /> : <Copy size={16} />}</button>
             {output}
           </div>
-        ) : <p style={{ color: "#64748b", fontSize: "12px", textAlign: "center", padding: "40px 0" }}>Your extracted clips will appear here.</p>}
-      />
+        ) : <p style={{ color: "#64748b", fontSize: "12px", textAlign: "center", padding: "40px 0" }}>Your extracted clips will appear here.</p>}      />
     </>
   );
 }

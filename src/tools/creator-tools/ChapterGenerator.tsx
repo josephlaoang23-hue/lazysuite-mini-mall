@@ -60,14 +60,21 @@ export default function ChapterGenerator({ triggerProcess, remainingRuns, onUpda
             {remainingRuns === 0 ? "Limit Exhausted – Click to Unlock" : isLoading ? "⏳ Generating Chapters..." : "Generate Chapters"}
           </button>
           <AdsterraNativeBanner />
+
+          <section className="tool-seo-section">
+            <h2>Skip manually timestamping your own video</h2>
+            <p>Adding chapter markers to a YouTube video means rewatching it and guessing where each topic starts. This tool reads your transcript, detects real topic transitions, and outputs clean MM:SS timestamps with descriptive titles, formatted exactly the way YouTube expects them pasted into the description box.</p>
+
+            <h2>Better chapters mean better watch time and discoverability</h2>
+            <p>Chapters help viewers jump to what they care about and give YouTube's search more context about your video's structure. If your transcript already has real timestamps, they're used directly; otherwise the tool estimates proportional placement and tells you so.</p>
+          </section>
         </>}
         canvas={output ? (
           <div className="output-box" style={{ position: "relative", whiteSpace: "pre-wrap" }}>
             <button className="copy-button" onClick={copyOutput} style={{ position: "absolute", top: "12px", right: "12px" }}>{copied ? <Check size={16} /> : <Copy size={16} />}</button>
             {output}
           </div>
-        ) : <p style={{ color: "#64748b", fontSize: "12px", textAlign: "center", padding: "40px 0" }}>Your YouTube chapters will appear here.</p>}
-      />
+        ) : <p style={{ color: "#64748b", fontSize: "12px", textAlign: "center", padding: "40px 0" }}>Your YouTube chapters will appear here.</p>}      />
     </>
   );
 }

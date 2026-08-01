@@ -60,14 +60,21 @@ export default function HookGenerator({ triggerProcess, remainingRuns, onUpdateR
             {remainingRuns === 0 ? "Limit Exhausted – Click to Unlock" : isLoading ? "⏳ Generating Hooks..." : "Generate Hooks"}
           </button>
           <AdsterraNativeBanner />
+
+          <section className="tool-seo-section">
+            <h2>The first line decides whether anyone keeps watching or reading</h2>
+            <p>Most content dies in the first three seconds because the hook doesn't create tension, curiosity, or urgency. This tool takes your topic or draft title and generates several distinct opening lines, each built around a different proven psychological trigger — curiosity, story, FOMO, contrarian framing, a direct question, or authority.</p>
+
+            <h2>Stop guessing which angle will land</h2>
+            <p>Instead of writing one hook and hoping it works, get multiple angles side by side so you can pick — or test — the one that fits your topic and audience best.</p>
+          </section>
         </>}
         canvas={output ? (
           <div className="output-box" style={{ position: "relative", whiteSpace: "pre-wrap" }}>
             <button className="copy-button" onClick={copyOutput} style={{ position: "absolute", top: "12px", right: "12px" }}>{copied ? <Check size={16} /> : <Copy size={16} />}</button>
             {output}
           </div>
-        ) : <p style={{ color: "#64748b", fontSize: "12px", textAlign: "center", padding: "40px 0" }}>Your hooks will appear here.</p>}
-      />
+        ) : <p style={{ color: "#64748b", fontSize: "12px", textAlign: "center", padding: "40px 0" }}>Your hooks will appear here.</p>}      />
     </>
   );
 }
